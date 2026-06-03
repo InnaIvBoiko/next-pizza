@@ -2,7 +2,13 @@ import path from 'node:path';
 import { defineConfig, env } from 'prisma/config';
 
 // Prisma 7 no longer auto-loads .env in the config file.
-process.loadEnvFile();
+// On platforms like Vercel there is no .env file (env vars are injected
+// directly), so loading is best-effort.
+try {
+  process.loadEnvFile();
+} catch {
+  // no .env file present — rely on the existing process.env
+}
 
 export default defineConfig({
   schema: path.join('prisma', 'schema.prisma'),
@@ -10,6 +16,6 @@ export default defineConfig({
     path: path.join('prisma', 'migrations'),
   },
   datasource: {
-    url: env('DATABASE_URL'),
+    url: env('POSTGRES_URL'),
   },
 });
