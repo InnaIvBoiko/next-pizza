@@ -1,0 +1,20 @@
+{
+    "TypeScript component (project style, named export)": {
+        "prefix": "tsdc",
+        "scope": "typescriptreact",
+        "body": [
+            "import React from 'react';",
+            "import { cn } from '@/lib/utils';",
+            "",
+            "export interface ${1:${TM_FILENAME_BASE/(^|-)([a-z])/${2:/upcase}/g}}Props {",
+            "    className?: string;",
+            "}",
+            "",
+            "export const ${1} = ({ className }: ${1}Props) => {",
+            "    return <div className={cn(className)}>$0</div>;",
+            "};",
+            ""
+        ],
+        "description": "Componente React/TS in stile next-pizza: named export + cn, nome dal filename"
+    }
+}

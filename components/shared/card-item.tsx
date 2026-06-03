@@ -1,7 +1,7 @@
+import React from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import React from 'react';
-import { CountButton } from './count-button';
+import { CountButton } from './';
 
 interface Props {
     imageUrl?: string;
@@ -11,7 +11,7 @@ interface Props {
     count?: number;
 }
 
-export const CartItem: React.FC<Props> = ({
+export const CardItem: React.FC<Props> = ({
     imageUrl,
     name,
     price,

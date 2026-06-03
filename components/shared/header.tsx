@@ -1,17 +1,16 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { Container } from './container';
-import { Button } from '../ui/button';
+import { Container, SearchInput } from './';
+import { Button } from '../ui/';
 // import { ArrowRight, ShoppingCart } from 'lucide-react';
-import { SearchInput } from './search-input';
 // import { CartDrawer } from './cart-drawer';
 
 export interface HeaderProps {
     className?: string;
 }
 
-export default function Header({ className }: HeaderProps) {
+export const Header = ({ className }: HeaderProps) => {
     return (
         <header className={cn('border border-b', className)}>
             <Container className='flex items-center justify-between py-8'>
@@ -48,4 +47,4 @@ export default function Header({ className }: HeaderProps) {
             </Container>
         </header>
     );
-}
+};

@@ -1,17 +1,17 @@
-import { Button } from '@/components/ui/button';
+import React from 'react';
 import {
+    Button,
     Sheet,
-    //   SheetClose,
     SheetContent,
     SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from '@/components/ui/sheet';
-import { CartItem } from './cart-item';
+} from '@/components/ui';
+import { CardItem } from './card-item';
 import { ArrowRight } from 'lucide-react';
 
-export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const CardDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
     return (
         <Sheet>
             <SheetTrigger asChild>{children}</SheetTrigger>
@@ -25,12 +25,12 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                     </SheetHeader>
 
                     <div className='-mx-6 mt-5 flex flex-col gap-2'>
-                        <CartItem
+                        <CardItem
                             name='Чизбургер-пицца'
                             imageUrl='https://media.dodostatic.net/image/r:292x292/11EE7D610BBEB562BD4D48786AD87270.webp'
                             price={500}
                         />
-                        <CartItem
+                        <CardItem
                             name='Чизбургер-пицца'
                             imageUrl='https://media.dodostatic.net/image/r:292x292/11EE7D610BBEB562BD4D48786AD87270.webp'
                             price={350}
