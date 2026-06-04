@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui';
 

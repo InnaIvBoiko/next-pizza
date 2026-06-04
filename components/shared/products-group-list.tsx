@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useIntersection } from 'react-use';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { ProductCard } from './product-card';
 import { Title } from './title';
-import { useCategoryStore } from '@/store/category';
+import { useCategoryStore } from '@/shared/store/category';
 
 export interface ProductsGroupListProps {
     title: string;
@@ -21,6 +21,7 @@ export interface ProductsGroupListProps {
     categoryId: number;
     className?: string;
     listClassName?: string;
+    priority?: boolean;
 }
 
 export const ProductsGroupList = ({
@@ -29,6 +30,7 @@ export const ProductsGroupList = ({
     className,
     listClassName,
     categoryId,
+    priority = false,
 }: ProductsGroupListProps) => {
     const setActiveCategoryId = useCategoryStore(state => state.setActiveId);
 
@@ -51,7 +53,7 @@ export const ProductsGroupList = ({
             <Title text={title} size='lg' className='mb-5 font-extrabold' />
 
             <div className={cn('grid grid-cols-3 gap-12.5', listClassName)}>
-                {items.map(product => (
+                {items.map((product, index) => (
                     <ProductCard
                         key={product.id}
                         id={product.id}
@@ -59,6 +61,7 @@ export const ProductsGroupList = ({
                         imageUrl={product.imageUrl}
                         price={product.items[0].price}
                         description={product.description}
+                        priority={priority && index < 3}
                     />
                 ))}
             </div>

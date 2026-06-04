@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Title } from './title';
@@ -12,6 +12,7 @@ export interface ProductCardProps {
     price: number;
     imageUrl: string;
     description: string;
+    priority?: boolean;
     className?: string;
 }
 
@@ -21,6 +22,7 @@ export const ProductCard = ({
     price,
     imageUrl,
     description,
+    priority = false,
     className,
 }: ProductCardProps) => {
     return (
@@ -33,6 +35,8 @@ export const ProductCard = ({
                         alt={name}
                         width={215}
                         height={215}
+                        loading={priority ? 'eager' : 'lazy'}
+                        fetchPriority={priority ? 'high' : 'auto'}
                     />
                 </div>
                 <Title text={name} size='sm' className='mt-3 mb-1 font-bold' />

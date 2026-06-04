@@ -20,6 +20,7 @@ export default function Home() {
                             <ProductsGroupList
                                 title='Pizzas'
                                 categoryId={1}
+                                priority
                                 items={[
                                     {
                                         id: 1,
