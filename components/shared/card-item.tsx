@@ -33,14 +33,14 @@ export const CardItem: React.FC<Props> = ({
             <div>
                 <h2 className='text-lg font-bold'>{name}</h2>
                 <p className='text-sm text-gray-400'>
-                    Средняя 30 см, традиционное тесто
+                    Medium 30 cm, traditional dough
                 </p>
                 <hr className='my-3' />
 
                 <div className='flex items-center justify-between'>
                     <CountButton value={count} />
 
-                    <h2 className='font-bold'>{price} ₽</h2>
+                    <h2 className='font-bold'>€ {price?.toFixed(2)}</h2>
                 </div>
             </div>
         </div>
