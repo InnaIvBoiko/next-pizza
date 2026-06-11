@@ -2,6 +2,10 @@ import { Container, Filters, Title, TopBar } from '@/shared/components';
 import { ProductsGroupList } from '@/shared/components/shared/products-group-list';
 import { prisma } from '@/prisma/prisma-client';
 
+// Render on each request: the menu comes from the database, which is not
+// reachable at build time (e.g. on Vercel). Avoids build-time prerendering.
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
     const categories = await prisma.category.findMany({
         include: {
