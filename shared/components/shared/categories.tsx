@@ -5,21 +5,22 @@ import { cn } from '@/shared/lib/utils';
 import Link from 'next/link';
 import { useCategoryStore } from '@/shared/store/category';
 
+interface Category {
+    id: number;
+    name: string;
+}
+
 export interface CategoriesProps {
+    items: Category[];
     className?: string;
 }
 
-const cats = [
-    { name: 'Pizzas', id: 1 },
-    { name: 'Combos', id: 2 },
-    { name: 'Appetizers', id: 3 },
-    { name: 'Cocktails', id: 4 },
-    { name: 'Coffee', id: 5 },
-    { name: 'Beverages', id: 6 },
-];
-
-export const Categories = ({ className }: CategoriesProps) => {
-    const activeCategoryId = useCategoryStore(state => state.activeId);
+export const Categories = ({ items, className }: CategoriesProps) => {
+    const activeId = useCategoryStore(state => state.activeId);
+    // Before any scroll sets an active category (activeId === 0), highlight the
+    // first one. Also falls back when the active category gets filtered out.
+    const activeCategoryId =
+        items.some(cat => cat.id === activeId) ? activeId : items[0]?.id;
 
     return (
         <div
@@ -28,9 +29,9 @@ export const Categories = ({ className }: CategoriesProps) => {
                 className
             )}
         >
-            {cats.map((cat, i) => (
+            {items.map(cat => (
                 <Link
-                    key={i}
+                    key={cat.id}
                     href={`#${cat.name}`}
                     className={cn(
                         'flex h-11 items-center rounded-2xl px-5 font-bold',

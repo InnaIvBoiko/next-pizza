@@ -4,11 +4,17 @@ import { Categories } from './categories';
 import { SortPopup } from './sort-popup';
 import { Container } from './container';
 
+interface Category {
+    id: number;
+    name: string;
+}
+
 export interface TopBarProps {
+    categories: Category[];
     className?: string;
 }
 
-export const TopBar = ({ className }: TopBarProps) => {
+export const TopBar = ({ categories, className }: TopBarProps) => {
     return (
         <div
             className={cn(
@@ -17,7 +23,7 @@ export const TopBar = ({ className }: TopBarProps) => {
             )}
         >
             <Container className='flex items-center justify-between'>
-                <Categories />
+                <Categories items={categories} />
                 <SortPopup />
             </Container>
         </div>

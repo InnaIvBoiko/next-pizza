@@ -65,13 +65,25 @@ export default async function Home({ searchParams }: HomeProps) {
         orderBy: { id: 'asc' },
     });
 
+    // Only categories that still have products after filtering — drives both
+    // the menu groups and the TopBar tabs, so a size/type filter that leaves
+    // only pizzas hides every other category's tab too.
+    const visibleCategories = categories.filter(
+        category => category.products.length > 0
+    );
+
     return (
         <>
             <Container className='mt-10'>
                 <Title text='All pizzas' size='lg' className='font-extrabold' />
             </Container>
 
-            <TopBar />
+            <TopBar
+                categories={visibleCategories.map(({ id, name }) => ({
+                    id,
+                    name,
+                }))}
+            />
             <Container className='mt-10 flex pb-14'>
                 <div className='flex gap-20'>
                     <div className='w-62.5'>
@@ -80,19 +92,15 @@ export default async function Home({ searchParams }: HomeProps) {
 
                     <div className='flex-1'>
                         <div className='flex flex-col gap-16'>
-                            {categories
-                                .filter(
-                                    category => category.products.length > 0
-                                )
-                                .map(category => (
-                                    <ProductsGroupList
-                                        key={category.id}
-                                        title={category.name}
-                                        categoryId={category.id}
-                                        items={category.products}
-                                        priority={category.id === 1}
-                                    />
-                                ))}
+                            {visibleCategories.map(category => (
+                                <ProductsGroupList
+                                    key={category.id}
+                                    title={category.name}
+                                    categoryId={category.id}
+                                    items={category.products}
+                                    priority={category.id === 1}
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>
