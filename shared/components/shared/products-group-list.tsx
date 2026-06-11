@@ -13,7 +13,7 @@ export interface ProductsGroupListProps {
         id: number;
         name: string;
         imageUrl: string;
-        description: string;
+        description?: string;
         items: Array<{
             price: number;
         }>;

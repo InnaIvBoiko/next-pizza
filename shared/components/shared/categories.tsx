@@ -16,7 +16,6 @@ const cats = [
     { name: 'Cocktails', id: 4 },
     { name: 'Coffee', id: 5 },
     { name: 'Beverages', id: 6 },
-    { name: 'Desserts', id: 7 },
 ];
 
 export const Categories = ({ className }: CategoriesProps) => {

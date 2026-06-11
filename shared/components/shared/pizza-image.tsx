@@ -8,6 +8,8 @@ interface Props {
     size: 20 | 30 | 40;
 }
 
+const sizePx: Record<Props['size'], number> = { 20: 300, 30: 400, 40: 500 };
+
 export const PizzaImage: React.FC<Props> = ({ imageUrl, size, className }) => {
     return (
         <div
@@ -19,6 +21,8 @@ export const PizzaImage: React.FC<Props> = ({ imageUrl, size, className }) => {
             <Image
                 src={imageUrl}
                 alt='Logo'
+                width={sizePx[size]}
+                height={sizePx[size]}
                 className={cn(
                     'relative top-2 left-2 z-10 transition-all duration-300',
                     {
