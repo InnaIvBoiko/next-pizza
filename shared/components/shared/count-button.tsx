@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Minus, Plus } from 'lucide-react';
-import { Button } from '@/components/ui';
+import { Button } from '@/shared/components/ui';
 
 interface Props {
     value?: number;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/shared/lib/utils';
+import { formatPrice } from '@/shared/lib';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Title } from './title';
@@ -43,7 +44,7 @@ export const ProductCard = ({
                 <p className='text-sm text-gray-400'>{description}</p>
                 <div className='mt-4 flex items-start justify-between'>
                     <span className='text-[20px]'>
-                        from <b>€ {price.toFixed(2)}</b>
+                        from <b>{formatPrice(price)}</b>
                     </span>
                     <Button variant='secondary'>
                         <Plus size={20} className='mr-1' />

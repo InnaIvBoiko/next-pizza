@@ -1,19 +1,10 @@
 export const categories = [
-    {
-        name: 'Pizzas',
-    },
-    {
-        name: 'Breakfast',
-    },
-    {
-        name: 'Snacks',
-    },
-    {
-        name: 'Cocktails',
-    },
-    {
-        name: 'Beverages',
-    },
+    { name: 'Pizzas' },
+    { name: 'Combos' },
+    { name: 'Appetizers' },
+    { name: 'Cocktails' },
+    { name: 'Coffee' },
+    { name: 'Beverages' },
 ];
 
 export const _ingredients = [
@@ -121,107 +112,104 @@ export const _ingredients = [
     },
 ].map((obj, index) => ({ id: index + 1, ...obj }));
 
-export const products = [
-    {
-        name: 'Omelette with ham and mushrooms',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE7970321044479C1D1085457A36EB.webp',
-        categoryId: 2,
-    },
-    {
-        name: 'Omelette with pepperoni',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE94ECF33B0C46BA410DEC1B1DD6F8.webp',
-        categoryId: 2,
-    },
-    {
-        name: 'Latte coffee',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE7D61B0C26A3F85D97A78FEEE00AD.webp',
-        categoryId: 2,
-    },
-    {
-        name: 'Denwich ham and cheese',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE796FF0059B799A17F57A9E64C725.webp',
-        categoryId: 3,
-    },
-    {
-        name: 'Chicken nuggets',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE7D618B5C7EC29350069AE9532C6E.webp',
-        categoryId: 3,
-    },
-    {
-        name: 'Oven-baked potatoes with sauce 🌱',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EED646A9CD324C962C6BEA78124F19.webp',
-        categoryId: 3,
-    },
-    {
-        name: 'Dodster',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE796F96D11392A2F6DD73599921B9.webp',
-        categoryId: 3,
-    },
-    {
-        name: 'Spicy Dodster 🌶️🌶️',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE796FD3B594068F7A752DF8161D04.webp',
-        categoryId: 3,
-    },
-    {
-        name: 'Banana milkshake',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EEE20B8772A72A9B60CFB20012C185.webp',
-        categoryId: 4,
-    },
-    {
-        name: 'Caramel apple milkshake',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE79702E2A22E693D96133906FB1B8.webp',
-        categoryId: 4,
-    },
-    {
-        name: 'Oreo cookie milkshake',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE796FA1F50F8F8111A399E4C1A1E3.webp',
-        categoryId: 4,
-    },
-    {
-        name: 'Classic milkshake 👶',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE796F93FB126693F96CB1D3E403FB.webp',
-        categoryId: 4,
-    },
-    {
-        name: 'Irish cappuccino',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE7D61999EBDA59C10E216430A6093.webp',
-        categoryId: 5,
-    },
-    {
-        name: 'Caramel cappuccino coffee',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE7D61AED6B6D4BFDAD4E58D76CF56.webp',
-        categoryId: 5,
-    },
-    {
-        name: 'Coconut latte coffee',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE7D61B19FA07090EE88B0ED347F42.webp',
-        categoryId: 5,
-    },
-    {
-        name: 'Americano coffee',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE7D61B044583596548A59078BBD33.webp',
-        categoryId: 5,
-    },
-    {
-        name: 'Latte coffee',
-        imageUrl:
-            'https://media.dodostatic.net/image/r:292x292/11EE7D61B0C26A3F85D97A78FEEE00AD.webp',
-        categoryId: 5,
-    },
+// Reusable dodostatic image URLs (next.config only allows **.dodostatic.net).
+const IMG = {
+    pizza: 'https://media.dodostatic.net/image/r:233x233/11EE7D61304FAF5A98A6958F2BB2D260.webp',
+    pizzaCheese:
+        'https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp',
+    denwich:
+        'https://media.dodostatic.net/image/r:292x292/11EE796FF0059B799A17F57A9E64C725.webp',
+    nuggets:
+        'https://media.dodostatic.net/image/r:292x292/11EE7D618B5C7EC29350069AE9532C6E.webp',
+    potatoes:
+        'https://media.dodostatic.net/image/r:292x292/11EED646A9CD324C962C6BEA78124F19.webp',
+    dodster:
+        'https://media.dodostatic.net/image/r:292x292/11EE796F96D11392A2F6DD73599921B9.webp',
+    bananaShake:
+        'https://media.dodostatic.net/image/r:292x292/11EEE20B8772A72A9B60CFB20012C185.webp',
+    appleShake:
+        'https://media.dodostatic.net/image/r:292x292/11EE79702E2A22E693D96133906FB1B8.webp',
+    oreoShake:
+        'https://media.dodostatic.net/image/r:292x292/11EE796FA1F50F8F8111A399E4C1A1E3.webp',
+    classicShake:
+        'https://media.dodostatic.net/image/r:292x292/11EE796F93FB126693F96CB1D3E403FB.webp',
+    irishCappuccino:
+        'https://media.dodostatic.net/image/r:292x292/11EE7D61999EBDA59C10E216430A6093.webp',
+    caramelCappuccino:
+        'https://media.dodostatic.net/image/r:292x292/11EE7D61AED6B6D4BFDAD4E58D76CF56.webp',
+    coconutLatte:
+        'https://media.dodostatic.net/image/r:292x292/11EE7D61B19FA07090EE88B0ED347F42.webp',
+    americano:
+        'https://media.dodostatic.net/image/r:292x292/11EE7D61B044583596548A59078BBD33.webp',
+    latte: 'https://media.dodostatic.net/image/r:292x292/11EE7D61B0C26A3F85D97A78FEEE00AD.webp',
+};
+
+// Non-pizza products. `price` drives a single ProductItem per product (these
+// have no size/type selector in the UI). Pizzas are created separately in
+// seed.ts because they need ingredient relations and 3 sizes × 2 doughs.
+// categoryId: 2 Combos, 3 Appetizers, 4 Cocktails, 5 Coffee, 6 Beverages.
+const productList = [
+    // --- Combos ---
+    { name: 'Menu Margherita (pizza + bibita)', imageUrl: IMG.pizza, categoryId: 2, price: 9 },
+    { name: 'Menu Diavola (pizza + birra)', imageUrl: IMG.pizza, categoryId: 2, price: 12 },
+    { name: 'Combo Coppia (2 pizze + 2 bibite)', imageUrl: IMG.pizzaCheese, categoryId: 2, price: 20 },
+    { name: 'Combo Famiglia (3 pizze + bibita 1.5L)', imageUrl: IMG.pizzaCheese, categoryId: 2, price: 30 },
+
+    // --- Appetizers / Aperitivo ---
+    { name: 'Bruschette al pomodoro', imageUrl: IMG.denwich, categoryId: 3, price: 5 },
+    { name: 'Tagliere di salumi e formaggi', imageUrl: IMG.denwich, categoryId: 3, price: 12 },
+    { name: 'Supplì al telefono', imageUrl: IMG.nuggets, categoryId: 3, price: 4.5 },
+    { name: 'Arancini siciliani', imageUrl: IMG.nuggets, categoryId: 3, price: 5 },
+    { name: 'Olive ascolane', imageUrl: IMG.nuggets, categoryId: 3, price: 5.5 },
+    { name: 'Crocchette di patate', imageUrl: IMG.potatoes, categoryId: 3, price: 4.5 },
+    { name: 'Caprese di bufala', imageUrl: IMG.dodster, categoryId: 3, price: 8 },
+    { name: 'Frittura di calamari', imageUrl: IMG.nuggets, categoryId: 3, price: 9 },
+
+    // --- Cocktails ---
+    { name: 'Aperol Spritz', imageUrl: IMG.appleShake, categoryId: 4, price: 6 },
+    { name: 'Negroni', imageUrl: IMG.bananaShake, categoryId: 4, price: 8 },
+    { name: 'Hugo Spritz', imageUrl: IMG.classicShake, categoryId: 4, price: 6.5 },
+    { name: 'Americano', imageUrl: IMG.bananaShake, categoryId: 4, price: 7 },
+    { name: 'Negroni Sbagliato', imageUrl: IMG.appleShake, categoryId: 4, price: 7.5 },
+    { name: 'Bellini', imageUrl: IMG.classicShake, categoryId: 4, price: 7 },
+    { name: 'Mojito', imageUrl: IMG.oreoShake, categoryId: 4, price: 7 },
+
+    // --- Coffee ---
+    { name: 'Espresso', imageUrl: IMG.americano, categoryId: 5, price: 1.2 },
+    { name: 'Caffè macchiato', imageUrl: IMG.caramelCappuccino, categoryId: 5, price: 1.4 },
+    { name: 'Cappuccino', imageUrl: IMG.caramelCappuccino, categoryId: 5, price: 1.5 },
+    { name: 'Caffè latte', imageUrl: IMG.latte, categoryId: 5, price: 1.8 },
+    { name: 'Marocchino', imageUrl: IMG.coconutLatte, categoryId: 5, price: 1.8 },
+    { name: 'Latte macchiato', imageUrl: IMG.latte, categoryId: 5, price: 2 },
+    { name: 'Caffè corretto', imageUrl: IMG.irishCappuccino, categoryId: 5, price: 2 },
+
+    // --- Beverages ---
+    { name: 'Acqua naturale 0.5L', imageUrl: IMG.classicShake, categoryId: 6, price: 1 },
+    { name: 'Acqua frizzante 0.5L', imageUrl: IMG.classicShake, categoryId: 6, price: 1 },
+    { name: 'Coca-Cola 0.33L', imageUrl: IMG.oreoShake, categoryId: 6, price: 2.5 },
+    { name: 'Aranciata San Pellegrino', imageUrl: IMG.appleShake, categoryId: 6, price: 2.5 },
+    { name: 'Chinotto', imageUrl: IMG.oreoShake, categoryId: 6, price: 2.5 },
+    { name: 'Limonata', imageUrl: IMG.classicShake, categoryId: 6, price: 2.5 },
+    { name: 'Birra Moretti 0.33L', imageUrl: IMG.bananaShake, categoryId: 6, price: 3.5 },
+    { name: 'Birra Peroni 0.33L', imageUrl: IMG.bananaShake, categoryId: 6, price: 3.5 },
+];
+
+// Stripped of `price` for prisma.createMany (the Product table has no price);
+// prices are applied via ProductItem rows in seed.ts.
+export const products = productList.map(({ price: _price, ...rest }) => rest);
+export const productPrices = productList.map(p => p.price);
+
+// --- Pizzas (categoryId 1) ---
+// base = price of a 30 cm traditional pizza; 20/30/40 cm are derived in seed.ts.
+export const pizzas = [
+    { name: 'Margherita', imageUrl: IMG.pizzaCheese, base: 6, ingredients: [2, 11, 14] },
+    { name: 'Marinara', imageUrl: IMG.pizza, base: 5.5, ingredients: [11, 12, 14] },
+    { name: 'Diavola', imageUrl: IMG.pizza, base: 8, ingredients: [2, 8, 4] },
+    { name: 'Quattro Formaggi', imageUrl: IMG.pizzaCheese, base: 9, ingredients: [1, 2, 3, 16] },
+    { name: 'Quattro Stagioni', imageUrl: IMG.pizza, base: 8.5, ingredients: [2, 7, 6, 11] },
+    { name: 'Capricciosa', imageUrl: IMG.pizza, base: 8.5, ingredients: [2, 7, 6, 15] },
+    { name: 'Prosciutto e Funghi', imageUrl: IMG.pizzaCheese, base: 8, ingredients: [2, 7, 6] },
+    { name: 'Napoli', imageUrl: IMG.pizza, base: 7, ingredients: [2, 11, 14] },
+    { name: 'Bufalina', imageUrl: IMG.pizzaCheese, base: 9.5, ingredients: [2, 11, 16, 14] },
+    { name: 'Ortolana', imageUrl: IMG.pizza, base: 7.5, ingredients: [6, 15, 12, 11] },
 ];

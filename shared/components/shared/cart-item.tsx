@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/shared/lib/utils';
+import { formatPrice } from '@/shared/lib';
 import Image from 'next/image';
 import { CountButton } from './';
 
@@ -11,7 +12,7 @@ interface Props {
     count?: number;
 }
 
-export const CardItem: React.FC<Props> = ({
+export const CartItem: React.FC<Props> = ({
     imageUrl,
     name,
     price,
@@ -40,7 +41,9 @@ export const CardItem: React.FC<Props> = ({
                 <div className='flex items-center justify-between'>
                     <CountButton value={count} />
 
-                    <h2 className='font-bold'>€ {price?.toFixed(2)}</h2>
+                    <h2 className='font-bold'>
+                        {price !== undefined ? formatPrice(price) : null}
+                    </h2>
                 </div>
             </div>
         </div>

@@ -7,11 +7,11 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from '@/components/ui';
-import { CardItem } from './card-item';
+} from '@/shared/components/ui';
+import { CartItem } from './cart-item';
 import { ArrowRight } from 'lucide-react';
 
-export const CardDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
     return (
         <Sheet>
             <SheetTrigger asChild>{children}</SheetTrigger>
@@ -19,19 +19,19 @@ export const CardDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                 <div>
                     <SheetHeader>
                         <SheetTitle>
-                            В корзине{' '}
-                            <span className='font-bold'>3 товара</span>
+                            In cart{' '}
+                            <span className='font-bold'>3 items</span>
                         </SheetTitle>
                     </SheetHeader>
 
                     <div className='-mx-6 mt-5 flex flex-col gap-2'>
-                        <CardItem
-                            name='Чизбургер-пицца'
+                        <CartItem
+                            name='Cheeseburger pizza'
                             imageUrl='https://media.dodostatic.net/image/r:292x292/11EE7D610BBEB562BD4D48786AD87270.webp'
                             price={500}
                         />
-                        <CardItem
-                            name='Чизбургер-пицца'
+                        <CartItem
+                            name='Cheeseburger pizza'
                             imageUrl='https://media.dodostatic.net/image/r:292x292/11EE7D610BBEB562BD4D48786AD87270.webp'
                             price={350}
                             count={3}
@@ -41,7 +41,7 @@ export const CardDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
 
                 <SheetFooter className='-mx-6 bg-white p-5'>
                     <Button type='submit' className='h-12 w-full text-base'>
-                        Оформить заказ
+                        Checkout
                         <ArrowRight className='ml-2 w-5' />
                     </Button>
                 </SheetFooter>
