@@ -1,4 +1,4 @@
-import { ProductItem } from '@prisma/client';
+import { ProductItem } from '@/generated/prisma/client';
 import { PizzaType, pizzaSizes } from '../constants/pizza';
 import { Variant } from '../components/shared/group-variants';
 

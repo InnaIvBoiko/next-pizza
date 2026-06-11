@@ -1,5 +1,5 @@
 import { Api } from '@/shared/services/api-client';
-import { Ingredient } from '@prisma/client';
+import { Ingredient } from '@/generated/prisma/client';
 import React from 'react';
 
 export const useIngredients = () => {

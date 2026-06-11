@@ -7,7 +7,7 @@ import { useClickAway, useDebounce } from 'react-use';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Api } from '@/shared/services/api-client';
-import { Product } from '@prisma/client';
+import { Product } from '@/generated/prisma/client';
 
 export const SearchInput = () => {
     const [searchQuery, setSearchQuery] = React.useState('');

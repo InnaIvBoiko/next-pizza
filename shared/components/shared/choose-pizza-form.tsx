@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Ingredient, ProductItem } from '@prisma/client';
+import { Ingredient, ProductItem } from '@/generated/prisma/client';
 
 import { PizzaImage } from './pizza-image';
 import { Title } from './title';

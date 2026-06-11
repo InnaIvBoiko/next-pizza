@@ -9,7 +9,7 @@ const prisma = new PrismaClient({ adapter });
 
 export { prisma };
 
-// import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@/generated/prisma/client';
 // import { PrismaPg } from '@prisma/adapter-pg';
 
 // const prismaClientSingleton = () => {

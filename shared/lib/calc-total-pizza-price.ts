@@ -1,4 +1,4 @@
-import { Ingredient, ProductItem } from '@prisma/client';
+import { Ingredient, ProductItem } from '@/generated/prisma/client';
 import { PizzaSize, PizzaType } from '../constants/pizza';
 
 /**

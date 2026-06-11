@@ -5,7 +5,7 @@
 
 // import { prisma } from '@/prisma/prisma-client';
 // import { compare, hashSync } from 'bcrypt';
-// import { UserRole } from '@prisma/client';
+// import { UserRole } from '@/generated/prisma/client';
 
 // export const authOptions: AuthOptions = {
 //     providers: [
