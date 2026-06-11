@@ -6,10 +6,56 @@ import { prisma } from '@/prisma/prisma-client';
 // reachable at build time (e.g. on Vercel). Avoids build-time prerendering.
 export const dynamic = 'force-dynamic';
 
-export default async function Home() {
+interface HomeProps {
+    searchParams: Promise<{
+        ingredients?: string;
+        sizes?: string;
+        pizzaTypes?: string;
+        priceFrom?: string;
+        priceTo?: string;
+    }>;
+}
+
+// "2,8,6" -> [2, 8, 6] (drops anything non-numeric)
+const toNumberList = (value?: string) =>
+    value
+        ?.split(',')
+        .map(Number)
+        .filter(n => !Number.isNaN(n));
+
+export default async function Home({ searchParams }: HomeProps) {
+    const params = await searchParams;
+
+    const ingredientIds = toNumberList(params.ingredients);
+    const sizes = toNumberList(params.sizes);
+    const pizzaTypes = toNumberList(params.pizzaTypes);
+    const priceFrom = Number(params.priceFrom) || undefined;
+    const priceTo = Number(params.priceTo) || undefined;
+
+    // Constraints on a product's variants (ProductItem): size, dough type, price.
+    const itemsWhere = {
+        ...(sizes?.length ? { size: { in: sizes } } : {}),
+        ...(pizzaTypes?.length ? { pizzaType: { in: pizzaTypes } } : {}),
+        ...(priceFrom || priceTo
+            ? { price: { gte: priceFrom, lte: priceTo } }
+            : {}),
+    };
+
+    const productsWhere = {
+        ...(ingredientIds?.length
+            ? { ingredients: { some: { id: { in: ingredientIds } } } }
+            : {}),
+        // Only constrain variants when at least one variant filter is set,
+        // so products without items aren't accidentally excluded.
+        ...(Object.keys(itemsWhere).length ? { items: { some: itemsWhere } } : {}),
+    };
+
     const categories = await prisma.category.findMany({
         include: {
             products: {
+                where: Object.keys(productsWhere).length
+                    ? productsWhere
+                    : undefined,
                 include: {
                     ingredients: true,
                     items: true,

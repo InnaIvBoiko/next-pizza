@@ -22,13 +22,15 @@ export const CartItem: React.FC<Props> = ({
     return (
         <div className={cn('flex h-36 gap-6 bg-white p-5', className)}>
             {imageUrl && (
-                <Image
-                    className='h-16.25 w-16.25'
-                    src={imageUrl}
-                    width={65}
-                    height={65}
-                    alt={name ?? 'Pizza'}
-                />
+                <div className='relative h-16.25 w-16.25 shrink-0'>
+                    <Image
+                        className='object-cover'
+                        src={imageUrl}
+                        fill
+                        sizes='65px'
+                        alt={name ?? 'Pizza'}
+                    />
+                </div>
             )}
 
             <div>

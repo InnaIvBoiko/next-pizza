@@ -1,19 +1,13 @@
 'use client';
 
-import React from 'react';
 import { Title } from './title';
 import { Input, RangeSlider } from '../ui';
 import { FilterCheckbox } from './filter-checkbox';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
-// import { useQueryFilters, useIngredients, useFilters } from '@/hooks';
+import { useFilters, useIngredients, useQueryFilters } from '@/shared/hooks';
 
 export interface FiltersProps {
     className?: string;
-}
-
-interface PriceProps {
-    priceFrom?: number;
-    priceTo?: number;
 }
 
 const MIN_PRICE = 0;
@@ -23,28 +17,32 @@ const MAX_PRICE = 50;
 const noSpinner =
     '[appearance:textfield] [&::-webkit-inner-spin-button]:[-webkit-appearance:none] [&::-webkit-outer-spin-button]:[-webkit-appearance:none] [&::-webkit-inner-spin-button]:m-0';
 
-const items = [
-    { value: '1', text: 'Tomato' },
-    { value: '2', text: 'Cheese' },
-    { value: '3', text: 'Pepperoni' },
-    { value: '4', text: 'Mushrooms' },
-    { value: '5', text: 'Onions' },
-    { value: '6', text: 'Olives' },
-    { value: '7', text: 'Basil' },
-    { value: '8', text: 'Spinach' },
-    { value: '9', text: 'Garlic' },
-    { value: '10', text: 'Pineapple' },
-];
-
 export const Filters = ({ className }: FiltersProps) => {
-    const [prices, setPrices] = React.useState<PriceProps>({});
+    const { ingredients, loading } = useIngredients();
+    const filters = useFilters();
+    const {
+        selectedIngredients,
+        setSelectedIngredients,
+        sizes,
+        setSizes,
+        pizzaTypes,
+        setPizzaTypes,
+        prices,
+        setPrices,
+    } = filters;
 
-    const updatePrice = (name: keyof PriceProps, value: number) => {
-        setPrices({ ...prices, [name]: value });
-    };
+    // Mirror the whole selection into the URL (ingredients, sizes,
+    // pizzaTypes, priceFrom, priceTo).
+    useQueryFilters(filters);
+
+    const items = ingredients.map(ingredient => ({
+        text: ingredient.name,
+        value: String(ingredient.id),
+    }));
 
     const updatePrices = (values: number[]) => {
-        setPrices({ priceFrom: values[0], priceTo: values[1] });
+        setPrices('priceFrom', values[0]);
+        setPrices('priceTo', values[1]);
     };
 
     return (
@@ -64,6 +62,8 @@ export const Filters = ({ className }: FiltersProps) => {
                     { text: 'Thin', value: '1' },
                     { text: 'Traditional', value: '2' },
                 ]}
+                selected={pizzaTypes}
+                onClickCheckbox={setPizzaTypes}
             />
 
             <CheckboxFiltersGroup
@@ -75,6 +75,8 @@ export const Filters = ({ className }: FiltersProps) => {
                     { text: '30 cm', value: '30' },
                     { text: '40 cm', value: '40' },
                 ]}
+                selected={sizes}
+                onClickCheckbox={setSizes}
             />
 
             <div className='mt-5 border-y border-y-neutral-100 py-6 pb-7'>
@@ -88,7 +90,7 @@ export const Filters = ({ className }: FiltersProps) => {
                         value={String(prices.priceFrom ?? MIN_PRICE)}
                         className={noSpinner}
                         onChange={e =>
-                            updatePrice('priceFrom', Number(e.target.value))
+                            setPrices('priceFrom', Number(e.target.value))
                         }
                     />
                     <Input
@@ -99,7 +101,7 @@ export const Filters = ({ className }: FiltersProps) => {
                         value={String(prices.priceTo ?? MAX_PRICE)}
                         className={noSpinner}
                         onChange={e =>
-                            updatePrice('priceTo', Number(e.target.value))
+                            setPrices('priceTo', Number(e.target.value))
                         }
                     />
                 </div>
@@ -122,7 +124,9 @@ export const Filters = ({ className }: FiltersProps) => {
                 limit={6}
                 defaultItems={items.slice(0, 6)}
                 items={items}
-                loading={false}
+                loading={loading}
+                selected={selectedIngredients}
+                onClickCheckbox={setSelectedIngredients}
             />
         </div>
     );
