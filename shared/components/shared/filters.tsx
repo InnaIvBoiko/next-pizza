@@ -2,7 +2,7 @@
 
 import { Title } from './title';
 import { Input, RangeSlider } from '../ui';
-import { FilterCheckbox } from './filter-checkbox';
+// import { FilterCheckbox } from './filter-checkbox';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
 import { useFilters, useIngredients, useQueryFilters } from '@/shared/hooks';
 
@@ -49,10 +49,10 @@ export const Filters = ({ className }: FiltersProps) => {
         <div className={className}>
             <Title text='Filtration' size='sm' className='mb-5 font-bold' />
 
-            <div className='mb-5 flex flex-col gap-4'>
+            {/* <div className='mb-5 flex flex-col gap-4'>
                 <FilterCheckbox text='Can be collected' value='1' />
                 <FilterCheckbox text='New products' value='2' />
-            </div>
+            </div> */}
 
             <CheckboxFiltersGroup
                 title='Pizza Types'

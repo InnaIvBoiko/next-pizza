@@ -1,7 +1,6 @@
-import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
+import { Providers } from '@/shared/components/shared/providers';
 import './globals.css';
-import { Header } from '@/shared/components';
 
 const nunito = Nunito({
     subsets: ['cyrillic'],
@@ -9,21 +8,18 @@ const nunito = Nunito({
     weight: ['400', '500', '600', '700', '800', '900'],
 });
 
-export const metadata: Metadata = {
-    title: 'Next Pizza',
-    description: 'Delicious pizza made with Next.js',
-};
-
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <html lang='en' data-scroll-behavior='smooth'>
-            <body className={nunito.variable}>
-                <Header />
-                <main className='min-h-screen'>{children}</main>
+        <html lang='en'>
+            <head>
+                <link data-rh='true' rel='icon' href='/logo.png' />
+            </head>
+            <body className={nunito.className}>
+                <Providers>{children}</Providers>
             </body>
         </html>
     );

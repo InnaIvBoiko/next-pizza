@@ -26,9 +26,9 @@ export const PizzaImage: React.FC<Props> = ({ imageUrl, size, className }) => {
                 className={cn(
                     'relative top-2 left-2 z-10 transition-all duration-300',
                     {
-                        'h-75 w-75': size === 20,
-                        'h-100 w-100': size === 30,
-                        'h-125 w-125': size === 40,
+                        'h-75 w-75': Number(size) === 20,
+                        'h-100 w-100': Number(size) === 30,
+                        'h-125 w-125': Number(size) === 40,
                     }
                 )}
             />
