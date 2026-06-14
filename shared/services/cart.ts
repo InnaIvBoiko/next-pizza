@@ -1,28 +1,21 @@
-import { CreateCartItemValues } from './dto/cart.dto';
-import { CartDTO } from './dto/cart.dto';
+import { axiosInstance } from './instance';
+import { ApiRoutes } from './constants';
+import { CartDTO, CreateCartItemValues } from './dto/cart.dto';
 
-/**
- * TODO: Cart backend not implemented yet (render-only scope).
- *
- * To enable persistence, replace these stubs with real calls against the
- * /api/cart routes, e.g.:
- *   return (await axiosInstance.get<CartDTO>(ApiRoutes.CART)).data;
- * and add the matching route handlers + Prisma cart-token/cookie logic.
- */
-const notImplemented = (): never => {
-    throw new Error('Cart API is not implemented yet');
-};
-
-export const getCart = async (): Promise<CartDTO> => notImplemented();
+export const getCart = async (): Promise<CartDTO> =>
+    (await axiosInstance.get<CartDTO>(ApiRoutes.CART)).data;
 
 export const addCartItem = async (
-    _values: CreateCartItemValues
-): Promise<CartDTO> => notImplemented();
+    values: CreateCartItemValues
+): Promise<CartDTO> =>
+    (await axiosInstance.post<CartDTO>(ApiRoutes.CART, values)).data;
 
 export const updateItemQuantity = async (
-    _id: number,
-    _quantity: number
-): Promise<CartDTO> => notImplemented();
+    id: number,
+    quantity: number
+): Promise<CartDTO> =>
+    (await axiosInstance.patch<CartDTO>(`${ApiRoutes.CART}/${id}`, { quantity }))
+        .data;
 
-export const removeCartItem = async (_id: number): Promise<CartDTO> =>
-    notImplemented();
+export const removeCartItem = async (id: number): Promise<CartDTO> =>
+    (await axiosInstance.delete<CartDTO>(`${ApiRoutes.CART}/${id}`)).data;

@@ -11,8 +11,6 @@ import {
     DialogTitle,
 } from '@/shared/components/ui/dialog';
 import { ProductForm } from '../product-form';
-// import { useCartStore } from '@/shared/store';
-// import toast from 'react-hot-toast';
 
 interface Props {
     product: ProductWithRelations;
@@ -26,7 +24,7 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
         <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
             <DialogContent
                 className={cn(
-                    'min-h-125 w-265 max-w-265 sm:max-w-265 overflow-hidden bg-white p-0',
+                    'min-h-125 w-265 max-w-265 overflow-hidden bg-white p-0 sm:max-w-265',
                     className
                 )}
             >

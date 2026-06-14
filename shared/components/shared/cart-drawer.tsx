@@ -1,50 +1,160 @@
+'use client';
+
 import React from 'react';
+
 import {
-    Button,
     Sheet,
+    SheetClose,
     SheetContent,
+    SheetDescription,
     SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from '@/shared/components/ui';
-import { CartItem } from './cart-item';
-import { ArrowRight } from 'lucide-react';
+} from '@/shared/components/ui/sheet';
+import Link from 'next/link';
+import { Button } from '../ui';
+import { ArrowLeft, ArrowRight, PackageOpen } from 'lucide-react';
+import { CartDrawerItem } from './cart-drawer-item';
+import { getCartItemDetails, formatPrice } from '@/shared/lib';
+import { PizzaSize, PizzaType } from '@/shared/constants/pizza';
+import { Title } from './title';
+import { cn } from '@/shared/lib/utils';
+import { useCart } from '@/shared/hooks';
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const { totalAmount, updateItemQuantity, items, removeCartItem } =
+        useCart();
+    const [redirecting, setRedirecting] = React.useState(false);
+
+    const onClickCountButton = (
+        id: number,
+        quantity: number,
+        type: 'plus' | 'minus'
+    ) => {
+        const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
+        updateItemQuantity(id, newQuantity);
+    };
     return (
         <Sheet>
             <SheetTrigger asChild>{children}</SheetTrigger>
-            <SheetContent className='flex flex-col justify-between bg-[#F4F1EE] pb-0'>
-                <div>
-                    <SheetHeader>
-                        <SheetTitle>
-                            In cart{' '}
-                            <span className='font-bold'>3 items</span>
-                        </SheetTitle>
-                    </SheetHeader>
 
-                    <div className='-mx-6 mt-5 flex flex-col gap-2'>
-                        <CartItem
-                            name='Cheeseburger pizza'
-                            imageUrl='https://media.dodostatic.net/image/r:292x292/11EE7D610BBEB562BD4D48786AD87270.webp'
-                            price={500}
-                        />
-                        <CartItem
-                            name='Cheeseburger pizza'
-                            imageUrl='https://media.dodostatic.net/image/r:292x292/11EE7D610BBEB562BD4D48786AD87270.webp'
-                            price={350}
-                            count={3}
-                        />
-                    </div>
+            <SheetContent className='flex flex-col justify-between bg-[#F4F1EE] px-6 pb-0'>
+                <SheetDescription className='sr-only'>
+                    Your selected items and order total
+                </SheetDescription>
+
+                <div
+                    className={cn(
+                        'flex h-full flex-col',
+                        !totalAmount && 'justify-center'
+                    )}
+                >
+                    {totalAmount > 0 ? (
+                        <SheetHeader>
+                            <SheetTitle>
+                                In the cart{' '}
+                                <span className='font-bold'>
+                                    {items.length} items
+                                </span>
+                            </SheetTitle>
+                        </SheetHeader>
+                    ) : (
+                        <SheetTitle className='sr-only'>Cart</SheetTitle>
+                    )}
+
+                    {!totalAmount && (
+                        <div className='mx-auto flex w-72 flex-col items-center justify-center'>
+                            <PackageOpen
+                                className='text-neutral-300'
+                                size={120}
+                                strokeWidth={1}
+                            />
+                            <Title
+                                size='sm'
+                                text='The cart is empty'
+                                className='my-2 text-center font-bold'
+                            />
+                            <p className='mb-5 text-center text-neutral-500'>
+                                Add at least one pizza to place an order
+                            </p>
+
+                            <SheetClose asChild>
+                                <Button
+                                    className='h-12 w-56 text-base'
+                                    size='lg'
+                                >
+                                    <ArrowLeft className='mr-2 w-5' />
+                                    Go back
+                                </Button>
+                            </SheetClose>
+                        </div>
+                    )}
+
+                    {totalAmount > 0 && (
+                        <>
+                            <div className='-mx-6 mt-5 flex-1 overflow-auto'>
+                                {items.map(item => (
+                                    <div key={item.id} className='mb-2'>
+                                        <CartDrawerItem
+                                            id={item.id}
+                                            imageUrl={item.imageUrl}
+                                            details={getCartItemDetails(
+                                                item.ingredients,
+                                                item.pizzaType as PizzaType,
+                                                item.pizzaSize as PizzaSize
+                                            )}
+                                            disabled={item.disabled}
+                                            name={item.name}
+                                            price={item.price}
+                                            quantity={item.quantity}
+                                            onClickCountButton={type =>
+                                                onClickCountButton(
+                                                    item.id,
+                                                    item.quantity,
+                                                    type
+                                                )
+                                            }
+                                            onClickRemove={() =>
+                                                removeCartItem(item.id)
+                                            }
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
+                            <SheetFooter className='-mx-6 bg-white p-8'>
+                                <div className='w-full'>
+                                    <div className='mb-4 flex'>
+                                        <span className='flex flex-1 text-lg text-neutral-500'>
+                                            Total amount
+                                            <div className='relative -top-1 mx-2 flex-1 border-b border-dashed border-b-neutral-200' />
+                                        </span>
+
+                                        <span className='text-lg font-bold'>
+                                            {formatPrice(totalAmount)}
+                                        </span>
+                                    </div>
+
+                                    <Link href='/checkout'>
+                                        <Button
+                                            onClick={() => setRedirecting(true)}
+                                            disabled={redirecting}
+                                            aria-busy={redirecting}
+                                            type='submit'
+                                            className='h-12 w-full text-base'
+                                        >
+                                            {redirecting
+                                                ? 'Loading...'
+                                                : 'Place order'}
+                                            <ArrowRight className='ml-2 w-5' />
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </SheetFooter>
+                        </>
+                    )}
                 </div>
-
-                <SheetFooter className='-mx-6 bg-white p-5'>
-                    <Button type='submit' className='h-12 w-full text-base'>
-                        Checkout
-                        <ArrowRight className='ml-2 w-5' />
-                    </Button>
-                </SheetFooter>
             </SheetContent>
         </Sheet>
     );

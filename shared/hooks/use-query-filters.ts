@@ -37,11 +37,14 @@ export const useQueryFilters = (filters: Filters) => {
         // replace (not push) so toggling a filter doesn't pollute history;
         // scroll:false keeps the user's place in the menu.
         router.replace(query ? `?${query}` : '?', { scroll: false });
+        // `router` is intentionally omitted from the deps: its identity can
+        // change after a navigation, which would re-run this effect and call
+        // `router.replace` again — an infinite "Maximum update depth" loop.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         filters.selectedIngredients,
         filters.sizes,
         filters.pizzaTypes,
         filters.prices,
-        router,
     ]);
 };
