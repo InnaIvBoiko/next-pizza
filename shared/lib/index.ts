@@ -5,5 +5,8 @@ export { getCartItemDetails } from './get-cart-item-details';
 export { getCartDetails } from './get-cart-details';
 export { calcCartItemTotalPrice } from './calc-cart-item-total-price';
 export { formatPrice } from './format-price';
-// export { sendEmail } from './send-email';
-// export { createPayment } from './create-payment';
+
+// NOTE: server-only modules (sendEmail, createPayment, stripe) are intentionally
+// NOT re-exported here. This barrel is imported by client components, and pulling
+// in Stripe/Resend would leak server code into the browser bundle. Import them
+// directly from their files in server code instead.
