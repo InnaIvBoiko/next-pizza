@@ -2,25 +2,24 @@ import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client';
 
-const connectionString = `${process.env.POSTGRES_URL}`;
+const prismaClientSingleton = () => {
+    const adapter = new PrismaPg({
+        connectionString: `${process.env.POSTGRES_URL}`,
+    });
+    return new PrismaClient({ adapter });
+};
 
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
+declare global {
+    var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
+}
+
+// Reuse the client across hot reloads in dev so repeated module evaluation
+// doesn't open a new connection pool each time. In production each instance
+// gets its own client.
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 
 export { prisma };
 
-// import { PrismaClient } from '@/generated/prisma/client';
-// import { PrismaPg } from '@prisma/adapter-pg';
-
-// const prismaClientSingleton = () => {
-//     const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
-//     return new PrismaClient({ adapter });
-// };
-
-// declare global {
-//     var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
-// }
-
-// export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
-
-// if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;
+if (process.env.NODE_ENV !== 'production') {
+    globalThis.prismaGlobal = prisma;
+}
