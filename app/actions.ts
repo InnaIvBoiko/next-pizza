@@ -159,6 +159,27 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
     }
 }
 
+export async function deleteUser() {
+    try {
+        const currentUser = await getUserSession();
+
+        if (!currentUser) {
+            throw new Error('User not found');
+        }
+
+        // Cascades remove the user's cart and verification code; orders keep
+        // their records with the user reference set to null (see schema).
+        await prisma.user.delete({
+            where: {
+                id: Number(currentUser.id),
+            },
+        });
+    } catch (err) {
+        console.log('Error [DELETE_USER]', err);
+        throw err;
+    }
+}
+
 export async function registerUser(body: Prisma.UserCreateInput) {
     try {
         const user = await prisma.user.findFirst({
@@ -173,6 +194,10 @@ export async function registerUser(body: Prisma.UserCreateInput) {
             }
 
             throw new Error('User already exists');
+        }
+
+        if (!body.password || typeof body.password !== 'string') {
+            throw new Error('Password is required');
         }
 
         const createdUser = await prisma.user.create({
@@ -199,6 +224,17 @@ export async function registerUser(body: Prisma.UserCreateInput) {
                 code,
             })
         );
+
+        // Dev convenience: if email delivery isn't configured, the user can
+        // never receive the code. Log a ready-to-click verification link.
+        const apiKey = process.env.RESEND_API_KEY;
+        if (!apiKey || !apiKey.startsWith('re_') || apiKey.length < 20) {
+            const baseUrl =
+                process.env.NEXTAUTH_URL ?? 'http://localhost:3000';
+            console.log(
+                `[registerUser:dev] Verify ${createdUser.email}: ${baseUrl}/api/auth/verify?code=${code}`
+            );
+        }
     } catch (err) {
         console.log('Error [CREATE_USER]', err);
         throw err;

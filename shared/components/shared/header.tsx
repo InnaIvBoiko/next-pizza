@@ -7,11 +7,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
 import { CartButton } from './cart-button';
-// import { useRouter, useSearchParams } from 'next/navigation';
-// import toast from 'react-hot-toast';
-import { Button } from '../ui';
-// import { ProfileButton } from './profile-button';
-// import { AuthModal } from './modals';
+import { useRouter, useSearchParams } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { ProfileButton } from './profile-button';
+import { AuthModal } from './modals';
 
 interface Props {
     hasSearch?: boolean;
@@ -24,32 +23,32 @@ export const Header: React.FC<Props> = ({
     hasCart = true,
     className,
 }) => {
-    // const router = useRouter();
-    // const [openAuthModal, setOpenAuthModal] = React.useState(false);
+    const router = useRouter();
+    const [openAuthModal, setOpenAuthModal] = React.useState(false);
 
-    // const searchParams = useSearchParams();
+    const searchParams = useSearchParams();
 
-    // React.useEffect(() => {
-    //     let toastMessage = '';
+    React.useEffect(() => {
+        let toastMessage = '';
 
-    //     if (searchParams.has('paid')) {
-    //         toastMessage =
-    //             'Order successfully paid! Information sent to email.';
-    //     }
+        if (searchParams.has('paid')) {
+            toastMessage =
+                'Order successfully paid! Information sent to email.';
+        }
 
-    //     if (searchParams.has('verified')) {
-    //         toastMessage = 'Email successfully verified!';
-    //     }
+        if (searchParams.has('verified')) {
+            toastMessage = 'Email successfully verified!';
+        }
 
-    //     if (toastMessage) {
-    //         setTimeout(() => {
-    //             router.replace('/');
-    //             toast.success(toastMessage, {
-    //                 duration: 3000,
-    //             });
-    //         }, 1000);
-    //     }
-    // }, [router, searchParams]);
+        if (toastMessage) {
+            setTimeout(() => {
+                router.replace('/');
+                toast.success(toastMessage, {
+                    duration: 3000,
+                });
+            }, 1000);
+        }
+    }, [router, searchParams]);
 
     return (
         <header className={cn('border-b', className)}>
@@ -82,16 +81,14 @@ export const Header: React.FC<Props> = ({
 
                 {/* Right Section */}
                 <div className='flex items-center gap-3'>
-                    <Button variant='outline'>Login</Button>
-
-                    {/* <AuthModal
+                    <AuthModal
                         open={openAuthModal}
                         onClose={() => setOpenAuthModal(false)}
-                    /> */}
+                    />
 
-                    {/* <ProfileButton
+                    <ProfileButton
                         onClickSignIn={() => setOpenAuthModal(true)}
-                    /> */}
+                    />
 
                     {hasCart && <CartButton />}
                 </div>

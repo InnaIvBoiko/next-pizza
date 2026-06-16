@@ -1,30 +1,15 @@
 import { AuthOptions } from 'next-auth';
-import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
 import { prisma } from '@/prisma/prisma-client';
-import { compare, hashSync } from 'bcrypt';
-import { UserRole } from '@/generated/prisma/client';
+import { compare } from 'bcrypt';
 
 export const authOptions: AuthOptions = {
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || '',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-        }),
-        GitHubProvider({
-            clientId: process.env.GITHUB_ID || '',
-            clientSecret: process.env.GITHUB_SECRET || '',
-            profile(profile) {
-                return {
-                    id: String(profile.id),
-                    name: profile.name || profile.login,
-                    email: profile.email,
-                    image: profile.avatar_url,
-                    role: 'USER' as UserRole,
-                };
-            },
         }),
         CredentialsProvider({
             name: 'Credentials',
@@ -34,19 +19,23 @@ export const authOptions: AuthOptions = {
             },
             async authorize(credentials) {
                 if (!credentials) {
-                    return null;
+                    throw new Error('INVALID_CREDENTIALS');
                 }
 
-                const values = {
-                    email: credentials.email,
-                };
-
                 const findUser = await prisma.user.findFirst({
-                    where: values,
+                    where: { email: credentials.email },
                 });
 
+                // Same generic error for "not found" and "wrong password"
+                // so attackers can't tell which emails are registered.
                 if (!findUser) {
-                    return null;
+                    throw new Error('INVALID_CREDENTIALS');
+                }
+
+                // No password means the account was created via an OAuth
+                // provider and can only be accessed through it.
+                if (!findUser.password) {
+                    throw new Error('OAUTH_ACCOUNT');
                 }
 
                 const isPasswordValid = await compare(
@@ -55,11 +44,11 @@ export const authOptions: AuthOptions = {
                 );
 
                 if (!isPasswordValid) {
-                    return null;
+                    throw new Error('INVALID_CREDENTIALS');
                 }
 
                 if (!findUser.verified) {
-                    return null;
+                    throw new Error('EMAIL_NOT_VERIFIED');
                 }
 
                 return {
@@ -116,7 +105,7 @@ export const authOptions: AuthOptions = {
                     data: {
                         email: user.email,
                         fullName: user.name || 'User #' + user.id,
-                        password: hashSync(user.id.toString(), 10),
+                        // No password: this account can only sign in via OAuth.
                         verified: new Date(),
                         provider: account?.provider,
                         providerId: account?.providerAccountId,

@@ -7,13 +7,12 @@ import {
     TFormRegisterValues,
     formRegisterSchema,
 } from './modals/auth-modal/forms/schemas';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma/client';
 import toast from 'react-hot-toast';
 import { signOut } from 'next-auth/react';
-import { Container } from './container';
-import { Title } from './title';
 import { FormInput } from './form';
 import { Button } from '../ui';
+import { DeleteAccountModal } from './modals';
 import { updateUserInfo } from '@/app/actions';
 
 interface Props {
@@ -21,6 +20,8 @@ interface Props {
 }
 
 export const ProfileForm: React.FC<Props> = ({ data }) => {
+    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+
     const form = useForm({
         resolver: zodResolver(formRegisterSchema),
         defaultValues: {
@@ -62,16 +63,10 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
     };
 
     return (
-        <Container className='my-10'>
-            <Title
-                text={`Profile info | #${data.id}`}
-                size='md'
-                className='font-bold'
-            />
-
+        <>
             <FormProvider {...form}>
                 <form
-                    className='mt-10 flex w-96 flex-col gap-5'
+                    className='flex w-full flex-col gap-5'
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
                     <FormInput name='email' label='E-Mail' required />
@@ -107,8 +102,23 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                     >
                         Sign Out
                     </Button>
+
+                    <Button
+                        onClick={() => setOpenDeleteModal(true)}
+                        variant='destructive'
+                        disabled={form.formState.isSubmitting}
+                        className='text-base'
+                        type='button'
+                    >
+                        Delete account
+                    </Button>
                 </form>
             </FormProvider>
-        </Container>
+
+            <DeleteAccountModal
+                open={openDeleteModal}
+                onClose={() => setOpenDeleteModal(false)}
+            />
+        </>
     );
 };
