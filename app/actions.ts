@@ -217,18 +217,28 @@ export async function registerUser(body: Prisma.UserCreateInput) {
             },
         });
 
-        await sendEmail(
-            createdUser.email,
-            'Next Pizza / 📝 Confirm your registration',
-            React.createElement(VerificationUserTemplate, {
-                code,
-            })
-        );
+        // The verification email is best-effort: a delivery failure (e.g. the
+        // Resend sandbox only allows sending to your own address) must NOT roll
+        // back the freshly created account — otherwise the user is stuck, unable
+        // to re-register because the unverified record already exists.
+        try {
+            await sendEmail(
+                createdUser.email,
+                'Next Pizza / 📝 Confirm your registration',
+                React.createElement(VerificationUserTemplate, {
+                    code,
+                })
+            );
+        } catch (emailErr) {
+            console.error(
+                '[registerUser] Verification email failed (non-blocking)',
+                emailErr
+            );
+        }
 
-        // Dev convenience: if email delivery isn't configured, the user can
-        // never receive the code. Log a ready-to-click verification link.
-        const apiKey = process.env.RESEND_API_KEY;
-        if (!apiKey || !apiKey.startsWith('re_') || apiKey.length < 20) {
+        // In dev always log a ready-to-click verification link, so the user can
+        // verify even when email delivery isn't working/configured.
+        if (process.env.NODE_ENV !== 'production') {
             const baseUrl =
                 process.env.NEXTAUTH_URL ?? 'http://localhost:3000';
             console.log(

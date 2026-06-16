@@ -15,9 +15,20 @@ export const ProfileButton: React.FC<Props> = ({
 }) => {
     const { data: session } = useSession();
 
+    // The session is only resolved on the client, so render the signed-out
+    // button until mounted — this keeps the server HTML and the first client
+    // render identical and avoids a hydration mismatch. useSyncExternalStore
+    // returns the server snapshot (false) during SSR/first render and the
+    // client snapshot (true) afterwards, without a setState-in-effect.
+    const mounted = React.useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
+    );
+
     return (
         <div className={className}>
-            {!session ? (
+            {!mounted || !session ? (
                 <Button
                     onClick={onClickSignIn}
                     variant='outline'
