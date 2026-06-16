@@ -61,7 +61,7 @@ export const ProductsGroupList = ({
                         imageUrl={product.imageUrl}
                         price={product.items[0].price}
                         description={product.description}
-                        priority={priority && index < 3}
+                        priority={priority && index === 0}
                     />
                 ))}
             </div>
