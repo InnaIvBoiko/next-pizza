@@ -25,7 +25,7 @@ export const Categories = ({ items, className }: CategoriesProps) => {
     return (
         <div
             className={cn(
-                'inline-flex gap-1 rounded-2xl bg-gray-50 p-1',
+                'inline-flex gap-1 rounded-full bg-muted p-1',
                 className
             )}
         >
@@ -34,9 +34,9 @@ export const Categories = ({ items, className }: CategoriesProps) => {
                     key={cat.id}
                     href={`#${cat.name}`}
                     className={cn(
-                        'flex h-11 items-center rounded-2xl px-5 font-bold',
+                        'flex h-10 items-center rounded-full px-4 text-sm font-semibold whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground',
                         activeCategoryId === cat.id &&
-                            'text-primary bg-white shadow-md shadow-gray-200'
+                            'bg-background text-primary shadow-sm'
                     )}
                 >
                     {cat.name}

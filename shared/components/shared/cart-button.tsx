@@ -11,12 +11,18 @@ import { formatPrice } from '@/shared/lib';
 
 interface Props {
     className?: string;
+    /** Hide the button entirely when the cart is empty (e.g. on the landing). */
+    hideWhenEmpty?: boolean;
 }
 
-export const CartButton: React.FC<Props> = ({ className }) => {
+export const CartButton: React.FC<Props> = ({ className, hideWhenEmpty }) => {
     const [totalAmount, items, loading] = useCartStore(
         useShallow(state => [state.totalAmount, state.items, state.loading])
     );
+
+    if (hideWhenEmpty && items.length === 0) {
+        return null;
+    }
 
     return (
         <CartDrawer>

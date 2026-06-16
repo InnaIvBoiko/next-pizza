@@ -18,11 +18,11 @@ export const TopBar = ({ categories, className }: TopBarProps) => {
     return (
         <div
             className={cn(
-                'sticky top-0 z-10 bg-white py-5 shadow-lg shadow-black/5',
+                'glass-strong sticky top-(--header-height) z-20 border-b border-border',
                 className
             )}
         >
-            <Container className='flex items-center justify-between'>
+            <Container className='scrollbar flex items-center justify-between gap-4 overflow-x-auto px-4 py-3'>
                 <Categories items={categories} />
                 <SortPopup />
             </Container>

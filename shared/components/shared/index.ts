@@ -28,6 +28,8 @@ export { ProfileButton } from './profile-button';
 export { InfoBlock } from './info-block';
 export { ProfileForm } from './profile-form';
 export { Stories } from './stories';
+export { ThemeToggle } from './theme-toggle';
+export * from './home';
 export * from './email-temapltes';
 export * from './checkout';
 export * from './form';

@@ -1,11 +1,11 @@
-import { Nunito } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { Providers } from '@/shared/components/shared/providers';
 import './globals.css';
 
-const nunito = Nunito({
-    subsets: ['cyrillic'],
-    variable: '--font-nunito',
-    weight: ['400', '500', '600', '700', '800', '900'],
+const inter = Inter({
+    subsets: ['latin'],
+    variable: '--font-inter',
+    display: 'swap',
 });
 
 export default function RootLayout({
@@ -14,11 +14,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang='en'>
+        <html lang='it' suppressHydrationWarning className={inter.variable}>
             <head>
                 <link data-rh='true' rel='icon' href='/logo.png' />
             </head>
-            <body className={nunito.className}>
+            <body className='font-sans antialiased'>
                 <Providers>{children}</Providers>
             </body>
         </html>

@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-sans: var(--font-nunito);
-    --font-heading: var(--font-nunito);
+    --font-sans: var(--font-inter);
+    --font-heading: var(--font-inter);
 
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -21,6 +21,8 @@
     --color-muted-foreground: var(--muted-foreground);
     --color-accent: var(--accent);
     --color-accent-foreground: var(--accent-foreground);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
     --color-destructive: var(--destructive);
     --color-destructive-foreground: var(--destructive-foreground);
     --color-border: var(--border);
@@ -49,79 +51,120 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+ * Palette B — "Pomodoro & Basilico"
+ * Neutri caldi + accento rosso pomodoro (--primary) e verde basilico (--success).
+ * Pensata per funzionare in light e dark con superfici glass.
+ */
 :root {
-    --radius: 0.625rem;
+    --radius: 0.875rem;
 
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
+    --background: #fbfaf8;
+    --foreground: #1a1712;
+    --card: #ffffff;
+    --card-foreground: #1a1712;
+    --popover: #ffffff;
+    --popover-foreground: #1a1712;
 
-    /* Tema pizza: arancione */
-    --primary: hsl(22 100% 50%);
-    --primary-foreground: hsl(60 9.1% 97.8%);
-    --secondary: hsl(32 100% 98%);
-    --secondary-foreground: hsl(24 9.8% 10%);
-    --ring: hsl(24.6 95% 53.1%);
+    /* Basilico (accento del tema chiaro) */
+    --primary: #2f7d4f;
+    --primary-foreground: #f6fbf7;
 
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.985 0 0);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
+    --secondary: #f4efea;
+    --secondary-foreground: #1a1712;
+
+    --muted: #f1ede7;
+    --muted-foreground: #6b6258;
+
+    --accent: #e9f4ec;
+    --accent-foreground: #1f5b39;
+
+    /* Basilico (tono più scuro, distinto dal primary) */
+    --success: #4a7c59;
+    --success-foreground: #ffffff;
+
+    --destructive: #d1352b;
+    --destructive-foreground: #ffffff;
+
+    --border: #e9e3da;
+    --input: #e9e3da;
+    --ring: #2f7d4f;
+
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
     --chart-4: oklch(0.828 0.189 84.429);
     --chart-5: oklch(0.769 0.188 70.08);
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+
+    --sidebar: #f7f4ef;
+    --sidebar-foreground: #1a1712;
+    --sidebar-primary: #2f7d4f;
+    --sidebar-primary-foreground: #f6fbf7;
+    --sidebar-accent: #f1ede7;
+    --sidebar-accent-foreground: #1a1712;
+    --sidebar-border: #e9e3da;
+    --sidebar-ring: #2f7d4f;
+
+    /* Glass */
+    --glass-blur: 20px;
+    --glass-saturate: 180%;
+
+    /* Altezza dell'header sticky: su mobile sono due righe (logo + ricerca) */
+    --header-height: 7.5rem;
+}
+
+@media (min-width: 1024px) {
+    :root {
+        --header-height: 4.75rem;
+    }
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: hsl(22 100% 50%);
-    --primary-foreground: hsl(60 9.1% 97.8%);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --destructive-foreground: oklch(0.985 0 0);
+    --background: #121110;
+    --foreground: #f4f1ea;
+    --card: #1b1a17;
+    --card-foreground: #f4f1ea;
+    --popover: #1b1a17;
+    --popover-foreground: #f4f1ea;
+
+    /* Pomodoro (leggermente più luminoso su fondo scuro) */
+    --primary: #eb4d58;
+    --primary-foreground: #fffaf9;
+
+    --secondary: #26241f;
+    --secondary-foreground: #f4f1ea;
+
+    --muted: #211f1b;
+    --muted-foreground: #a8a096;
+
+    --accent: #2a1517;
+    --accent-foreground: #f4b4b9;
+
+    /* Basilico */
+    --success: #5e9a6f;
+    --success-foreground: #0b0f0c;
+
+    --destructive: #e5564b;
+    --destructive-foreground: #ffffff;
+
     --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: hsl(24.6 95% 53.1%);
+    --input: oklch(1 0 0 / 14%);
+    --ring: #eb4d58;
+
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
     --chart-4: oklch(0.627 0.265 303.9);
     --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
+
+    --sidebar: #1b1a17;
+    --sidebar-foreground: #f4f1ea;
+    --sidebar-primary: #eb4d58;
+    --sidebar-primary-foreground: #fffaf9;
+    --sidebar-accent: #26241f;
+    --sidebar-accent-foreground: #f4f1ea;
     --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --sidebar-ring: #eb4d58;
 }
 
 @layer base {
@@ -130,6 +173,17 @@
     }
     body {
         @apply bg-background text-foreground font-sans;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+    h1,
+    h2,
+    h3,
+    h4 {
+        letter-spacing: -0.02em;
+    }
+    ::selection {
+        background-color: color-mix(in oklab, var(--primary) 28%, transparent);
     }
 }
 
@@ -147,6 +201,35 @@ html {
     .text-balance {
         text-wrap: balance;
     }
+
+    /* Glass surface — vetro stile Apple. Comporre con rounded-* e shadow. */
+    .glass {
+        background-color: color-mix(in oklab, var(--card) 70%, transparent);
+        backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+        -webkit-backdrop-filter: blur(var(--glass-blur))
+            saturate(var(--glass-saturate));
+        border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+        box-shadow:
+            inset 0 1px 0 0 color-mix(in oklab, #ffffff 22%, transparent),
+            0 1px 2px 0 color-mix(in oklab, var(--foreground) 6%, transparent);
+    }
+
+    /* Variante più opaca per header / barre fisse sopra contenuto scorrevole. */
+    .glass-strong {
+        background-color: color-mix(in oklab, var(--background) 78%, transparent);
+        backdrop-filter: blur(24px) saturate(var(--glass-saturate));
+        -webkit-backdrop-filter: blur(24px) saturate(var(--glass-saturate));
+        border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+    }
+
+    /* Bagliore radiale caldo da usare come sfondo di sezione. */
+    .glow-warm {
+        background-image: radial-gradient(
+            60% 60% at 50% 0%,
+            color-mix(in oklab, var(--primary) 16%, transparent) 0%,
+            transparent 70%
+        );
+    }
 }
 
 .scrollbar::-webkit-scrollbar {
@@ -155,16 +238,16 @@ html {
 
 .scrollbar::-webkit-scrollbar-track {
     border-radius: 6px;
-    background: #fff;
+    background: transparent;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-    background: #dbdadd;
+    background: color-mix(in oklab, var(--foreground) 20%, transparent);
     border-radius: 6px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #dbdadd;
+    background: color-mix(in oklab, var(--foreground) 32%, transparent);
 }
 
 #nprogress .bar {
