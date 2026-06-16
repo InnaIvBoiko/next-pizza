@@ -4,8 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
-    TFormRegisterValues,
-    formRegisterSchema,
+    TFormProfileValues,
+    formProfileSchema,
 } from './modals/auth-modal/forms/schemas';
 import { User } from '@/generated/prisma/client';
 import toast from 'react-hot-toast';
@@ -23,7 +23,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 
     const form = useForm({
-        resolver: zodResolver(formRegisterSchema),
+        resolver: zodResolver(formProfileSchema),
         defaultValues: {
             fullName: data.fullName,
             email: data.email,
@@ -32,13 +32,8 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
         },
     });
 
-    const onSubmit = async (data: TFormRegisterValues) => {
+    const onSubmit = async (data: TFormProfileValues) => {
         try {
-            console.log('Updated user info:', {
-                email: data.email,
-                fullName: data.fullName,
-                password: data.password,
-            });
             await updateUserInfo({
                 email: data.email,
                 fullName: data.fullName,
@@ -75,14 +70,12 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                     <FormInput
                         type='password'
                         name='password'
-                        label='New Password'
-                        required
+                        label='New Password (leave blank to keep current)'
                     />
                     <FormInput
                         type='password'
                         name='confirmPassword'
                         label='Confirm Password'
-                        required
                     />
 
                     <Button

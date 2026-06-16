@@ -21,5 +21,37 @@ export const formRegisterSchema = formLoginSchema
         path: ['confirmPassword'],
     });
 
+// Profile update: name/email are required, but the password is optional —
+// an empty password field means "keep the current password".
+export const formProfileSchema = z
+    .object({
+        email: z.string().email({ message: 'Invalid email' }),
+        fullName: z.string().min(2, { message: 'Invalid full name' }),
+        password: z.string().optional(),
+        confirmPassword: z.string().optional(),
+    })
+    .superRefine((data, ctx) => {
+        if (!data.password) {
+            return;
+        }
+
+        if (data.password.length < 4) {
+            ctx.addIssue({
+                code: 'custom',
+                message: 'Invalid password',
+                path: ['password'],
+            });
+        }
+
+        if (data.password !== data.confirmPassword) {
+            ctx.addIssue({
+                code: 'custom',
+                message: 'Passwords do not match',
+                path: ['confirmPassword'],
+            });
+        }
+    });
+
 export type TFormLoginValues = z.infer<typeof formLoginSchema>;
 export type TFormRegisterValues = z.infer<typeof formRegisterSchema>;
+export type TFormProfileValues = z.infer<typeof formProfileSchema>;
