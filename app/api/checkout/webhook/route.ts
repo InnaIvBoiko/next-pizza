@@ -51,14 +51,24 @@ export async function POST(req: NextRequest) {
         // items is a JSON column holding a stringified cart snapshot (see createOrder).
         const items = JSON.parse(order.items as string) as CartItemDTO[];
 
-        await sendEmail(
-            order.email,
-            'Next Pizza / Your order is confirmed #' + order.id,
-            React.createElement(OrderSuccessTemplate, {
-                orderId: order.id,
-                items,
-            })
-        );
+        // Best-effort: the order is already marked SUCCEEDED above, so an email
+        // failure (e.g. Resend sandbox restrictions) must not make the webhook
+        // return 500 — Stripe would keep retrying a delivery that can't succeed.
+        try {
+            await sendEmail(
+                order.email,
+                'Next Pizza / Your order is confirmed #' + order.id,
+                React.createElement(OrderSuccessTemplate, {
+                    orderId: order.id,
+                    items,
+                })
+            );
+        } catch (emailErr) {
+            console.error(
+                '[Stripe webhook] Confirmation email failed (non-blocking)',
+                emailErr
+            );
+        }
     }
 
     return NextResponse.json({ received: true });
