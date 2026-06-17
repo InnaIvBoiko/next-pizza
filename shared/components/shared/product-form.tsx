@@ -4,7 +4,7 @@ import { ProductWithRelations } from '@/@types/prisma';
 import { useCartStore } from '@/shared/store';
 import { useShallow } from 'zustand/react/shallow';
 import React from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { ChoosePizzaForm } from './choose-pizza-form';
 import { ChooseProductForm } from './choose-product-form';
 

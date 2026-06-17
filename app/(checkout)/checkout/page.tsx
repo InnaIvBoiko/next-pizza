@@ -14,7 +14,7 @@ import {
 import { CheckoutFormValues, checkoutFormSchema } from '@/shared/constants';
 import { useCart } from '@/shared/hooks';
 import { createOrder } from '@/app/actions';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import React from 'react';
 import { useSession } from 'next-auth/react';
 
@@ -58,7 +58,7 @@ export default function CheckoutPage() {
 
             const url = await createOrder(data);
 
-            toast.error(
+            toast.success(
                 'Order created successfully! 📝 Redirecting to payment... ',
                 {
                     icon: '✅',

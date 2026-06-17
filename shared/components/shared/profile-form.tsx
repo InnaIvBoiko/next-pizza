@@ -8,7 +8,7 @@ import {
     formProfileSchema,
 } from './modals/auth-modal/forms/schemas';
 import { User } from '@/generated/prisma/client';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { signOut } from 'next-auth/react';
 import { FormInput } from './form';
 import { Button } from '../ui';

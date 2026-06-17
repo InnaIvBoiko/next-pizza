@@ -10,7 +10,7 @@ import { Button } from '../ui';
 import { SearchInput } from './search-input';
 import { CartButton } from './cart-button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { ProfileButton } from './profile-button';
 import { ThemeToggle } from './theme-toggle';
 import { AuthModal } from './modals';

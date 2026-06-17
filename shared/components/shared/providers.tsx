@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from '@/shared/components/ui/sonner';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
 import NextTopLoader from 'nextjs-toploader';
@@ -15,7 +15,7 @@ export const Providers: React.FC<React.PropsWithChildren> = ({ children }) => {
             disableTransitionOnChange
         >
             <SessionProvider>{children}</SessionProvider>
-            <Toaster />
+            <Toaster richColors position='top-center' />
             <NextTopLoader color='var(--primary)' showSpinner={false} />
         </ThemeProvider>
     );
