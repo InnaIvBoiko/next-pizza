@@ -9,6 +9,7 @@ import {
 } from './modals/auth-modal/forms/schemas';
 import { User } from '@/generated/prisma/client';
 import { toast } from 'sonner';
+import { logger } from '@/shared/lib/logger.client';
 import { signOut } from 'next-auth/react';
 import { FormInput } from './form';
 import { Button } from '../ui';
@@ -44,7 +45,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                 icon: '✅',
             });
         } catch (error) {
-            console.error(error);
+            logger.error({ err: error }, '[ProfileForm] Update failed');
             return toast.error('Error updating profile', {
                 icon: '❌',
             });

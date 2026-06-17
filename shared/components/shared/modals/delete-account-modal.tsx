@@ -3,6 +3,7 @@
 import React from 'react';
 import { signOut } from 'next-auth/react';
 import { toast } from 'sonner';
+import { logger } from '@/shared/lib/logger.client';
 
 import {
     Dialog,
@@ -33,7 +34,7 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
             // Clear the session and leave the (now non-existent) profile page.
             await signOut({ callbackUrl: '/' });
         } catch (error) {
-            console.error('Error [DELETE_ACCOUNT]', error);
+            logger.error({ err: error }, 'Error [DELETE_ACCOUNT]');
             toast.error('Could not delete the account. Please try again.', {
                 icon: '❌',
             });

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Api } from '@/shared/services/api-client';
 import { Product } from '@/generated/prisma/client';
+import { logger } from '@/shared/lib/logger.client';
 
 export const SearchInput = () => {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -23,7 +24,7 @@ export const SearchInput = () => {
                 const response = await Api.products.search(searchQuery);
                 setProducts(response);
             } catch (error) {
-                console.log(error);
+                logger.error({ err: error }, '[SearchInput] Search failed');
             }
         },
         250,

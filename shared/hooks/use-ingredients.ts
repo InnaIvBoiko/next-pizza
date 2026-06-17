@@ -1,5 +1,6 @@
 import { Api } from '@/shared/services/api-client';
 import { Ingredient } from '@/generated/prisma/client';
+import { logger } from '@/shared/lib/logger.client';
 import React from 'react';
 
 export const useIngredients = () => {
@@ -13,7 +14,7 @@ export const useIngredients = () => {
                 const ingredients = await Api.ingredients.getAll();
                 setIngredients(ingredients);
             } catch (error) {
-                console.log(error);
+                logger.error({ err: error }, '[useIngredients] Fetch failed');
             } finally {
                 setLoading(false);
             }

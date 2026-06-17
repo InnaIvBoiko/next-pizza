@@ -15,6 +15,7 @@ import { CheckoutFormValues, checkoutFormSchema } from '@/shared/constants';
 import { useCart } from '@/shared/hooks';
 import { createOrder } from '@/app/actions';
 import { toast } from 'sonner';
+import { logger } from '@/shared/lib/logger.client';
 import React from 'react';
 import { useSession } from 'next-auth/react';
 
@@ -69,7 +70,7 @@ export default function CheckoutPage() {
                 window.location.assign(url);
             }
         } catch (err) {
-            console.log(err);
+            logger.error({ err }, '[Checkout] Failed to create order');
             setSubmitting(false);
             toast.error('Failed to create order', {
                 icon: '❌',

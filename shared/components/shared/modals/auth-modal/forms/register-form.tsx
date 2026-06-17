@@ -4,6 +4,7 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { logger } from '@/shared/lib/logger.client';
 
 import { Title } from '../../../title';
 import { FormInput } from '../../../form';
@@ -40,7 +41,7 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
 
             onClose?.();
         } catch (error) {
-            console.error('Error [REGISTER]', error);
+            logger.error({ err: error }, 'Error [REGISTER]');
             toast.error('Could not register. The email may already be in use.', {
                 icon: '❌',
             });

@@ -2,6 +2,7 @@ import { prisma } from '@/prisma/prisma-client';
 import { authOptions } from '@/shared/constants/auth-options';
 import { getServerSession } from 'next-auth/next';
 import { NextResponse } from 'next/server';
+import { logger } from '@/shared/lib/logger.server';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +30,7 @@ export async function GET() {
 
         return NextResponse.json(data);
     } catch (error) {
-        console.log(error);
+        logger.error({ err: error }, '[USER_GET] Server error');
         return NextResponse.json(
             { message: '[USER_GET] Server error' },
             { status: 500 }

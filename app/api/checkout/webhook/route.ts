@@ -7,6 +7,7 @@ import { OrderStatus } from '@/generated/prisma/client';
 import { sendEmail } from '@/shared/lib/send-email';
 import { OrderSuccessTemplate } from '@/shared/components/shared/email-temapltes';
 import { CartItemDTO } from '@/shared/services/dto/cart.dto';
+import { logger } from '@/shared/lib/logger.server';
 
 // Stripe's SDK needs Node APIs, not the Edge runtime.
 export const runtime = 'nodejs';
@@ -28,7 +29,10 @@ export async function POST(req: NextRequest) {
     try {
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
     } catch (err) {
-        console.error('[Stripe webhook] Signature verification failed', err);
+        logger.error(
+            { err },
+            '[Stripe webhook] Signature verification failed'
+        );
         return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
@@ -64,9 +68,9 @@ export async function POST(req: NextRequest) {
                 })
             );
         } catch (emailErr) {
-            console.error(
-                '[Stripe webhook] Confirmation email failed (non-blocking)',
-                emailErr
+            logger.error(
+                { err: emailErr },
+                '[Stripe webhook] Confirmation email failed (non-blocking)'
             );
         }
     }

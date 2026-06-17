@@ -5,6 +5,7 @@ import { useCartStore } from '@/shared/store';
 import { useShallow } from 'zustand/react/shallow';
 import React from 'react';
 import { toast } from 'sonner';
+import { logger } from '@/shared/lib/logger.client';
 import { ChoosePizzaForm } from './choose-pizza-form';
 import { ChooseProductForm } from './choose-product-form';
 
@@ -38,7 +39,7 @@ export const ProductForm: React.FC<Props> = ({
             _onSubmit?.();
         } catch (err) {
             toast.error('Failed to add item to cart');
-            console.error(err);
+            logger.error({ err }, '[ProductForm] Add to cart failed');
         }
     };
 

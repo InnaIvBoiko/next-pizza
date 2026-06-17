@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma-client';
 import { findOrCreateCart } from '@/shared/lib/find-or-create-cart';
 import { updateCartTotalAmount } from '@/shared/lib/update-cart-total-amount';
 import { CreateCartItemValues } from '@/shared/services/dto/cart.dto';
+import { logger } from '@/shared/lib/logger.server';
 
 const CART_TOKEN = 'cartToken';
 const CART_TOKEN_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
@@ -34,7 +35,7 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json(userCart ?? emptyCart);
     } catch (error) {
-        console.error('[CART_GET] Server error', error);
+        logger.error({ err: error }, '[CART_GET] Server error');
         return NextResponse.json(
             { error: 'Could not fetch cart' },
             { status: 500 }
@@ -99,7 +100,7 @@ export async function POST(req: NextRequest) {
         });
         return resp;
     } catch (error) {
-        console.error('[CART_POST] Server error', error);
+        logger.error({ err: error }, '[CART_POST] Server error');
         return NextResponse.json(
             { error: 'Could not add item to cart' },
             { status: 500 }

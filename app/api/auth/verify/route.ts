@@ -1,5 +1,6 @@
 import { prisma } from '@/prisma/prisma-client';
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/shared/lib/logger.server';
 
 export async function GET(req: NextRequest) {
     try {
@@ -42,7 +43,6 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.redirect(new URL('/?verified', req.url));
     } catch (error) {
-        console.error(error);
-        console.log('[VERIFY_GET] Server error', error);
+        logger.error({ err: error }, '[VERIFY_GET] Server error');
     }
 }

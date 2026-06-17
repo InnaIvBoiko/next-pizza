@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/prisma/prisma-client';
 import { updateCartTotalAmount } from '@/shared/lib/update-cart-total-amount';
+import { logger } from '@/shared/lib/logger.server';
 
 const CART_TOKEN = 'cartToken';
 
@@ -29,7 +30,7 @@ export async function PATCH(
         const updatedCart = await updateCartTotalAmount(token);
         return NextResponse.json(updatedCart);
     } catch (error) {
-        console.error('[CART_PATCH] Server error', error);
+        logger.error({ err: error }, '[CART_PATCH] Server error');
         return NextResponse.json(
             { error: 'Could not update cart item' },
             { status: 500 }
@@ -57,7 +58,7 @@ export async function DELETE(
         const updatedCart = await updateCartTotalAmount(token);
         return NextResponse.json(updatedCart);
     } catch (error) {
-        console.error('[CART_DELETE] Server error', error);
+        logger.error({ err: error }, '[CART_DELETE] Server error');
         return NextResponse.json(
             { error: 'Could not remove cart item' },
             { status: 500 }

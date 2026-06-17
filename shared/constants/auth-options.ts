@@ -4,6 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 
 import { prisma } from '@/prisma/prisma-client';
 import { compare } from 'bcrypt';
+import { logger } from '@/shared/lib/logger.server';
 
 export const authOptions: AuthOptions = {
     providers: [
@@ -114,7 +115,7 @@ export const authOptions: AuthOptions = {
 
                 return true;
             } catch (error) {
-                console.error('Error [SIGNIN]', error);
+                logger.error({ err: error }, 'Error [SIGNIN]');
                 return false;
             }
         },

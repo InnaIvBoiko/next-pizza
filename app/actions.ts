@@ -9,6 +9,7 @@ import { CheckoutFormValues, DELIVERY_PRICE } from '@/shared/constants';
 import { createPayment } from '@/shared/lib/create-payment';
 import { sendEmail } from '@/shared/lib/send-email';
 import { getUserSession } from '@/shared/lib/get-user-session';
+import { logger } from '@/shared/lib/logger.server';
 import { OrderStatus, Prisma } from '@/generated/prisma/client';
 import { hashSync } from 'bcrypt';
 import { cookies } from 'next/headers';
@@ -118,12 +119,15 @@ export async function createOrder(data: CheckoutFormValues) {
                 })
             );
         } catch (emailErr) {
-            console.error('[CreateOrder] Email send failed (non-blocking)', emailErr);
+            logger.error(
+                { err: emailErr },
+                '[CreateOrder] Email send failed (non-blocking)'
+            );
         }
 
         return paymentUrl;
     } catch (err) {
-        console.log('[CreateOrder] Server error', err);
+        logger.error({ err }, '[CreateOrder] Server error');
     }
 }
 
@@ -154,7 +158,7 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
             },
         });
     } catch (err) {
-        console.log('Error [UPDATE_USER]', err);
+        logger.error({ err }, 'Error [UPDATE_USER]');
         throw err;
     }
 }
@@ -175,7 +179,7 @@ export async function deleteUser() {
             },
         });
     } catch (err) {
-        console.log('Error [DELETE_USER]', err);
+        logger.error({ err }, 'Error [DELETE_USER]');
         throw err;
     }
 }
@@ -230,9 +234,9 @@ export async function registerUser(body: Prisma.UserCreateInput) {
                 })
             );
         } catch (emailErr) {
-            console.error(
-                '[registerUser] Verification email failed (non-blocking)',
-                emailErr
+            logger.error(
+                { err: emailErr },
+                '[registerUser] Verification email failed (non-blocking)'
             );
         }
 
@@ -241,12 +245,12 @@ export async function registerUser(body: Prisma.UserCreateInput) {
         if (process.env.NODE_ENV !== 'production') {
             const baseUrl =
                 process.env.NEXTAUTH_URL ?? 'http://localhost:3000';
-            console.log(
+            logger.info(
                 `[registerUser:dev] Verify ${createdUser.email}: ${baseUrl}/api/auth/verify?code=${code}`
             );
         }
     } catch (err) {
-        console.log('Error [CREATE_USER]', err);
+        logger.error({ err }, 'Error [CREATE_USER]');
         throw err;
     }
 }

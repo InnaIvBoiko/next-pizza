@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import React from 'react';
+import { logger } from '@/shared/lib/logger.server';
 
 /**
  * Sends a transactional email rendered from a React template.
@@ -17,7 +18,7 @@ export async function sendEmail(
     // Treat a missing OR placeholder/invalid key (real keys are "re_" + ~30 chars)
     // as "no key" and fall back to logging — so a junk value never breaks the flow.
     if (!apiKey || !apiKey.startsWith('re_') || apiKey.length < 20) {
-        console.log(
+        logger.info(
             `[sendEmail:dev] to=${to} subject="${subject}" (no valid RESEND_API_KEY, email not sent)`
         );
         return;
