@@ -47,7 +47,7 @@ export const Filters = ({ className }: FiltersProps) => {
 
     return (
         <div className={className}>
-            <Title text='Filtration' size='sm' className='mb-5 font-bold' />
+            <Title text='Filtri' size='sm' className='mb-5 font-bold' />
 
             {/* <div className='mb-5 flex flex-col gap-4'>
                 <FilterCheckbox text='Can be collected' value='1' />
@@ -55,19 +55,19 @@ export const Filters = ({ className }: FiltersProps) => {
             </div> */}
 
             <CheckboxFiltersGroup
-                title='Pizza Types'
+                title='Tipo di impasto'
                 name='pizzaTypes'
                 className='mb-5'
                 items={[
-                    { text: 'Thin', value: '1' },
-                    { text: 'Traditional', value: '2' },
+                    { text: 'Sottile', value: '1' },
+                    { text: 'Tradizionale', value: '2' },
                 ]}
                 selected={pizzaTypes}
                 onClickCheckbox={setPizzaTypes}
             />
 
             <CheckboxFiltersGroup
-                title='Sizes'
+                title='Dimensioni'
                 name='sizes'
                 className='mb-5'
                 items={[
@@ -79,8 +79,8 @@ export const Filters = ({ className }: FiltersProps) => {
                 onClickCheckbox={setSizes}
             />
 
-            <div className='mt-5 border-y border-y-neutral-100 py-6 pb-7'>
-                <p className='mb-3 font-bold'>Price from and to:</p>
+            <div className='mt-5 border-y border-y-border py-6 pb-7'>
+                <p className='mb-3 font-bold'>Prezzo (da / a):</p>
                 <div className='mb-5 flex gap-3'>
                     <Input
                         type='number'
@@ -118,7 +118,7 @@ export const Filters = ({ className }: FiltersProps) => {
             </div>
 
             <CheckboxFiltersGroup
-                title='Ingredients'
+                title='Ingredienti'
                 name='ingredients'
                 className='mt-5'
                 limit={6}

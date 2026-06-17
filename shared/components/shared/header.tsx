@@ -3,10 +3,11 @@
 import { cn } from '@/shared/lib/utils';
 import React from 'react';
 import { Container } from './container';
-import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Pizza } from 'lucide-react';
 import { Button } from '../ui';
+import { Logo } from './logo';
+import { BurgerMenu } from './burger-menu';
 import { SearchInput } from './search-input';
 import { CartButton } from './cart-button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -42,11 +43,11 @@ export const Header: React.FC<Props> = ({
 
         if (searchParams.has('paid')) {
             toastMessage =
-                'Order successfully paid! Information sent to email.';
+                'Ordine pagato! I dettagli sono nella tua email.';
         }
 
         if (searchParams.has('verified')) {
-            toastMessage = 'Email successfully verified!';
+            toastMessage = 'Email verificata con successo!';
         }
 
         if (toastMessage) {
@@ -70,13 +71,7 @@ export const Header: React.FC<Props> = ({
                 <div className='relative flex items-center justify-between gap-3 py-3 sm:py-4'>
                     {/* Logo */}
                     <Link href='/' className='flex items-center gap-3'>
-                        <Image
-                            src='/logo.png'
-                            alt='Next Pizza'
-                            width={35}
-                            height={35}
-                            className='size-8 sm:size-9'
-                        />
+                        <Logo className='h-9 w-auto sm:h-10' />
                         <div className='leading-none'>
                             <span className='text-lg font-black sm:text-xl'>
                                 Next Pizza
@@ -101,14 +96,21 @@ export const Header: React.FC<Props> = ({
                                 asChild
                                 className='group relative rounded-full px-6'
                             >
-                                <Link href='/menu'>
-                                    <span className='transition-transform duration-300 group-hover:-translate-x-1.5'>
-                                        Menu
+                                <Link
+                                    href='/menu'
+                                    className='inline-flex items-center gap-2'
+                                >
+                                    Menu
+                                    <span className='relative inline-flex size-4 items-center justify-center'>
+                                        <Pizza
+                                            size={16}
+                                            className='absolute transition-all duration-300 group-hover:scale-50 group-hover:opacity-0'
+                                        />
+                                        <ArrowRight
+                                            size={16}
+                                            className='absolute -translate-x-1 scale-50 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:scale-100 group-hover:opacity-100'
+                                        />
                                     </span>
-                                    <ArrowRight
-                                        size={18}
-                                        className='absolute right-4 translate-x-3 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100'
-                                    />
                                 </Link>
                             </Button>
                         </div>
@@ -116,18 +118,25 @@ export const Header: React.FC<Props> = ({
 
                     {/* Right section */}
                     <div className='flex items-center gap-2 sm:gap-3'>
-                        <ThemeToggle />
-
                         <AuthModal
                             open={openAuthModal}
                             onClose={() => setOpenAuthModal(false)}
                         />
 
+                        {/* Desktop actions */}
+                        <ThemeToggle className='hidden md:inline-flex' />
                         <ProfileButton
+                            className='hidden md:block'
                             onClickSignIn={() => setOpenAuthModal(true)}
                         />
 
                         {hasCart && <CartButton hideWhenEmpty={isHome} />}
+
+                        {/* Mobile burger */}
+                        <BurgerMenu
+                            className='md:hidden'
+                            onClickSignIn={() => setOpenAuthModal(true)}
+                        />
                     </div>
                 </div>
 

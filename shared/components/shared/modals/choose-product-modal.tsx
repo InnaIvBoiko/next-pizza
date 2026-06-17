@@ -24,13 +24,13 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
         <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
             <DialogContent
                 className={cn(
-                    'min-h-125 w-265 max-w-265 overflow-hidden bg-white p-0 sm:max-w-265',
+                    'max-h-[92vh] w-full max-w-[calc(100%-1.5rem)] overflow-y-auto bg-card p-0 sm:max-w-md lg:min-h-125 lg:max-w-265 lg:overflow-hidden',
                     className
                 )}
             >
                 <DialogTitle className='sr-only'>{product.name}</DialogTitle>
                 <DialogDescription className='sr-only'>
-                    Choose options for {product.name}
+                    Scegli le opzioni per {product.name}
                 </DialogDescription>
                 <ProductForm product={product} onSubmit={() => router.back()} />
             </DialogContent>

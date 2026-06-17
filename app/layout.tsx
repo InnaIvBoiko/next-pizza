@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Providers } from '@/shared/components/shared/providers';
 import './globals.css';
@@ -8,6 +9,10 @@ const inter = Inter({
     display: 'swap',
 });
 
+export const metadata: Metadata = {
+    icons: { icon: '/logo.svg' },
+};
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -15,9 +20,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='it' suppressHydrationWarning className={inter.variable}>
-            <head>
-                <link data-rh='true' rel='icon' href='/logo.png' />
-            </head>
             <body className='font-sans antialiased'>
                 <Providers>{children}</Providers>
             </body>

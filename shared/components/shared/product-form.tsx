@@ -34,11 +34,11 @@ export const ProductForm: React.FC<Props> = ({
                 ingredients,
             });
 
-            toast.success(product.name + ' added to cart');
+            toast.success(product.name + ' aggiunto al carrello');
 
             _onSubmit?.();
         } catch (err) {
-            toast.error('Failed to add item to cart');
+            toast.error('Impossibile aggiungere al carrello');
             logger.error({ err }, '[ProductForm] Add to cart failed');
         }
     };

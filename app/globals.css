@@ -59,24 +59,24 @@
 :root {
     --radius: 0.875rem;
 
-    --background: #fbfaf8;
-    --foreground: #1a1712;
+    --background: #f7f9f7;
+    --foreground: #171c18;
     --card: #ffffff;
-    --card-foreground: #1a1712;
+    --card-foreground: #171c18;
     --popover: #ffffff;
-    --popover-foreground: #1a1712;
+    --popover-foreground: #171c18;
 
     /* Basilico (accento del tema chiaro) */
     --primary: #2f7d4f;
     --primary-foreground: #f6fbf7;
 
-    --secondary: #f4efea;
-    --secondary-foreground: #1a1712;
+    --secondary: #ecf1ec;
+    --secondary-foreground: #171c18;
 
-    --muted: #f1ede7;
-    --muted-foreground: #6b6258;
+    --muted: #eef2ee;
+    --muted-foreground: #5f6b60;
 
-    --accent: #e9f4ec;
+    --accent: #e6f3ea;
     --accent-foreground: #1f5b39;
 
     /* Basilico (tono più scuro, distinto dal primary) */
@@ -86,8 +86,8 @@
     --destructive: #d1352b;
     --destructive-foreground: #ffffff;
 
-    --border: #e9e3da;
-    --input: #e9e3da;
+    --border: #e1e8e2;
+    --input: #e1e8e2;
     --ring: #2f7d4f;
 
     --chart-1: oklch(0.646 0.222 41.116);
@@ -96,13 +96,13 @@
     --chart-4: oklch(0.828 0.189 84.429);
     --chart-5: oklch(0.769 0.188 70.08);
 
-    --sidebar: #f7f4ef;
-    --sidebar-foreground: #1a1712;
+    --sidebar: #f1f5f1;
+    --sidebar-foreground: #171c18;
     --sidebar-primary: #2f7d4f;
     --sidebar-primary-foreground: #f6fbf7;
-    --sidebar-accent: #f1ede7;
-    --sidebar-accent-foreground: #1a1712;
-    --sidebar-border: #e9e3da;
+    --sidebar-accent: #eef2ee;
+    --sidebar-accent-foreground: #171c18;
+    --sidebar-border: #e1e8e2;
     --sidebar-ring: #2f7d4f;
 
     /* Glass */

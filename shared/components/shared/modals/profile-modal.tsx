@@ -22,12 +22,12 @@ export const ProfileModal: React.FC<Props> = ({ user }) => {
 
     return (
         <Dialog open onOpenChange={() => router.back()}>
-            <DialogContent className='w-120 max-w-120 bg-white p-8'>
-                <DialogTitle className='sr-only'>My Profile</DialogTitle>
+            <DialogContent className='max-h-[90vh] w-full max-w-[calc(100%-1.5rem)] overflow-y-auto bg-card p-6 sm:max-w-120 sm:p-8'>
+                <DialogTitle className='sr-only'>Il mio profilo</DialogTitle>
                 <DialogDescription className='sr-only'>
                     Manage your account
                 </DialogDescription>
-                <Title text='My Profile' size='md' className='font-bold' />
+                <Title text='Il mio profilo' size='md' className='font-bold' />
                 <div className='mt-6'>
                     <ProfileForm data={user} />
                 </div>

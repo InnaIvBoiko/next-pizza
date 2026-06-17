@@ -41,12 +41,12 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                 password: data.password,
             });
 
-            toast.success('Profile updated successfully 📝', {
+            toast.success('Profilo aggiornato con successo 📝', {
                 icon: '✅',
             });
         } catch (error) {
             logger.error({ err: error }, '[ProfileForm] Update failed');
-            return toast.error('Error updating profile', {
+            return toast.error('Errore durante l\'aggiornamento del profilo', {
                 icon: '❌',
             });
         }
@@ -65,18 +65,18 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                     className='flex w-full flex-col gap-5'
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
-                    <FormInput name='email' label='E-Mail' required />
-                    <FormInput name='fullName' label='Full Name' required />
+                    <FormInput name='email' label='E-mail' required />
+                    <FormInput name='fullName' label='Nome completo' required />
 
                     <FormInput
                         type='password'
                         name='password'
-                        label='New Password (leave blank to keep current)'
+                        label='Nuova password (lascia vuoto per non cambiarla)'
                     />
                     <FormInput
                         type='password'
                         name='confirmPassword'
-                        label='Confirm Password'
+                        label='Conferma password'
                     />
 
                     <Button
@@ -84,7 +84,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                         className='mt-10 text-base'
                         type='submit'
                     >
-                        Save
+                        Salva
                     </Button>
 
                     <Button
@@ -94,7 +94,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                         className='text-base'
                         type='button'
                     >
-                        Sign Out
+                        Esci
                     </Button>
 
                     <Button
@@ -104,7 +104,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                         className='text-base'
                         type='button'
                     >
-                        Delete account
+                        Elimina account
                     </Button>
                 </form>
             </FormProvider>

@@ -29,22 +29,22 @@ export const InfoBlock: React.FC<Props> = ({
             <div className='flex flex-col'>
                 <div className='w-111.25'>
                     <Title size='lg' text={title} className='font-extrabold' />
-                    <p className='text-lg text-gray-400'>{text}</p>
+                    <p className='text-lg text-muted-foreground'>{text}</p>
                 </div>
 
                 <div className='mt-11 flex gap-5'>
                     <Link href='/'>
                         <Button variant='outline' className='gap-2'>
                             <ArrowLeft />
-                            Back toHome
+                            Torna alla home
                         </Button>
                     </Link>
                     <a href=''>
                         <Button
                             variant='outline'
-                            className='border-gray-400 text-gray-500 hover:bg-gray-50'
+                            className='border-border text-muted-foreground hover:bg-muted'
                         >
-                            Update
+                            Aggiorna
                         </Button>
                     </a>
                 </div>

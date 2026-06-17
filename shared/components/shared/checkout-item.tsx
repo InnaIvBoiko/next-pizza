@@ -47,7 +47,7 @@ export const CheckoutItem: React.FC<Props> = ({
                 />
                 <button type='button' onClick={onClickRemove}>
                     <X
-                        className='cursor-pointer text-gray-400 hover:text-gray-600'
+                        className='cursor-pointer text-muted-foreground hover:text-foreground'
                         size={20}
                     />
                 </button>

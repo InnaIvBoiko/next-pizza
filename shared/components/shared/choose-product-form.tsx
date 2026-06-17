@@ -28,18 +28,18 @@ export const ChooseProductForm: React.FC<Props> = ({
     className,
 }) => {
     return (
-        <div className={cn(className, 'flex flex-1')}>
-            <div className='relative flex flex-1 items-center justify-center'>
+        <div className={cn(className, 'flex flex-1 flex-col lg:flex-row')}>
+            <div className='relative flex flex-1 items-center justify-center py-6 lg:py-0'>
                 <Image
                     src={imageUrl}
                     alt={name}
                     width={350}
                     height={350}
-                    className='relative top-2 left-2 z-10 transition-all duration-300'
+                    className='relative top-2 left-2 z-10 h-auto w-48 transition-all duration-300 sm:w-60 lg:w-87.5'
                 />
             </div>
 
-            <div className='w-122.5 bg-[#f7f6f5] p-7'>
+            <div className='bg-card w-full p-5 sm:p-7 lg:w-122.5'>
                 <Title text={name} size='md' className='mb-1 font-extrabold' />
 
                 <Button
@@ -48,8 +48,8 @@ export const ChooseProductForm: React.FC<Props> = ({
                     disabled={loading}
                 >
                     {loading
-                        ? 'Adding...'
-                        : `Add to cart by price ${formatPrice(price)}`}
+                        ? 'Aggiungo...'
+                        : `Aggiungi al carrello · ${formatPrice(price)}`}
                 </Button>
             </div>
         </div>

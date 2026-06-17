@@ -13,7 +13,7 @@ export const CartItemInfo: React.FC<Props> = ({ name, details, className }) => {
                 <h2 className='flex-1 text-lg leading-6 font-bold'>{name}</h2>
             </div>
             {details && (
-                <p className='w-[90%] text-xs text-gray-400'>{details}</p>
+                <p className='w-[90%] text-xs text-muted-foreground'>{details}</p>
             )}
         </div>
     );

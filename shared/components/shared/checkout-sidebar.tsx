@@ -25,7 +25,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
     return (
         <WhiteBlock className={cn('sticky top-4 p-6', className)}>
             <div className='flex flex-col gap-1'>
-                <span className='text-xl'>Total:</span>
+                <span className='text-xl'>Totale:</span>
                 {loading ? (
                     <Skeleton className='h-11 w-48' />
                 ) : (
@@ -38,8 +38,8 @@ export const CheckoutSidebar: React.FC<Props> = ({
             <CheckoutItemDetails
                 title={
                     <div className='flex items-center'>
-                        <Package size={18} className='mr-2 text-gray-400' />
-                        Cost of cart:
+                        <Package size={18} className='mr-2 text-muted-foreground' />
+                        Totale prodotti:
                     </div>
                 }
                 value={
@@ -53,8 +53,8 @@ export const CheckoutSidebar: React.FC<Props> = ({
             <CheckoutItemDetails
                 title={
                     <div className='flex items-center'>
-                        <Truck size={18} className='mr-2 text-gray-400' />
-                        Delivery:
+                        <Truck size={18} className='mr-2 text-muted-foreground' />
+                        Consegna:
                     </div>
                 }
                 value={
@@ -68,8 +68,8 @@ export const CheckoutSidebar: React.FC<Props> = ({
             <CheckoutItemDetails
                 title={
                     <div className='flex items-center'>
-                        <Percent size={18} className='mr-2 text-gray-400' />
-                        of which VAT ({VAT}%):
+                        <Percent size={18} className='mr-2 text-muted-foreground' />
+                        di cui IVA ({VAT}%):
                     </div>
                 }
                 value={
@@ -86,7 +86,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
                 type='submit'
                 className='mt-6 h-14 w-full rounded-2xl text-base font-bold'
             >
-                Go to payment
+                Vai al pagamento
                 <ArrowRight className='ml-2 w-5' />
             </Button>
         </WhiteBlock>

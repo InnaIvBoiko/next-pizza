@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const passwordSchema = z
     .string()
-    .min(4, { message: 'Invalid password' });
+    .min(4, { message: 'Password non valida' });
 
 export const formLoginSchema = z.object({
     email: z.string().email({ message: 'Invalid email' }),
@@ -12,12 +12,12 @@ export const formLoginSchema = z.object({
 export const formRegisterSchema = formLoginSchema
     .merge(
         z.object({
-            fullName: z.string().min(2, { message: 'Invalid full name' }),
+            fullName: z.string().min(2, { message: 'Nome completo non valido' }),
             confirmPassword: passwordSchema,
         })
     )
     .refine(data => data.password === data.confirmPassword, {
-        message: 'Passwords do not match',
+        message: 'Le password non coincidono',
         path: ['confirmPassword'],
     });
 
@@ -25,7 +25,7 @@ export const formRegisterSchema = formLoginSchema
 // an empty password field means "keep the current password".
 export const formProfileSchema = z
     .object({
-        email: z.string().email({ message: 'Invalid email' }),
+        email: z.string().email({ message: 'Email non valida' }),
         fullName: z.string().min(2, { message: 'Invalid full name' }),
         password: z.string().optional(),
         confirmPassword: z.string().optional(),
@@ -46,7 +46,7 @@ export const formProfileSchema = z
         if (data.password !== data.confirmPassword) {
             ctx.addIssue({
                 code: 'custom',
-                message: 'Passwords do not match',
+                message: 'Le password non coincidono',
                 path: ['confirmPassword'],
             });
         }

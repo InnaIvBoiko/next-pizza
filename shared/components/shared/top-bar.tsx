@@ -24,7 +24,7 @@ export const TopBar = ({ categories, className }: TopBarProps) => {
         >
             <Container className='scrollbar flex items-center justify-between gap-4 overflow-x-auto px-4 py-3'>
                 <Categories items={categories} />
-                <SortPopup />
+                <SortPopup className='hidden sm:inline-flex' />
             </Container>
         </div>
     );

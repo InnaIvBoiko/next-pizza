@@ -16,9 +16,10 @@ interface Props {
 }
 
 const ERROR_MESSAGES: Record<string, string> = {
-    INVALID_CREDENTIALS: 'Invalid email or password.',
-    EMAIL_NOT_VERIFIED: 'Please confirm your email before logging in.',
-    OAUTH_ACCOUNT: 'This account uses Google sign-in. Use the button below.',
+    INVALID_CREDENTIALS: 'Email o password non validi.',
+    EMAIL_NOT_VERIFIED: 'Conferma la tua email prima di accedere.',
+    OAUTH_ACCOUNT:
+        'Questo account utilizza l\'accesso con Google. Usa il pulsante qui sotto.',
 };
 
 export const LoginForm: React.FC<Props> = ({ onClose }) => {
@@ -37,7 +38,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
         });
 
         if (resp?.ok) {
-            toast.success('You have successfully logged in 🎉', {
+            toast.success('Hai effettuato l\'accesso con successo 🎉', {
                 icon: '✅',
             });
             onClose?.();
@@ -47,7 +48,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
         // NextAuth puts the code thrown by authorize() into resp.error.
         const message =
             (resp?.error && ERROR_MESSAGES[resp.error]) ??
-            'Could not log in. Please try again.';
+            'Impossibile accedere. Riprova.';
 
         toast.error(message, { icon: '❌' });
     };
@@ -60,14 +61,14 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
             >
                 <div className='mb-2 flex items-center justify-between'>
                     <div className='mr-2'>
-                        <Title text='Log in to your account' size='md' />
-                        <p className='text-gray-400'>
-                            Enter your email to log in to your account
+                        <Title text='Accedi al tuo account' size='md' />
+                        <p className='text-muted-foreground'>
+                            Inserisci la tua email per accedere al tuo account
                         </p>
                     </div>
                 </div>
 
-                <FormInput name='email' label='E-Mail' required />
+                <FormInput name='email' label='E-mail' required />
                 <FormInput
                     type='password'
                     name='password'
@@ -80,7 +81,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
                     className='h-12 text-base'
                     type='submit'
                 >
-                    Log In
+                    Accedi
                 </Button>
             </form>
         </FormProvider>

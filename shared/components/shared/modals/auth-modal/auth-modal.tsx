@@ -33,12 +33,12 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className='w-112.5 bg-white p-10'>
+            <DialogContent className='w-112.5 bg-card p-10'>
                 <DialogTitle className='sr-only'>
-                    {type === 'login' ? 'Log in' : 'Register'}
+                    {type === 'login' ? 'Accedi' : 'Registrati'}
                 </DialogTitle>
                 <DialogDescription className='sr-only'>
-                    Authenticate to your Next Pizza account
+                    Accedi al tuo account Next Pizza
                 </DialogDescription>
 
                 {type === 'login' ? (
@@ -55,7 +55,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                     type='button'
                     className='h-12 gap-2 p-2'
                 >
-                    Continue with Google
+                    Continua con Google
                 </Button>
 
                 <Button
@@ -64,7 +64,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                     type='button'
                     className='h-12'
                 >
-                    {type === 'login' ? 'Register' : 'Log in'}
+                    {type === 'login' ? 'Registrati' : 'Accedi'}
                 </Button>
             </DialogContent>
         </Dialog>

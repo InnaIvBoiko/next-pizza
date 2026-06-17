@@ -29,13 +29,13 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
             setLoading(true);
             await deleteUser();
 
-            toast.success('Your account has been deleted.', { icon: '🗑️' });
+            toast.success('Il tuo account è stato eliminato.', { icon: '🗑️' });
 
             // Clear the session and leave the (now non-existent) profile page.
             await signOut({ callbackUrl: '/' });
         } catch (error) {
             logger.error({ err: error }, 'Error [DELETE_ACCOUNT]');
-            toast.error('Could not delete the account. Please try again.', {
+            toast.error('Impossibile eliminare l\'account. Riprova.', {
                 icon: '❌',
             });
             setLoading(false);
@@ -51,12 +51,12 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
                 }
             }}
         >
-            <DialogContent className='w-110 bg-white p-8'>
+            <DialogContent className='w-110 bg-card p-8'>
                 <DialogHeader>
-                    <DialogTitle>Delete account</DialogTitle>
+                    <DialogTitle>Elimina account</DialogTitle>
                     <DialogDescription>
-                        This action is permanent. Your account and cart will be
-                        removed and cannot be recovered. Are you sure?
+                        Sei sicuro di voler eliminare il tuo account?
+                        L&apos;operazione è irreversibile.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -67,7 +67,7 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
                         disabled={loading}
                         onClick={onClose}
                     >
-                        Cancel
+                        Annulla
                     </Button>
                     <Button
                         variant='destructive'
@@ -75,7 +75,7 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
                         disabled={loading}
                         onClick={onConfirm}
                     >
-                        Delete my account
+                        Elimina
                     </Button>
                 </DialogFooter>
             </DialogContent>

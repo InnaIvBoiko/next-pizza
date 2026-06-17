@@ -60,7 +60,7 @@ export default function CheckoutPage() {
             const url = await createOrder(data);
 
             toast.success(
-                'Order created successfully! 📝 Redirecting to payment... ',
+                'Ordine creato con successo! 📝 Reindirizzamento al pagamento... ',
                 {
                     icon: '✅',
                 }
@@ -72,7 +72,7 @@ export default function CheckoutPage() {
         } catch (err) {
             logger.error({ err }, '[Checkout] Failed to create order');
             setSubmitting(false);
-            toast.error('Failed to create order', {
+            toast.error('Impossibile creare l\'ordine', {
                 icon: '❌',
             });
         }
@@ -90,7 +90,7 @@ export default function CheckoutPage() {
     return (
         <Container className='mt-10'>
             <Title
-                text='Checkout'
+                text='Il tuo ordine'
                 className='mb-8 text-[36px] font-extrabold'
             />
 

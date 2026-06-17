@@ -35,7 +35,7 @@ export const ProfileButton: React.FC<Props> = ({
                     className='flex items-center gap-1'
                 >
                     <User size={16} />
-                    Login
+                    Accedi
                 </Button>
             ) : (
                 <Link href='/profile'>
@@ -44,7 +44,7 @@ export const ProfileButton: React.FC<Props> = ({
                         className='flex items-center gap-2'
                     >
                         <CircleUser size={18} />
-                        Profile
+                        Profilo
                     </Button>
                 </Link>
             )}

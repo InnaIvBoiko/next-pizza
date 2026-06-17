@@ -46,11 +46,11 @@ export const SearchInput = () => {
                 ref={ref}
                 className='relative z-30 flex h-11 flex-1 justify-between rounded-2xl'
             >
-                <Search className='absolute top-1/2 left-3 h-5 translate-y-[-50%] text-gray-400' />
+                <Search className='absolute top-1/2 left-3 h-5 translate-y-[-50%] text-muted-foreground' />
                 <input
-                    className='w-full rounded-2xl bg-gray-50 pl-11 outline-none'
+                    className='w-full rounded-2xl bg-muted pl-11 outline-none'
                     type='text'
-                    placeholder='Search your pizza...'
+                    placeholder='Cerca la tua pizza...'
                     onFocus={() => setFocused(true)}
                     // onBlur={() => setFocused(false)}
                     value={searchQuery}
@@ -60,7 +60,7 @@ export const SearchInput = () => {
                 {products.length > 0 && (
                     <div
                         className={cn(
-                            'invisible absolute top-14 z-30 w-full rounded-xl bg-white py-2 opacity-0 shadow-md transition-all duration-200',
+                            'invisible absolute top-14 z-30 w-full rounded-xl bg-popover border border-border py-2 opacity-0 shadow-md transition-all duration-200',
                             focused && 'visible top-14 opacity-100'
                         )}
                     >

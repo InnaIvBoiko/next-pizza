@@ -35,14 +35,14 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
                 password: data.password,
             });
 
-            toast.success('Registration successful 📝 Confirm your email.', {
+            toast.success('Registrazione completata 📝 Conferma la tua email.', {
                 icon: '✅',
             });
 
             onClose?.();
         } catch (error) {
             logger.error({ err: error }, 'Error [REGISTER]');
-            toast.error('Could not register. The email may already be in use.', {
+            toast.error('Impossibile registrarsi. L\'email potrebbe essere già in uso.', {
                 icon: '❌',
             });
         }
@@ -55,14 +55,14 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
                 onSubmit={form.handleSubmit(onSubmit)}
             >
                 <div className='mb-2'>
-                    <Title text='Create an account' size='md' />
-                    <p className='text-gray-400'>
-                        Enter your details to create an account
+                    <Title text='Crea un account' size='md' />
+                    <p className='text-muted-foreground'>
+                        Inserisci i tuoi dati per creare un account
                     </p>
                 </div>
 
-                <FormInput name='email' label='E-Mail' required />
-                <FormInput name='fullName' label='Full Name' required />
+                <FormInput name='email' label='E-mail' required />
+                <FormInput name='fullName' label='Nome completo' required />
                 <FormInput
                     type='password'
                     name='password'
@@ -72,7 +72,7 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
                 <FormInput
                     type='password'
                     name='confirmPassword'
-                    label='Confirm Password'
+                    label='Conferma password'
                     required
                 />
 
@@ -81,7 +81,7 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
                     className='h-12 text-base'
                     type='submit'
                 >
-                    Register
+                    Registrati
                 </Button>
             </form>
         </FormProvider>

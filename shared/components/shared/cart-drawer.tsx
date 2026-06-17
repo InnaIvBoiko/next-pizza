@@ -39,9 +39,9 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
         <Sheet>
             <SheetTrigger asChild>{children}</SheetTrigger>
 
-            <SheetContent className='flex flex-col justify-between bg-[#F4F1EE] px-6 pb-0'>
+            <SheetContent className='flex flex-col justify-between bg-background px-6 pb-0'>
                 <SheetDescription className='sr-only'>
-                    Your selected items and order total
+                    Gli articoli selezionati e il totale dell&apos;ordine
                 </SheetDescription>
 
                 <div
@@ -53,30 +53,30 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                     {totalAmount > 0 ? (
                         <SheetHeader>
                             <SheetTitle>
-                                In the cart{' '}
+                                Nel carrello{' '}
                                 <span className='font-bold'>
-                                    {items.length} items
+                                    {items.length} articoli
                                 </span>
                             </SheetTitle>
                         </SheetHeader>
                     ) : (
-                        <SheetTitle className='sr-only'>Cart</SheetTitle>
+                        <SheetTitle className='sr-only'>Carrello</SheetTitle>
                     )}
 
                     {!totalAmount && (
                         <div className='mx-auto flex w-72 flex-col items-center justify-center'>
                             <PackageOpen
-                                className='text-neutral-300'
+                                className='text-muted-foreground'
                                 size={120}
                                 strokeWidth={1}
                             />
                             <Title
                                 size='sm'
-                                text='The cart is empty'
+                                text='Il tuo carrello è vuoto'
                                 className='my-2 text-center font-bold'
                             />
-                            <p className='mb-5 text-center text-neutral-500'>
-                                Add at least one pizza to place an order
+                            <p className='mb-5 text-center text-muted-foreground'>
+                                Aggiungi qualcosa al carrello
                             </p>
 
                             <SheetClose asChild>
@@ -85,7 +85,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                     size='lg'
                                 >
                                     <ArrowLeft className='mr-2 w-5' />
-                                    Go back
+                                    Torna indietro
                                 </Button>
                             </SheetClose>
                         </div>
@@ -123,12 +123,12 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                 ))}
                             </div>
 
-                            <SheetFooter className='-mx-6 bg-white p-8'>
+                            <SheetFooter className='-mx-6 bg-card p-8'>
                                 <div className='w-full'>
                                     <div className='mb-4 flex'>
-                                        <span className='flex flex-1 text-lg text-neutral-500'>
-                                            Total amount
-                                            <div className='relative -top-1 mx-2 flex-1 border-b border-dashed border-b-neutral-200' />
+                                        <span className='flex flex-1 text-lg text-muted-foreground'>
+                                            Totale
+                                            <div className='relative -top-1 mx-2 flex-1 border-b border-dashed border-b-border' />
                                         </span>
 
                                         <span className='text-lg font-bold'>
@@ -145,8 +145,8 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                             className='h-12 w-full text-base'
                                         >
                                             {redirecting
-                                                ? 'Loading...'
-                                                : 'Place order'}
+                                                ? 'Caricamento...'
+                                                : 'Vai al pagamento'}
                                             <ArrowRight className='ml-2 w-5' />
                                         </Button>
                                     </Link>

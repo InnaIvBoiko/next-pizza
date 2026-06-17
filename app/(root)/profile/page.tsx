@@ -27,11 +27,22 @@ export default async function ProfilePage() {
     }
 
     return (
-        <Container className='my-10 w-96'>
-            <Title text='My Profile' size='md' className='font-bold' />
-            <div className='mt-10'>
-                <ProfileForm data={user} />
-            </div>
-        </Container>
+        <section className='glow-warm'>
+            <Container className='px-4 py-10'>
+                <div className='mx-auto w-full max-w-md'>
+                    <Title
+                        text='Il mio profilo'
+                        size='lg'
+                        className='font-extrabold'
+                    />
+                    <p className='mt-2 text-muted-foreground'>
+                        Gestisci i tuoi dati e l&apos;account.
+                    </p>
+                    <div className='glass mt-6 rounded-3xl p-6 sm:p-8'>
+                        <ProfileForm data={user} />
+                    </div>
+                </div>
+            </Container>
+        </section>
     );
 }

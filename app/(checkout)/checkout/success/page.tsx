@@ -15,21 +15,21 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
             <div className='text-7xl'>🎉</div>
 
             <Title
-                text='Thank you for your order!'
+                text='Grazie per il tuo ordine!'
                 size='lg'
                 className='font-extrabold'
             />
 
-            <p className='max-w-md text-lg text-gray-400'>
+            <p className='max-w-md text-lg text-muted-foreground'>
                 {orderId
-                    ? `Your payment was successful and order #${orderId} is confirmed. We'll start preparing it right away.`
-                    : 'Your payment was successful and your order is confirmed.'}
+                    ? `Il pagamento è andato a buon fine e l'ordine #${orderId} è confermato. Inizieremo subito a prepararlo.`
+                    : 'Il pagamento è andato a buon fine e il tuo ordine è confermato.'}
             </p>
 
             <Link href='/'>
                 <Button className='mt-4 h-12 gap-2 px-6 text-base'>
                     <ArrowLeft className='w-5' />
-                    Back to home
+                    Torna alla home
                 </Button>
             </Link>
         </div>

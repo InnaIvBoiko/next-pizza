@@ -26,7 +26,7 @@ export const CartDrawerItem: React.FC<Props> = ({
     return (
         <div
             className={cn(
-                'flex gap-6 bg-white p-5',
+                'flex gap-6 bg-card p-5',
                 {
                     'pointer-events-none opacity-50': disabled,
                 },
@@ -50,7 +50,7 @@ export const CartDrawerItem: React.FC<Props> = ({
                         <CartItem.Price value={price} />
                         <Trash2Icon
                             onClick={onClickRemove}
-                            className='cursor-pointer text-gray-400 hover:text-gray-600'
+                            className='cursor-pointer text-muted-foreground hover:text-foreground'
                             size={16}
                         />
                     </div>

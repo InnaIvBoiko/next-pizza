@@ -9,11 +9,11 @@ export const CheckoutItemSkeleton: React.FC<Props> = ({ className }) => {
     return (
         <div className={cn('flex items-center justify-between', className)}>
             <div className='flex items-center gap-5'>
-                <div className='h-12.5 w-12.5 animate-pulse rounded-full bg-gray-200' />
-                <h2 className='h-5 w-40 animate-pulse rounded bg-gray-200' />
+                <div className='h-12.5 w-12.5 animate-pulse rounded-full bg-muted' />
+                <h2 className='h-5 w-40 animate-pulse rounded bg-muted' />
             </div>
-            <div className='h-5 w-10 animate-pulse rounded bg-gray-200' />
-            <div className='h-8 w-33.25 animate-pulse rounded bg-gray-200' />
+            <div className='h-5 w-10 animate-pulse rounded bg-muted' />
+            <div className='h-8 w-33.25 animate-pulse rounded bg-muted' />
         </div>
     );
 };

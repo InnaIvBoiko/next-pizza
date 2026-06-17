@@ -27,7 +27,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
     items,
     defaultItems,
     limit = 5,
-    searchInputPlaceholder = 'Search...',
+    searchInputPlaceholder = 'Cerca...',
     className,
     loading,
     onClickCheckbox,
@@ -75,7 +75,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
                     <Input
                         onChange={onChangeSearchInput}
                         placeholder={searchInputPlaceholder}
-                        className='border-none bg-gray-50'
+                        className='border-none bg-muted'
                     />
                 </div>
             )}
@@ -97,14 +97,14 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
             {items.length > limit && (
                 <div
                     className={
-                        showAll ? 'mt-4 border-t border-t-neutral-100' : ''
+                        showAll ? 'mt-4 border-t border-t-border' : ''
                     }
                 >
                     <button
                         onClick={() => setShowAll(!showAll)}
                         className='text-primary mt-3'
                     >
-                        {showAll ? 'Hide' : '+ Show All'}
+                        {showAll ? 'Nascondi' : '+ Mostra tutti'}
                     </button>
                 </div>
             )}

@@ -3,8 +3,6 @@ import { cn } from '@/shared/lib/utils';
 import { formatPrice } from '@/shared/lib';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Title } from './title';
-import { Button } from '../ui';
 import { Plus } from 'lucide-react';
 
 export interface ProductCardProps {
@@ -27,38 +25,50 @@ export const ProductCard = ({
     className,
 }: ProductCardProps) => {
     return (
-        <div className={cn(className)}>
-            <Link href={`/product/${id}`}>
-                <div className='bg-secondary flex h-65 justify-center rounded-lg p-6'>
-                    {/* fill (not width/height) so arbitrary-ratio product
-                        photos sit in the fixed square box without tripping
-                        Next's aspect-ratio warning; object-contain keeps them
-                        undistorted. */}
-                    <div className='relative h-53.75 w-53.75'>
-                        <Image
-                            className='object-contain'
-                            src={imageUrl}
-                            alt={name}
-                            fill
-                            sizes='215px'
-                            priority={priority}
-                        />
-                    </div>
-                </div>
-                <Title text={name} size='sm' className='mt-3 mb-1 font-bold' />
+        <Link
+            href={`/product/${id}`}
+            className={cn(
+                'group flex flex-col rounded-3xl border border-border bg-card p-3 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-foreground/5',
+                className
+            )}
+        >
+            {/* Photo box: fixed square, fill + object-contain keeps arbitrary
+                ratios undistorted and avoids Next's aspect-ratio warning. */}
+            <div className='relative aspect-square overflow-hidden rounded-2xl bg-secondary'>
+                <div className='glow-warm absolute inset-0' />
+                <Image
+                    className='object-contain p-4 transition-transform duration-500 group-hover:scale-105'
+                    src={imageUrl}
+                    alt={name}
+                    fill
+                    sizes='(max-width: 640px) 90vw, (max-width: 1280px) 45vw, 300px'
+                    priority={priority}
+                />
+            </div>
+
+            <div className='flex flex-1 flex-col px-2 pt-4 pb-1'>
+                <h3 className='text-lg leading-tight font-bold'>{name}</h3>
                 {description && (
-                    <p className='text-sm text-gray-400'>{description}</p>
+                    <p className='mt-1 line-clamp-2 text-sm text-muted-foreground'>
+                        {description}
+                    </p>
                 )}
-                <div className='mt-4 flex items-start justify-between'>
-                    <span className='text-[20px]'>
-                        from <b>{formatPrice(price)}</b>
+
+                <div className='mt-4 flex items-center justify-between gap-2'>
+                    <span className='text-sm text-muted-foreground'>
+                        da{' '}
+                        <b className='text-xl text-foreground'>
+                            {formatPrice(price)}
+                        </b>
                     </span>
-                    <Button variant='secondary'>
-                        <Plus size={20} className='mr-1' />
-                        Add to Cart
-                    </Button>
+                    <span
+                        aria-hidden
+                        className='inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-transform duration-300 group-hover:scale-110 group-active:scale-95'
+                    >
+                        <Plus size={20} />
+                    </span>
                 </div>
-            </Link>
-        </div>
+            </div>
+        </Link>
     );
 };

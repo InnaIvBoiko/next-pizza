@@ -35,10 +35,14 @@ export const ProductsGroupList = ({
     const setActiveCategoryId = useCategoryStore(state => state.setActiveId);
 
     const intersectionRef = React.useRef<HTMLDivElement | null>(null);
+    // Mark a category active when its top crosses just below the sticky header +
+    // TopBar (the negative top rootMargin), so the highlighted tab matches what
+    // the user actually sees below the fixed bars.
     const intersection = useIntersection(
         intersectionRef as React.RefObject<HTMLDivElement>,
         {
-            threshold: 0.4,
+            rootMargin: '-180px 0px -65% 0px',
+            threshold: 0,
         }
     );
 
@@ -49,10 +53,27 @@ export const ProductsGroupList = ({
     }, [categoryId, intersection?.isIntersecting, title, setActiveCategoryId]);
 
     return (
-        <div className={className} id={title} ref={intersectionRef}>
-            <Title text={title} size='lg' className='mb-5 font-extrabold' />
+        <div
+            className={cn(
+                'scroll-mt-[calc(var(--header-height)+5rem)]',
+                className
+            )}
+            id={title}
+            ref={intersectionRef}
+        >
+            <div className='mb-6 flex items-center gap-3'>
+                <Title text={title} size='lg' className='font-extrabold' />
+                <span className='rounded-full bg-muted px-3 py-1 text-sm font-semibold text-muted-foreground'>
+                    {items.length}
+                </span>
+            </div>
 
-            <div className={cn('grid grid-cols-3 gap-12.5', listClassName)}>
+            <div
+                className={cn(
+                    'grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3',
+                    listClassName
+                )}
+            >
                 {items.map((product, index) => (
                     <ProductCard
                         key={product.id}

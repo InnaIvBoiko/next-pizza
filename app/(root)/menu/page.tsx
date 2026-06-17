@@ -1,4 +1,4 @@
-import { Container, Filters, Title, TopBar } from '@/shared/components';
+import { Container, Filters, FiltersDrawer, TopBar } from '@/shared/components';
 import { ProductsGroupList } from '@/shared/components/shared/products-group-list';
 import { prisma } from '@/prisma/prisma-client';
 import type { Metadata } from 'next';
@@ -79,9 +79,20 @@ export default async function Menu({ searchParams }: MenuProps) {
 
     return (
         <>
-            <Container className='mt-6 px-4 sm:mt-10'>
-                <Title text='Menu' size='lg' className='font-extrabold' />
-            </Container>
+            <section className='glow-warm'>
+                <Container className='px-4 pt-8 pb-6 sm:pt-12'>
+                    <span className='text-sm font-semibold tracking-wide text-primary uppercase'>
+                        Ordina ora
+                    </span>
+                    <h1 className='mt-2 text-4xl font-extrabold text-balance sm:text-5xl'>
+                        Il nostro menu
+                    </h1>
+                    <p className='mt-3 max-w-xl text-muted-foreground'>
+                        Pizze a lievitazione naturale, ingredienti freschi e
+                        consegna calda. Filtra e trova la tua preferita.
+                    </p>
+                </Container>
+            </section>
 
             <TopBar
                 categories={visibleCategories.map(({ id, name }) => ({
@@ -91,9 +102,15 @@ export default async function Menu({ searchParams }: MenuProps) {
             />
 
             <Container className='mt-6 px-4 pb-14 sm:mt-10'>
-                <div className='flex flex-col gap-8 lg:flex-row lg:gap-16 xl:gap-20'>
-                    <aside className='w-full lg:w-62.5 lg:shrink-0'>
-                        <Filters />
+                <div className='flex flex-col gap-8 lg:flex-row lg:gap-12 xl:gap-16'>
+                    <aside className='w-full lg:w-72 lg:shrink-0'>
+                        {/* Mobile: filters open in a drawer */}
+                        <FiltersDrawer />
+
+                        {/* Desktop: sticky glass sidebar */}
+                        <div className='glass scrollbar hidden rounded-3xl p-5 lg:sticky lg:top-32 lg:block lg:max-h-[calc(100vh-9rem)] lg:overflow-y-auto'>
+                            <Filters />
+                        </div>
                     </aside>
 
                     <div className='flex-1'>

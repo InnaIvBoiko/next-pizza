@@ -24,7 +24,7 @@ export const IngredientItem: React.FC<Props> = ({
     return (
         <div
             className={cn(
-                'relative flex w-32 cursor-pointer flex-col items-center rounded-md bg-white p-1 text-center shadow-md',
+                'relative flex w-32 cursor-pointer flex-col items-center rounded-md bg-card p-1 text-center shadow-md',
                 { 'border-primary border': active },
                 className
             )}
