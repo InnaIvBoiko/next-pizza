@@ -13,19 +13,14 @@ import {
     SheetTrigger,
 } from '../ui/sheet';
 import { ThemeToggle } from './theme-toggle';
+import { LanguageSelect } from './language-select';
 import { ProfileButton } from './profile-button';
+import { useDictionary, useLocalizeHref } from './i18n/dictionary-provider';
 
 interface Props {
     onClickSignIn?: () => void;
     className?: string;
 }
-
-const links = [
-    { href: '/', label: 'Home' },
-    { href: '/menu', label: 'Menu' },
-    { href: '/#chi-siamo', label: 'Chi siamo' },
-    { href: '/#come-funziona', label: 'Come funziona' },
-];
 
 /**
  * Mobile-only navigation: a hamburger button opening a right drawer with the
@@ -33,12 +28,22 @@ const links = [
  * header instead.
  */
 export const BurgerMenu: React.FC<Props> = ({ onClickSignIn, className }) => {
+    const dict = useDictionary();
+    const localize = useLocalizeHref();
+
+    const links = [
+        { href: localize('/'), label: dict.nav.home },
+        { href: localize('/menu'), label: dict.nav.menu },
+        { href: localize('/#chi-siamo'), label: dict.nav.aboutUs },
+        { href: localize('/#come-funziona'), label: dict.nav.howItWorks },
+    ];
+
     return (
         <Sheet>
             <SheetTrigger asChild>
                 <button
                     type='button'
-                    aria-label='Apri menu'
+                    aria-label={dict.nav.openMenu}
                     className={cn(
                         'glass inline-flex size-11 items-center justify-center rounded-full text-foreground/80 transition-colors hover:text-foreground',
                         className
@@ -50,7 +55,9 @@ export const BurgerMenu: React.FC<Props> = ({ onClickSignIn, className }) => {
 
             <SheetContent side='right' className='w-[82vw] max-w-xs'>
                 <SheetHeader>
-                    <SheetTitle className='text-lg font-bold'>Menu</SheetTitle>
+                    <SheetTitle className='text-lg font-bold'>
+                        {dict.nav.menu}
+                    </SheetTitle>
                 </SheetHeader>
 
                 <nav className='flex flex-col gap-1 px-2'>
@@ -66,11 +73,14 @@ export const BurgerMenu: React.FC<Props> = ({ onClickSignIn, className }) => {
                     ))}
                 </nav>
 
-                <div className='mt-auto flex items-center justify-between gap-3 border-t border-border p-4'>
-                    <SheetClose asChild>
-                        <ProfileButton onClickSignIn={onClickSignIn} />
-                    </SheetClose>
-                    <ThemeToggle />
+                <div className='mt-auto flex flex-col gap-3 border-t border-border p-4'>
+                    <LanguageSelect className='w-full justify-between' />
+                    <div className='flex items-center justify-between gap-3'>
+                        <SheetClose asChild>
+                            <ProfileButton onClickSignIn={onClickSignIn} />
+                        </SheetClose>
+                        <ThemeToggle />
+                    </div>
                 </div>
             </SheetContent>
         </Sheet>

@@ -5,6 +5,7 @@ import { Input, RangeSlider } from '../ui';
 // import { FilterCheckbox } from './filter-checkbox';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
 import { useFilters, useIngredients, useQueryFilters } from '@/shared/hooks';
+import { useDictionary } from '@/shared/components/shared/i18n/dictionary-provider';
 
 export interface FiltersProps {
     className?: string;
@@ -18,6 +19,7 @@ const noSpinner =
     '[appearance:textfield] [&::-webkit-inner-spin-button]:[-webkit-appearance:none] [&::-webkit-outer-spin-button]:[-webkit-appearance:none] [&::-webkit-inner-spin-button]:m-0';
 
 export const Filters = ({ className }: FiltersProps) => {
+    const dict = useDictionary();
     const { ingredients, loading } = useIngredients();
     const filters = useFilters();
     const {
@@ -47,7 +49,11 @@ export const Filters = ({ className }: FiltersProps) => {
 
     return (
         <div className={className}>
-            <Title text='Filtri' size='sm' className='mb-5 font-bold' />
+            <Title
+                text={dict.filters.title}
+                size='sm'
+                className='mb-5 font-bold'
+            />
 
             {/* <div className='mb-5 flex flex-col gap-4'>
                 <FilterCheckbox text='Can be collected' value='1' />
@@ -55,32 +61,32 @@ export const Filters = ({ className }: FiltersProps) => {
             </div> */}
 
             <CheckboxFiltersGroup
-                title='Tipo di impasto'
+                title={dict.filters.doughType}
                 name='pizzaTypes'
                 className='mb-5'
                 items={[
-                    { text: 'Sottile', value: '1' },
-                    { text: 'Tradizionale', value: '2' },
+                    { text: dict.filters.doughThin, value: '1' },
+                    { text: dict.filters.doughTraditional, value: '2' },
                 ]}
                 selected={pizzaTypes}
                 onClickCheckbox={setPizzaTypes}
             />
 
             <CheckboxFiltersGroup
-                title='Dimensioni'
+                title={dict.filters.sizes}
                 name='sizes'
                 className='mb-5'
                 items={[
-                    { text: '20 cm', value: '20' },
-                    { text: '30 cm', value: '30' },
-                    { text: '40 cm', value: '40' },
+                    { text: dict.filters.size20, value: '20' },
+                    { text: dict.filters.size30, value: '30' },
+                    { text: dict.filters.size40, value: '40' },
                 ]}
                 selected={sizes}
                 onClickCheckbox={setSizes}
             />
 
             <div className='mt-5 border-y border-y-border py-6 pb-7'>
-                <p className='mb-3 font-bold'>Prezzo (da / a):</p>
+                <p className='mb-3 font-bold'>{dict.filters.priceRange}</p>
                 <div className='mb-5 flex gap-3'>
                     <Input
                         type='number'
@@ -118,7 +124,7 @@ export const Filters = ({ className }: FiltersProps) => {
             </div>
 
             <CheckboxFiltersGroup
-                title='Ingredienti'
+                title={dict.filters.ingredients}
                 name='ingredients'
                 className='mt-5'
                 limit={6}

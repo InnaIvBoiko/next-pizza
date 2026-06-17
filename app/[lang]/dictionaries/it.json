@@ -1,0 +1,236 @@
+{
+    "common": {
+        "loading": "Caricamento...",
+        "back": "Torna indietro",
+        "backHome": "Torna alla home",
+        "cancel": "Annulla",
+        "delete": "Elimina",
+        "save": "Salva",
+        "toggleTheme": "Cambia tema",
+        "refresh": "Aggiorna"
+    },
+    "nav": {
+        "home": "Home",
+        "menu": "Menu",
+        "aboutUs": "Chi siamo",
+        "howItWorks": "Come funziona",
+        "openMenu": "Apri menu"
+    },
+    "header": {
+        "tagline": "La vera pizza italiana",
+        "menu": "Menu",
+        "orderPaid": "Ordine pagato! I dettagli sono nella tua email.",
+        "emailVerified": "Email verificata con successo!"
+    },
+    "language": {
+        "label": "Lingua"
+    },
+    "search": {
+        "placeholder": "Cerca la tua pizza..."
+    },
+    "product": {
+        "from": "da",
+        "adding": "Aggiungo...",
+        "addToCart": "Aggiungi al carrello · {price}",
+        "addedToCart": "{name} aggiunto al carrello",
+        "addError": "Impossibile aggiungere al carrello",
+        "detailsTemplate": "{size} cm, {type} pizza"
+    },
+    "cart": {
+        "itemDetailsTemplate": "{type} {size} cm",
+        "title": "Nel carrello",
+        "srTitle": "Carrello",
+        "srDescription": "Gli articoli selezionati e il totale dell'ordine",
+        "itemsCount": "{count} articoli",
+        "emptyTitle": "Il tuo carrello è vuoto",
+        "emptyText": "Aggiungi qualcosa al carrello",
+        "total": "Totale",
+        "checkout": "Vai al pagamento"
+    },
+    "filters": {
+        "title": "Filtri",
+        "doughType": "Tipo di impasto",
+        "doughThin": "Sottile",
+        "doughTraditional": "Tradizionale",
+        "sizes": "Dimensioni",
+        "size20": "20 cm",
+        "size30": "30 cm",
+        "size40": "40 cm",
+        "priceRange": "Prezzo (da / a):",
+        "ingredients": "Ingredienti",
+        "searchPlaceholder": "Cerca...",
+        "hide": "Nascondi",
+        "showAll": "+ Mostra tutti"
+    },
+    "sort": {
+        "label": "Ordina:",
+        "popular": "popolari"
+    },
+    "auth": {
+        "signIn": "Accedi",
+        "signOut": "Esci",
+        "register": "Registrati",
+        "profile": "Profilo",
+        "continueWithGoogle": "Continua con Google",
+        "modalDescription": "Accedi al tuo account Next Pizza",
+        "login": {
+            "title": "Accedi al tuo account",
+            "description": "Inserisci la tua email per accedere al tuo account",
+            "email": "E-mail",
+            "password": "Password",
+            "submit": "Accedi",
+            "successToast": "Hai effettuato l'accesso con successo 🎉",
+            "errorToast": "Impossibile accedere. Riprova.",
+            "errors": {
+                "INVALID_CREDENTIALS": "Email o password non validi.",
+                "EMAIL_NOT_VERIFIED": "Conferma la tua email prima di accedere.",
+                "OAUTH_ACCOUNT": "Questo account utilizza l'accesso con Google. Usa il pulsante qui sotto."
+            }
+        },
+        "register": {
+            "title": "Crea un account",
+            "description": "Inserisci i tuoi dati per creare un account",
+            "email": "E-mail",
+            "fullName": "Nome completo",
+            "password": "Password",
+            "confirmPassword": "Conferma password",
+            "submit": "Registrati",
+            "successToast": "Registrazione completata 📝 Conferma la tua email.",
+            "errorToast": "Impossibile registrarsi. L'email potrebbe essere già in uso."
+        }
+    },
+    "profile": {
+        "pageTitle": "Il mio profilo",
+        "pageDescription": "Gestisci i tuoi dati e l'account.",
+        "email": "E-mail",
+        "fullName": "Nome completo",
+        "newPassword": "Nuova password (lascia vuoto per non cambiarla)",
+        "confirmPassword": "Conferma password",
+        "save": "Salva",
+        "signOut": "Esci",
+        "deleteAccount": "Elimina account",
+        "updateSuccess": "Profilo aggiornato con successo 📝",
+        "updateError": "Errore durante l'aggiornamento del profilo"
+    },
+    "deleteAccount": {
+        "title": "Elimina account",
+        "description": "Sei sicuro di voler eliminare il tuo account? L'operazione è irreversibile.",
+        "cancel": "Annulla",
+        "confirm": "Elimina",
+        "successToast": "Il tuo account è stato eliminato.",
+        "errorToast": "Impossibile eliminare l'account. Riprova."
+    },
+    "checkout": {
+        "pageTitle": "Il tuo ordine",
+        "cartSection": "1. Carrello",
+        "personalSection": "2. Dati personali",
+        "addressSection": "3. Indirizzo di consegna",
+        "firstName": "Nome",
+        "lastName": "Cognome",
+        "email": "E-mail",
+        "phone": "Telefono",
+        "address": "Via, numero, città, codice postale",
+        "comment": "Aggiungi un commento",
+        "total": "Totale:",
+        "productsTotal": "Totale prodotti:",
+        "delivery": "Consegna:",
+        "vat": "di cui IVA ({vat}%):",
+        "submit": "Vai al pagamento",
+        "orderSuccess": "Ordine creato con successo! 📝 Reindirizzamento al pagamento... ",
+        "orderError": "Impossibile creare l'ordine"
+    },
+    "success": {
+        "title": "Grazie per il tuo ordine!",
+        "messageWithId": "Il pagamento è andato a buon fine e l'ordine #{orderId} è confermato. Inizieremo subito a prepararlo.",
+        "message": "Il pagamento è andato a buon fine e il tuo ordine è confermato.",
+        "backHome": "Torna alla home"
+    },
+    "menuPage": {
+        "label": "Ordina ora",
+        "title": "Il nostro menu",
+        "description": "Pizze a lievitazione naturale, ingredienti freschi e consegna calda. Filtra e trova la tua preferita."
+    },
+    "home": {
+        "hero": {
+            "badge": "Ingredienti freschi ogni giorno",
+            "title": "La vera pizza italiana, a casa tua",
+            "description": "Impasto a lenta lievitazione, forno a legna e consegna calda in 30 minuti. Ordina in pochi tap.",
+            "orderNow": "Ordina ora",
+            "howItWorks": "Come funziona",
+            "rating": "4.9",
+            "trust": "oltre 2.000 ordini consegnati",
+            "imageAlt": "Pizza margherita napoletana appena sfornata"
+        },
+        "about": {
+            "label": "Chi siamo",
+            "title": "Dal 2010, la tradizione napoletana",
+            "description": "Siamo nati da una piccola pizzeria di quartiere con un'idea semplice: portare in tavola la pizza come si fa a Napoli. Niente scorciatoie, solo materie prime selezionate e tanta passione.",
+            "point1Title": "Forno a legna",
+            "point1Text": "Cotta a 450°C in 90 secondi, per un cornicione alveolato e leggero.",
+            "point2Title": "Ingredienti DOP",
+            "point2Text": "Pomodoro San Marzano, mozzarella di bufala e basilico fresco.",
+            "point3Title": "Mani esperte",
+            "point3Text": "Pizzaioli napoletani e impasto a 48 ore di lievitazione.",
+            "imageAlt": "Pizzaiolo che inforna nel forno a legna"
+        },
+        "howItWorks": {
+            "label": "Come funziona",
+            "title": "Dalla scelta alla consegna in 3 passi",
+            "step1Title": "Scegli",
+            "step1Text": "Componi la tua pizza dal menu e aggiungi al carrello.",
+            "step2Title": "Prepariamo",
+            "step2Text": "I nostri pizzaioli infornano il tuo ordine al momento.",
+            "step3Title": "Consegniamo",
+            "step3Text": "Ricevi la pizza calda a casa in circa 30 minuti.",
+            "deliveryInfo": "Consegniamo in tutta la città · Lun–Dom 11:00–23:00",
+            "promo": "Consegna gratuita sopra i 25€"
+        },
+        "testimonials": {
+            "label": "Testimonianze",
+            "title": "Cosa dicono i nostri clienti",
+            "review1Name": "Giulia R.",
+            "review1Text": "La margherita più buona della città. Impasto leggero e consegna sempre puntuale.",
+            "review2Name": "Marco T.",
+            "review2Text": "Ordino ogni venerdì. Arriva calda, fragrante e il sito è velocissimo.",
+            "review3Name": "Sara B.",
+            "review3Text": "Ingredienti di qualità che si sentono. Per me la migliore pizza a domicilio.",
+            "photoAlt": "Foto di {name}"
+        },
+        "footer": {
+            "tagline": "La vera pizza napoletana, consegnata calda a casa tua.",
+            "menuSection": "Menu",
+            "allPizzas": "Tutte le pizze",
+            "howItWorks": "Come funziona",
+            "aboutUs": "Chi siamo",
+            "contactSection": "Contatti",
+            "hoursSection": "Orari",
+            "days": "Lun–Dom",
+            "hours": "11:00 – 23:00",
+            "copyright": "© {year} Next Pizza. Tutti i diritti riservati."
+        }
+    },
+    "pizza": {
+        "sizes": {
+            "20": "Piccola",
+            "30": "Media",
+            "40": "Grande"
+        },
+        "types": {
+            "1": "tradizionale",
+            "2": "sottile"
+        }
+    },
+    "validation": {
+        "password": "Password non valida",
+        "fullName": "Nome completo non valido",
+        "passwordMismatch": "Le password non coincidono",
+        "email": "Email non valida"
+    },
+    "checkoutValidation": {
+        "firstName": "Il nome deve contenere almeno 2 caratteri",
+        "lastName": "Il cognome deve contenere almeno 2 caratteri",
+        "email": "Inserisci un indirizzo email valido",
+        "phone": "Inserisci un numero di telefono valido",
+        "address": "Inserisci un indirizzo valido"
+    }
+}

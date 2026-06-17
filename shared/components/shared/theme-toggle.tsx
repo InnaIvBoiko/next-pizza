@@ -4,12 +4,14 @@ import React from 'react';
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
+import { useDictionary } from './i18n/dictionary-provider';
 
 interface Props {
     className?: string;
 }
 
 export const ThemeToggle: React.FC<Props> = ({ className }) => {
+    const dict = useDictionary();
     const { resolvedTheme, setTheme } = useTheme();
 
     // Icon visibility is driven by the `dark` class (set by next-themes before
@@ -18,7 +20,7 @@ export const ThemeToggle: React.FC<Props> = ({ className }) => {
     return (
         <button
             type='button'
-            aria-label='Cambia tema'
+            aria-label={dict.common.toggleTheme}
             onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
             className={cn(
                 'glass inline-flex size-11 items-center justify-center rounded-full text-foreground/80 transition-colors hover:text-foreground',

@@ -12,6 +12,7 @@ import {
     SheetTrigger,
 } from '../ui';
 import { Filters } from './filters';
+import { useDictionary } from '@/shared/components/shared/i18n/dictionary-provider';
 
 interface Props {
     className?: string;
@@ -22,6 +23,8 @@ interface Props {
  * full <Filters /> in a left drawer. On lg+ the inline sidebar is used instead.
  */
 export const FiltersDrawer: React.FC<Props> = ({ className }) => {
+    const dict = useDictionary();
+
     return (
         <div className={cn('lg:hidden', className)}>
             <Sheet>
@@ -32,7 +35,7 @@ export const FiltersDrawer: React.FC<Props> = ({ className }) => {
                         size='lg'
                     >
                         <SlidersHorizontal className='mr-2 size-4' />
-                        Filtri
+                        {dict.filters.title}
                     </Button>
                 </SheetTrigger>
                 <SheetContent
@@ -41,7 +44,7 @@ export const FiltersDrawer: React.FC<Props> = ({ className }) => {
                 >
                     <SheetHeader>
                         <SheetTitle className='text-lg font-bold'>
-                            Filtri
+                            {dict.filters.title}
                         </SheetTitle>
                     </SheetHeader>
                     <div className='px-4 pb-8'>

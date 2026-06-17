@@ -1,27 +1,17 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Inter } from 'next/font/google';
-import { Providers } from '@/shared/components/shared/providers';
 import { DictionaryProvider } from '@/shared/components/shared/i18n/dictionary-provider';
+import { HtmlLang } from '@/shared/components/shared/i18n/html-lang';
 import { locales, isLocale } from '@/shared/constants/i18n';
 import { getDictionary } from './dictionaries';
-import '../globals.css';
-
-const inter = Inter({
-    subsets: ['latin'],
-    variable: '--font-inter',
-    display: 'swap',
-});
-
-export const metadata: Metadata = {
-    icons: { icon: '/logo.svg' },
-};
 
 export function generateStaticParams() {
     return locales.map((lang) => ({ lang }));
 }
 
-export default async function RootLayout({
+// Locale layout: nested under the root layout. It only resolves the dictionary
+// for the active locale and exposes it via context — <html>/<body> and the
+// global Providers live in the root layout so they survive locale switches.
+export default async function LangLayout({
     children,
     params,
 }: Readonly<{
@@ -37,14 +27,9 @@ export default async function RootLayout({
     const dict = await getDictionary(lang);
 
     return (
-        <html lang={lang} suppressHydrationWarning className={inter.variable}>
-            <body className='font-sans antialiased'>
-                <Providers>
-                    <DictionaryProvider dict={dict} lang={lang}>
-                        {children}
-                    </DictionaryProvider>
-                </Providers>
-            </body>
-        </html>
+        <DictionaryProvider dict={dict} lang={lang}>
+            <HtmlLang lang={lang} />
+            {children}
+        </DictionaryProvider>
     );
 }

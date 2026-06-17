@@ -9,22 +9,22 @@ import { toast } from 'sonner';
 import { Title } from '../../../title';
 import { FormInput } from '../../../form';
 import { Button } from '../../../../ui';
-import { formLoginSchema, TFormLoginValues } from './schemas';
+import { useDictionary } from '../../../i18n/dictionary-provider';
+import { makeLoginSchema, TFormLoginValues } from './schemas';
 
 interface Props {
     onClose?: () => void;
 }
 
-const ERROR_MESSAGES: Record<string, string> = {
-    INVALID_CREDENTIALS: 'Email o password non validi.',
-    EMAIL_NOT_VERIFIED: 'Conferma la tua email prima di accedere.',
-    OAUTH_ACCOUNT:
-        'Questo account utilizza l\'accesso con Google. Usa il pulsante qui sotto.',
-};
-
 export const LoginForm: React.FC<Props> = ({ onClose }) => {
+    const dict = useDictionary();
+    const schema = React.useMemo(
+        () => makeLoginSchema(dict.validation),
+        [dict]
+    );
+
     const form = useForm<TFormLoginValues>({
-        resolver: zodResolver(formLoginSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             email: '',
             password: '',
@@ -38,7 +38,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
         });
 
         if (resp?.ok) {
-            toast.success('Hai effettuato l\'accesso con successo 🎉', {
+            toast.success(dict.auth.login.successToast, {
                 icon: '✅',
             });
             onClose?.();
@@ -46,9 +46,11 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
         }
 
         // NextAuth puts the code thrown by authorize() into resp.error.
+        const errors = dict.auth.login.errors;
         const message =
-            (resp?.error && ERROR_MESSAGES[resp.error]) ??
-            'Impossibile accedere. Riprova.';
+            (resp?.error &&
+                errors[resp.error as keyof typeof errors]) ??
+            dict.auth.login.errorToast;
 
         toast.error(message, { icon: '❌' });
     };
@@ -61,18 +63,22 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
             >
                 <div className='mb-2 flex items-center justify-between'>
                     <div className='mr-2'>
-                        <Title text='Accedi al tuo account' size='md' />
+                        <Title text={dict.auth.login.title} size='md' />
                         <p className='text-muted-foreground'>
-                            Inserisci la tua email per accedere al tuo account
+                            {dict.auth.login.description}
                         </p>
                     </div>
                 </div>
 
-                <FormInput name='email' label='E-mail' required />
+                <FormInput
+                    name='email'
+                    label={dict.auth.login.email}
+                    required
+                />
                 <FormInput
                     type='password'
                     name='password'
-                    label='Password'
+                    label={dict.auth.login.password}
                     required
                 />
 
@@ -81,7 +87,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
                     className='h-12 text-base'
                     type='submit'
                 >
-                    Accedi
+                    {dict.auth.login.submit}
                 </Button>
             </form>
         </FormProvider>

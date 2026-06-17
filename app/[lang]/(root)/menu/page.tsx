@@ -1,6 +1,8 @@
 import { Container, Filters, FiltersDrawer, TopBar } from '@/shared/components';
 import { ProductsGroupList } from '@/shared/components/shared/products-group-list';
 import { prisma } from '@/prisma/prisma-client';
+import { getDictionary } from '../../dictionaries';
+import type { Locale } from '@/shared/constants/i18n';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 interface MenuProps {
+    params: Promise<{ lang: string }>;
     searchParams: Promise<{
         ingredients?: string;
         sizes?: string;
@@ -28,14 +31,16 @@ const toNumberList = (value?: string) =>
         .map(Number)
         .filter(n => !Number.isNaN(n));
 
-export default async function Menu({ searchParams }: MenuProps) {
-    const params = await searchParams;
+export default async function Menu({ params, searchParams }: MenuProps) {
+    const { lang } = await params;
+    const filters = await searchParams;
+    const dict = await getDictionary(lang as Locale);
 
-    const ingredientIds = toNumberList(params.ingredients);
-    const sizes = toNumberList(params.sizes);
-    const pizzaTypes = toNumberList(params.pizzaTypes);
-    const priceFrom = Number(params.priceFrom) || undefined;
-    const priceTo = Number(params.priceTo) || undefined;
+    const ingredientIds = toNumberList(filters.ingredients);
+    const sizes = toNumberList(filters.sizes);
+    const pizzaTypes = toNumberList(filters.pizzaTypes);
+    const priceFrom = Number(filters.priceFrom) || undefined;
+    const priceTo = Number(filters.priceTo) || undefined;
 
     // Constraints on a product's variants (ProductItem): size, dough type, price.
     const itemsWhere = {
@@ -82,14 +87,13 @@ export default async function Menu({ searchParams }: MenuProps) {
             <section className='glow-warm'>
                 <Container className='px-4 pt-8 pb-6 sm:pt-12'>
                     <span className='text-sm font-semibold tracking-wide text-primary uppercase'>
-                        Ordina ora
+                        {dict.menuPage.label}
                     </span>
                     <h1 className='mt-2 text-4xl font-extrabold text-balance sm:text-5xl'>
-                        Il nostro menu
+                        {dict.menuPage.title}
                     </h1>
                     <p className='mt-3 max-w-xl text-muted-foreground'>
-                        Pizze a lievitazione naturale, ingredienti freschi e
-                        consegna calda. Filtra e trova la tua preferita.
+                        {dict.menuPage.description}
                     </p>
                 </Container>
             </section>

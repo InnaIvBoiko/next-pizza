@@ -1,0 +1,236 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "back": "Go back",
+        "backHome": "Back to home",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "save": "Save",
+        "toggleTheme": "Toggle theme",
+        "refresh": "Refresh"
+    },
+    "nav": {
+        "home": "Home",
+        "menu": "Menu",
+        "aboutUs": "About us",
+        "howItWorks": "How it works",
+        "openMenu": "Open menu"
+    },
+    "header": {
+        "tagline": "Authentic Italian pizza",
+        "menu": "Menu",
+        "orderPaid": "Order paid! The details are in your email.",
+        "emailVerified": "Email verified successfully!"
+    },
+    "language": {
+        "label": "Language"
+    },
+    "search": {
+        "placeholder": "Search for your pizza..."
+    },
+    "product": {
+        "from": "from",
+        "adding": "Adding...",
+        "addToCart": "Add to cart · {price}",
+        "addedToCart": "{name} added to cart",
+        "addError": "Could not add to cart",
+        "detailsTemplate": "{size} cm, {type} pizza"
+    },
+    "cart": {
+        "itemDetailsTemplate": "{type} {size} cm",
+        "title": "In the cart",
+        "srTitle": "Cart",
+        "srDescription": "The selected items and the order total",
+        "itemsCount": "{count} items",
+        "emptyTitle": "Your cart is empty",
+        "emptyText": "Add something to the cart",
+        "total": "Total",
+        "checkout": "Go to checkout"
+    },
+    "filters": {
+        "title": "Filters",
+        "doughType": "Dough type",
+        "doughThin": "Thin",
+        "doughTraditional": "Traditional",
+        "sizes": "Sizes",
+        "size20": "20 cm",
+        "size30": "30 cm",
+        "size40": "40 cm",
+        "priceRange": "Price (from / to):",
+        "ingredients": "Ingredients",
+        "searchPlaceholder": "Search...",
+        "hide": "Hide",
+        "showAll": "+ Show all"
+    },
+    "sort": {
+        "label": "Sort:",
+        "popular": "popular"
+    },
+    "auth": {
+        "signIn": "Sign in",
+        "signOut": "Sign out",
+        "register": "Sign up",
+        "profile": "Profile",
+        "continueWithGoogle": "Continue with Google",
+        "modalDescription": "Sign in to your Next Pizza account",
+        "login": {
+            "title": "Sign in to your account",
+            "description": "Enter your email to sign in to your account",
+            "email": "E-mail",
+            "password": "Password",
+            "submit": "Sign in",
+            "successToast": "You have signed in successfully 🎉",
+            "errorToast": "Could not sign in. Please try again.",
+            "errors": {
+                "INVALID_CREDENTIALS": "Invalid email or password.",
+                "EMAIL_NOT_VERIFIED": "Please verify your email before signing in.",
+                "OAUTH_ACCOUNT": "This account uses Google sign-in. Use the button below."
+            }
+        },
+        "register": {
+            "title": "Create an account",
+            "description": "Enter your details to create an account",
+            "email": "E-mail",
+            "fullName": "Full name",
+            "password": "Password",
+            "confirmPassword": "Confirm password",
+            "submit": "Sign up",
+            "successToast": "Registration complete 📝 Please confirm your email.",
+            "errorToast": "Could not sign up. The email may already be in use."
+        }
+    },
+    "profile": {
+        "pageTitle": "My profile",
+        "pageDescription": "Manage your details and account.",
+        "email": "E-mail",
+        "fullName": "Full name",
+        "newPassword": "New password (leave blank to keep it)",
+        "confirmPassword": "Confirm password",
+        "save": "Save",
+        "signOut": "Sign out",
+        "deleteAccount": "Delete account",
+        "updateSuccess": "Profile updated successfully 📝",
+        "updateError": "Error while updating the profile"
+    },
+    "deleteAccount": {
+        "title": "Delete account",
+        "description": "Are you sure you want to delete your account? This action is irreversible.",
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "successToast": "Your account has been deleted.",
+        "errorToast": "Could not delete the account. Please try again."
+    },
+    "checkout": {
+        "pageTitle": "Your order",
+        "cartSection": "1. Cart",
+        "personalSection": "2. Personal details",
+        "addressSection": "3. Delivery address",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "E-mail",
+        "phone": "Phone",
+        "address": "Street, number, city, postal code",
+        "comment": "Add a comment",
+        "total": "Total:",
+        "productsTotal": "Products total:",
+        "delivery": "Delivery:",
+        "vat": "incl. VAT ({vat}%):",
+        "submit": "Go to checkout",
+        "orderSuccess": "Order created successfully! 📝 Redirecting to payment... ",
+        "orderError": "Could not create the order"
+    },
+    "success": {
+        "title": "Thank you for your order!",
+        "messageWithId": "The payment was successful and order #{orderId} is confirmed. We'll start preparing it right away.",
+        "message": "The payment was successful and your order is confirmed.",
+        "backHome": "Back to home"
+    },
+    "menuPage": {
+        "label": "Order now",
+        "title": "Our menu",
+        "description": "Naturally leavened pizzas, fresh ingredients and hot delivery. Filter and find your favorite."
+    },
+    "home": {
+        "hero": {
+            "badge": "Fresh ingredients every day",
+            "title": "Authentic Italian pizza, at your home",
+            "description": "Slow-risen dough, wood-fired oven and hot delivery in 30 minutes. Order in a few taps.",
+            "orderNow": "Order now",
+            "howItWorks": "How it works",
+            "rating": "4.9",
+            "trust": "over 2,000 orders delivered",
+            "imageAlt": "Freshly baked Neapolitan margherita pizza"
+        },
+        "about": {
+            "label": "About us",
+            "title": "Since 2010, the Neapolitan tradition",
+            "description": "We started as a small neighborhood pizzeria with a simple idea: bring pizza to the table the way it's made in Naples. No shortcuts, just selected raw ingredients and a lot of passion.",
+            "point1Title": "Wood-fired oven",
+            "point1Text": "Baked at 450°C in 90 seconds, for a light, airy crust.",
+            "point2Title": "DOP ingredients",
+            "point2Text": "San Marzano tomato, buffalo mozzarella and fresh basil.",
+            "point3Title": "Expert hands",
+            "point3Text": "Neapolitan pizzaioli and dough left to rise for 48 hours.",
+            "imageAlt": "Pizzaiolo putting pizza into the wood-fired oven"
+        },
+        "howItWorks": {
+            "label": "How it works",
+            "title": "From choice to delivery in 3 steps",
+            "step1Title": "Choose",
+            "step1Text": "Build your pizza from the menu and add it to the cart.",
+            "step2Title": "We prepare",
+            "step2Text": "Our pizzaioli bake your order to order.",
+            "step3Title": "We deliver",
+            "step3Text": "Get your hot pizza at home in about 30 minutes.",
+            "deliveryInfo": "We deliver across the city · Mon–Sun 11:00–23:00",
+            "promo": "Free delivery over €25"
+        },
+        "testimonials": {
+            "label": "Testimonials",
+            "title": "What our customers say",
+            "review1Name": "Giulia R.",
+            "review1Text": "The best margherita in town. Light dough and always punctual delivery.",
+            "review2Name": "Marco T.",
+            "review2Text": "I order every Friday. It arrives hot, fragrant and the site is super fast.",
+            "review3Name": "Sara B.",
+            "review3Text": "Quality ingredients you can taste. For me the best pizza delivery.",
+            "photoAlt": "Photo of {name}"
+        },
+        "footer": {
+            "tagline": "Authentic Neapolitan pizza, delivered hot to your home.",
+            "menuSection": "Menu",
+            "allPizzas": "All pizzas",
+            "howItWorks": "How it works",
+            "aboutUs": "About us",
+            "contactSection": "Contacts",
+            "hoursSection": "Hours",
+            "days": "Mon–Sun",
+            "hours": "11:00 – 23:00",
+            "copyright": "© {year} Next Pizza. All rights reserved."
+        }
+    },
+    "pizza": {
+        "sizes": {
+            "20": "Small",
+            "30": "Medium",
+            "40": "Large"
+        },
+        "types": {
+            "1": "traditional",
+            "2": "thin"
+        }
+    },
+    "validation": {
+        "password": "Invalid password",
+        "fullName": "Invalid full name",
+        "passwordMismatch": "Passwords do not match",
+        "email": "Invalid email"
+    },
+    "checkoutValidation": {
+        "firstName": "The first name must be at least 2 characters long",
+        "lastName": "The last name must be at least 2 characters long",
+        "email": "Please enter a valid email address",
+        "phone": "Please enter a valid phone number",
+        "address": "Please enter a valid address"
+    }
+}

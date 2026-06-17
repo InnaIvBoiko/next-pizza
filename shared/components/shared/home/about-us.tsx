@@ -2,26 +2,31 @@ import React from 'react';
 import Image from 'next/image';
 import { ChefHat, Flame, Leaf } from 'lucide-react';
 import { Container } from '@/shared/components/shared/container';
+import type { Dictionary } from '@/shared/lib/i18n/types';
 
-const points = [
-    {
-        icon: Flame,
-        title: 'Forno a legna',
-        text: 'Cotta a 450°C in 90 secondi, per un cornicione alveolato e leggero.',
-    },
-    {
-        icon: Leaf,
-        title: 'Ingredienti DOP',
-        text: 'Pomodoro San Marzano, mozzarella di bufala e basilico fresco.',
-    },
-    {
-        icon: ChefHat,
-        title: 'Mani esperte',
-        text: 'Pizzaioli napoletani e impasto a 48 ore di lievitazione.',
-    },
-];
+interface Props {
+    dict: Dictionary['home']['about'];
+}
 
-export const AboutUs: React.FC = () => {
+export const AboutUs: React.FC<Props> = ({ dict }) => {
+    const points = [
+        {
+            icon: Flame,
+            title: dict.point1Title,
+            text: dict.point1Text,
+        },
+        {
+            icon: Leaf,
+            title: dict.point2Title,
+            text: dict.point2Text,
+        },
+        {
+            icon: ChefHat,
+            title: dict.point3Title,
+            text: dict.point3Text,
+        },
+    ];
+
     return (
         <section id='chi-siamo' className='scroll-mt-24 py-16 sm:py-24'>
             <Container className='px-4'>
@@ -30,7 +35,7 @@ export const AboutUs: React.FC = () => {
                     <div className='glass relative aspect-4/3 w-full overflow-hidden rounded-[2rem]'>
                         <Image
                             src='/images/about-forno.png'
-                            alt='Pizzaiolo che inforna nel forno a legna'
+                            alt={dict.imageAlt}
                             fill
                             sizes='(max-width: 1024px) 100vw, 50vw'
                             className='object-cover'
@@ -40,16 +45,13 @@ export const AboutUs: React.FC = () => {
                     {/* Copy */}
                     <div>
                         <span className='text-primary text-sm font-semibold tracking-wide uppercase'>
-                            Chi siamo
+                            {dict.label}
                         </span>
                         <h2 className='mt-3 text-3xl font-extrabold text-balance sm:text-4xl'>
-                            Dal 2010, la tradizione napoletana
+                            {dict.title}
                         </h2>
                         <p className='text-muted-foreground mt-4 text-base text-balance sm:text-lg'>
-                            Siamo nati da una piccola pizzeria di quartiere con
-                            un&apos;idea semplice: portare in tavola la pizza
-                            come si fa a Napoli. Niente scorciatoie, solo
-                            materie prime selezionate e tanta passione.
+                            {dict.description}
                         </p>
 
                         <div className='mt-8 grid gap-4 sm:grid-cols-3'>

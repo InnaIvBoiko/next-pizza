@@ -10,6 +10,7 @@ import {
     DialogTitle,
 } from '@/shared/components/ui/dialog';
 import { Button } from '../../../ui';
+import { useDictionary } from '../../i18n/dictionary-provider';
 import { LoginForm } from './forms/login-form';
 import { RegisterForm } from './forms/register-form';
 
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
+    const dict = useDictionary();
     const [type, setType] = React.useState<'login' | 'register'>('login');
 
     const onSwitchType = () => {
@@ -35,10 +37,12 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className='w-112.5 bg-card p-10'>
                 <DialogTitle className='sr-only'>
-                    {type === 'login' ? 'Accedi' : 'Registrati'}
+                    {type === 'login'
+                        ? dict.auth.signIn
+                        : dict.auth.register.submit}
                 </DialogTitle>
                 <DialogDescription className='sr-only'>
-                    Accedi al tuo account Next Pizza
+                    {dict.auth.modalDescription}
                 </DialogDescription>
 
                 {type === 'login' ? (
@@ -55,7 +59,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                     type='button'
                     className='h-12 gap-2 p-2'
                 >
-                    Continua con Google
+                    {dict.auth.continueWithGoogle}
                 </Button>
 
                 <Button
@@ -64,7 +68,9 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                     type='button'
                     className='h-12'
                 >
-                    {type === 'login' ? 'Registrati' : 'Accedi'}
+                    {type === 'login'
+                        ? dict.auth.register.submit
+                        : dict.auth.signIn}
                 </Button>
             </DialogContent>
         </Dialog>

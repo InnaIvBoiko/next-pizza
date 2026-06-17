@@ -14,6 +14,7 @@ import {
     DialogTitle,
 } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui';
+import { useDictionary } from '../i18n/dictionary-provider';
 import { deleteUser } from '@/app/actions';
 
 interface Props {
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
+    const dict = useDictionary();
     const [loading, setLoading] = React.useState(false);
 
     const onConfirm = async () => {
@@ -29,13 +31,13 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
             setLoading(true);
             await deleteUser();
 
-            toast.success('Il tuo account è stato eliminato.', { icon: '🗑️' });
+            toast.success(dict.deleteAccount.successToast, { icon: '🗑️' });
 
             // Clear the session and leave the (now non-existent) profile page.
             await signOut({ callbackUrl: '/' });
         } catch (error) {
             logger.error({ err: error }, 'Error [DELETE_ACCOUNT]');
-            toast.error('Impossibile eliminare l\'account. Riprova.', {
+            toast.error(dict.deleteAccount.errorToast, {
                 icon: '❌',
             });
             setLoading(false);
@@ -53,10 +55,9 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
         >
             <DialogContent className='w-110 bg-card p-8'>
                 <DialogHeader>
-                    <DialogTitle>Elimina account</DialogTitle>
+                    <DialogTitle>{dict.deleteAccount.title}</DialogTitle>
                     <DialogDescription>
-                        Sei sicuro di voler eliminare il tuo account?
-                        L&apos;operazione è irreversibile.
+                        {dict.deleteAccount.description}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -67,7 +68,7 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
                         disabled={loading}
                         onClick={onClose}
                     >
-                        Annulla
+                        {dict.deleteAccount.cancel}
                     </Button>
                     <Button
                         variant='destructive'
@@ -75,7 +76,7 @@ export const DeleteAccountModal: React.FC<Props> = ({ open, onClose }) => {
                         disabled={loading}
                         onClick={onConfirm}
                     >
-                        Elimina
+                        {dict.deleteAccount.confirm}
                     </Button>
                 </DialogFooter>
             </DialogContent>

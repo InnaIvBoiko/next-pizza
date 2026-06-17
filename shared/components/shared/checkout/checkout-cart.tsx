@@ -5,6 +5,7 @@ import { getCartItemDetails } from '@/shared/lib';
 import { PizzaSize, PizzaType } from '@/shared/constants/pizza';
 import { CartStateItem } from '@/shared/lib/get-cart-details';
 import { CheckoutItemSkeleton } from '../checkout-item-skeleton';
+import { useDictionary } from '../i18n/dictionary-provider';
 
 interface Props {
     items: CartStateItem[];
@@ -25,8 +26,10 @@ export const CheckoutCart: React.FC<Props> = ({
     loading,
     className,
 }) => {
+    const dict = useDictionary();
+
     return (
-        <WhiteBlock title='1. Carrello' className={className}>
+        <WhiteBlock title={dict.checkout.cartSection} className={className}>
             <div className='flex flex-col gap-5'>
                 {loading
                     ? [...Array(4)].map((_, index) => (
@@ -38,6 +41,7 @@ export const CheckoutCart: React.FC<Props> = ({
                               id={item.id}
                               imageUrl={item.imageUrl}
                               details={getCartItemDetails(
+                                  dict,
                                   item.ingredients,
                                   item.pizzaType as PizzaType,
                                   item.pizzaSize as PizzaSize

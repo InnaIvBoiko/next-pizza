@@ -1,26 +1,31 @@
 import React from 'react';
 import { ChefHat, MapPin, ShoppingBag, Truck } from 'lucide-react';
 import { Container } from '@/shared/components/shared/container';
+import type { Dictionary } from '@/shared/lib/i18n/types';
 
-const steps = [
-    {
-        icon: ShoppingBag,
-        title: 'Scegli',
-        text: 'Componi la tua pizza dal menu e aggiungi al carrello.',
-    },
-    {
-        icon: ChefHat,
-        title: 'Prepariamo',
-        text: 'I nostri pizzaioli infornano il tuo ordine al momento.',
-    },
-    {
-        icon: Truck,
-        title: 'Consegniamo',
-        text: 'Ricevi la pizza calda a casa in circa 30 minuti.',
-    },
-];
+interface Props {
+    dict: Dictionary['home']['howItWorks'];
+}
 
-export const HowItWorks: React.FC = () => {
+export const HowItWorks: React.FC<Props> = ({ dict }) => {
+    const steps = [
+        {
+            icon: ShoppingBag,
+            title: dict.step1Title,
+            text: dict.step1Text,
+        },
+        {
+            icon: ChefHat,
+            title: dict.step2Title,
+            text: dict.step2Text,
+        },
+        {
+            icon: Truck,
+            title: dict.step3Title,
+            text: dict.step3Text,
+        },
+    ];
+
     return (
         <section
             id='come-funziona'
@@ -29,10 +34,10 @@ export const HowItWorks: React.FC = () => {
             <Container className='px-4'>
                 <div className='mx-auto max-w-2xl text-center'>
                     <span className='text-sm font-semibold tracking-wide text-primary uppercase'>
-                        Come funziona
+                        {dict.label}
                     </span>
                     <h2 className='mt-3 text-3xl font-extrabold text-balance sm:text-4xl'>
-                        Dalla scelta alla consegna in 3 passi
+                        {dict.title}
                     </h2>
                 </div>
 
@@ -61,11 +66,11 @@ export const HowItWorks: React.FC = () => {
                     <div className='flex items-center gap-3'>
                         <MapPin className='size-6 shrink-0 text-primary' />
                         <p className='text-sm text-muted-foreground sm:text-base'>
-                            Consegniamo in tutta la città · Lun–Dom 11:00–23:00
+                            {dict.deliveryInfo}
                         </p>
                     </div>
                     <p className='text-sm font-semibold text-success'>
-                        Consegna gratuita sopra i 25€
+                        {dict.promo}
                     </p>
                 </div>
             </Container>

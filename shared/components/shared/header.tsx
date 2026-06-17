@@ -14,7 +14,13 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { ProfileButton } from './profile-button';
 import { ThemeToggle } from './theme-toggle';
+import { LanguageSelect } from './language-select';
 import { AuthModal } from './modals';
+import {
+    useDictionary,
+    useLocale,
+    useLocalizeHref,
+} from './i18n/dictionary-provider';
 
 interface Props {
     hasSearch?: boolean;
@@ -29,36 +35,39 @@ export const Header: React.FC<Props> = ({
 }) => {
     const router = useRouter();
     const pathname = usePathname();
+    const lang = useLocale();
+    const dict = useDictionary();
+    const localize = useLocalizeHref();
     const [openAuthModal, setOpenAuthModal] = React.useState(false);
 
     const searchParams = useSearchParams();
 
     // On the landing the search bar is noise; the cart only shows once it has
-    // items. Shop pages keep the full header.
-    const isHome = pathname === '/';
+    // items. Shop pages keep the full header. The pathname carries the locale
+    // prefix (e.g. `/it`), so home is `/${lang}`.
+    const isHome = pathname === `/${lang}`;
     const showSearch = hasSearch && !isHome;
 
     React.useEffect(() => {
         let toastMessage = '';
 
         if (searchParams.has('paid')) {
-            toastMessage =
-                'Ordine pagato! I dettagli sono nella tua email.';
+            toastMessage = dict.header.orderPaid;
         }
 
         if (searchParams.has('verified')) {
-            toastMessage = 'Email verificata con successo!';
+            toastMessage = dict.header.emailVerified;
         }
 
         if (toastMessage) {
             setTimeout(() => {
-                router.replace('/');
+                router.replace(`/${lang}`);
                 toast.success(toastMessage, {
                     duration: 3000,
                 });
             }, 1000);
         }
-    }, [router, searchParams]);
+    }, [router, searchParams, lang, dict]);
 
     return (
         <header
@@ -70,14 +79,17 @@ export const Header: React.FC<Props> = ({
             <Container className='px-4'>
                 <div className='relative flex items-center justify-between gap-3 py-3 sm:py-4'>
                     {/* Logo */}
-                    <Link href='/' className='flex items-center gap-3'>
+                    <Link
+                        href={localize('/')}
+                        className='flex items-center gap-3'
+                    >
                         <Logo className='h-9 w-auto sm:h-10' />
                         <div className='leading-none'>
                             <span className='text-lg font-black sm:text-xl'>
                                 Next Pizza
                             </span>
                             <p className='hidden text-xs text-muted-foreground sm:block'>
-                                La vera pizza italiana
+                                {dict.header.tagline}
                             </p>
                         </div>
                     </Link>
@@ -97,10 +109,10 @@ export const Header: React.FC<Props> = ({
                                 className='group relative rounded-full px-6'
                             >
                                 <Link
-                                    href='/menu'
+                                    href={localize('/menu')}
                                     className='inline-flex items-center gap-2'
                                 >
-                                    Menu
+                                    {dict.header.menu}
                                     <span className='relative inline-flex size-4 items-center justify-center'>
                                         <Pizza
                                             size={16}
@@ -124,6 +136,7 @@ export const Header: React.FC<Props> = ({
                         />
 
                         {/* Desktop actions */}
+                        <LanguageSelect className='hidden md:inline-flex' />
                         <ThemeToggle className='hidden md:inline-flex' />
                         <ProfileButton
                             className='hidden md:block'

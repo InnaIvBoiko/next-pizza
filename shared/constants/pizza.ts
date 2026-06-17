@@ -1,23 +1,9 @@
-export const mapPizzaSize = {
-    20: 'Piccola',
-    30: 'Media',
-    40: 'Grande',
-} as const;
+// Numeric, locale-independent pizza option values. Display labels live in the
+// dictionaries (`pizza.sizes` / `pizza.types`) and are resolved through the
+// helpers in `shared/lib/pizza-labels`.
 
-export const mapPizzaType = {
-    1: 'tradizionale',
-    2: 'sottile',
-} as const;
+export const pizzaSizeValues = [20, 30, 40] as const;
+export const pizzaTypeValues = [1, 2] as const;
 
-export const pizzaSizes = Object.entries(mapPizzaSize).map(([value, name]) => ({
-    name,
-    value,
-}));
-
-export const pizzaTypes = Object.entries(mapPizzaType).map(([value, name]) => ({
-    name,
-    value,
-}));
-
-export type PizzaSize = keyof typeof mapPizzaSize;
-export type PizzaType = keyof typeof mapPizzaType;
+export type PizzaSize = (typeof pizzaSizeValues)[number];
+export type PizzaType = (typeof pizzaTypeValues)[number];

@@ -32,6 +32,13 @@ export { InfoBlock } from './info-block';
 export { ProfileForm } from './profile-form';
 export { Stories } from './stories';
 export { ThemeToggle } from './theme-toggle';
+export { LanguageSelect } from './language-select';
+export {
+    DictionaryProvider,
+    useDictionary,
+    useLocale,
+    useLocalizeHref,
+} from './i18n/dictionary-provider';
 export * from './home';
 export * from './email-temapltes';
 export * from './checkout';

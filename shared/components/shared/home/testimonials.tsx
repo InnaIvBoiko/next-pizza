@@ -2,35 +2,41 @@ import React from 'react';
 import Image from 'next/image';
 import { Quote, Star } from 'lucide-react';
 import { Container } from '@/shared/components/shared/container';
+import type { Dictionary } from '@/shared/lib/i18n/types';
+import { format } from '@/shared/lib/i18n/format';
 
-const reviews = [
-    {
-        name: 'Giulia R.',
-        avatar: '/images/avatar-1.png',
-        text: 'La margherita più buona della città. Impasto leggero e consegna sempre puntuale.',
-    },
-    {
-        name: 'Marco T.',
-        avatar: '/images/avatar-2.png',
-        text: 'Ordino ogni venerdì. Arriva calda, fragrante e il sito è velocissimo.',
-    },
-    {
-        name: 'Sara B.',
-        avatar: '/images/avatar-3.png',
-        text: 'Ingredienti di qualità che si sentono. Per me la migliore pizza a domicilio.',
-    },
-];
+interface Props {
+    dict: Dictionary['home']['testimonials'];
+}
 
-export const Testimonials: React.FC = () => {
+export const Testimonials: React.FC<Props> = ({ dict }) => {
+    const reviews = [
+        {
+            name: dict.review1Name,
+            avatar: '/images/avatar-1.png',
+            text: dict.review1Text,
+        },
+        {
+            name: dict.review2Name,
+            avatar: '/images/avatar-2.png',
+            text: dict.review2Text,
+        },
+        {
+            name: dict.review3Name,
+            avatar: '/images/avatar-3.png',
+            text: dict.review3Text,
+        },
+    ];
+
     return (
         <section className='py-16 sm:py-24'>
             <Container className='px-4'>
                 <div className='mx-auto max-w-2xl text-center'>
                     <span className='text-sm font-semibold tracking-wide text-primary uppercase'>
-                        Testimonianze
+                        {dict.label}
                     </span>
                     <h2 className='mt-3 text-3xl font-extrabold text-balance sm:text-4xl'>
-                        Cosa dicono i nostri clienti
+                        {dict.title}
                     </h2>
                 </div>
 
@@ -48,7 +54,7 @@ export const Testimonials: React.FC = () => {
                             <figcaption className='mt-6 flex items-center gap-3'>
                                 <Image
                                     src={avatar}
-                                    alt={`Foto di ${name}`}
+                                    alt={format(dict.photoAlt, { name })}
                                     width={44}
                                     height={44}
                                     className='size-11 rounded-full object-cover'

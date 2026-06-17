@@ -11,22 +11,29 @@ import {
     CheckoutCart,
     CheckoutPersonalForm,
 } from '@/shared/components';
-import { CheckoutFormValues, checkoutFormSchema } from '@/shared/constants';
+import { CheckoutFormValues, makeCheckoutFormSchema } from '@/shared/constants';
 import { useCart } from '@/shared/hooks';
 import { createOrder } from '@/app/actions';
 import { toast } from 'sonner';
 import { logger } from '@/shared/lib/logger.client';
 import React from 'react';
 import { useSession } from 'next-auth/react';
+import { useDictionary } from '@/shared/components/shared/i18n/dictionary-provider';
 
 export default function CheckoutPage() {
+    const dict = useDictionary();
     const [submitting, setSubmitting] = React.useState(false);
     const { totalAmount, updateItemQuantity, items, removeCartItem, loading } =
         useCart();
     const { data: session } = useSession();
 
+    const schema = React.useMemo(
+        () => makeCheckoutFormSchema(dict.checkoutValidation),
+        [dict]
+    );
+
     const form = useForm<CheckoutFormValues>({
-        resolver: zodResolver(checkoutFormSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             email: '',
             firstName: '',
@@ -59,12 +66,9 @@ export default function CheckoutPage() {
 
             const url = await createOrder(data);
 
-            toast.success(
-                'Ordine creato con successo! 📝 Reindirizzamento al pagamento... ',
-                {
-                    icon: '✅',
-                }
-            );
+            toast.success(dict.checkout.orderSuccess, {
+                icon: '✅',
+            });
 
             if (url) {
                 window.location.assign(url);
@@ -72,7 +76,7 @@ export default function CheckoutPage() {
         } catch (err) {
             logger.error({ err }, '[Checkout] Failed to create order');
             setSubmitting(false);
-            toast.error('Impossibile creare l\'ordine', {
+            toast.error(dict.checkout.orderError, {
                 icon: '❌',
             });
         }
@@ -90,7 +94,7 @@ export default function CheckoutPage() {
     return (
         <Container className='mt-10'>
             <Title
-                text='Il tuo ordine'
+                text={dict.checkout.pageTitle}
                 className='mb-8 text-[36px] font-extrabold'
             />
 

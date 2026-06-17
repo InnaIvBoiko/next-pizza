@@ -4,8 +4,10 @@ import React from 'react';
 import Image from 'next/image';
 import { cn } from '@/shared/lib/utils';
 import { formatPrice } from '@/shared/lib';
+import { format } from '@/shared/lib/i18n/format';
 import { Title } from './title';
 import { Button } from '../ui';
+import { useDictionary } from './i18n/dictionary-provider';
 
 interface Props {
     imageUrl: string;
@@ -27,6 +29,8 @@ export const ChooseProductForm: React.FC<Props> = ({
     onSubmit,
     className,
 }) => {
+    const dict = useDictionary();
+
     return (
         <div className={cn(className, 'flex flex-1 flex-col lg:flex-row')}>
             <div className='relative flex flex-1 items-center justify-center py-6 lg:py-0'>
@@ -48,8 +52,10 @@ export const ChooseProductForm: React.FC<Props> = ({
                     disabled={loading}
                 >
                     {loading
-                        ? 'Aggiungo...'
-                        : `Aggiungi al carrello · ${formatPrice(price)}`}
+                        ? dict.product.adding
+                        : format(dict.product.addToCart, {
+                              price: formatPrice(price),
+                          })}
                 </Button>
             </div>
         </div>

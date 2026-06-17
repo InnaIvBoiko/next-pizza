@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -5,6 +7,7 @@ import { cn } from '@/shared/lib/utils';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Title } from './title';
+import { useDictionary, useLocalizeHref } from './i18n/dictionary-provider';
 
 interface Props {
     title: string;
@@ -19,6 +22,9 @@ export const InfoBlock: React.FC<Props> = ({
     text,
     imageUrl,
 }) => {
+    const dict = useDictionary();
+    const localize = useLocalizeHref();
+
     return (
         <div
             className={cn(
@@ -33,10 +39,10 @@ export const InfoBlock: React.FC<Props> = ({
                 </div>
 
                 <div className='mt-11 flex gap-5'>
-                    <Link href='/'>
+                    <Link href={localize('/')}>
                         <Button variant='outline' className='gap-2'>
                             <ArrowLeft />
-                            Torna alla home
+                            {dict.common.backHome}
                         </Button>
                     </Link>
                     <a href=''>
@@ -44,7 +50,7 @@ export const InfoBlock: React.FC<Props> = ({
                             variant='outline'
                             className='border-border text-muted-foreground hover:bg-muted'
                         >
-                            Aggiorna
+                            {dict.common.refresh}
                         </Button>
                     </a>
                 </div>

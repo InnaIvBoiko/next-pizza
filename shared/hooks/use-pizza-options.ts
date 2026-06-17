@@ -3,6 +3,7 @@ import React from 'react';
 import { Variant } from '../components/shared/group-variants';
 import { useSet } from 'react-use';
 import { getAvailablePizzaSizes } from '../lib';
+import { useDictionary } from '../components/shared/i18n/dictionary-provider';
 import { ProductItem } from '@/generated/prisma/client';
 
 interface ReturnProps {
@@ -17,13 +18,14 @@ interface ReturnProps {
 }
 
 export const usePizzaOptions = (items: ProductItem[]): ReturnProps => {
+    const dict = useDictionary();
     const [size, setSize] = React.useState<PizzaSize>(20);
     const [type, setType] = React.useState<PizzaType>(1);
     const [selectedIngredients, { toggle: addIngredient }] = useSet(
         new Set<number>([])
     );
 
-    const availableSizes = getAvailablePizzaSizes(type, items);
+    const availableSizes = getAvailablePizzaSizes(type, items, dict);
 
     const currentItemId = items.find(
         item => item.pizzaType === type && item.size === size

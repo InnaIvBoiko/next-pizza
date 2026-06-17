@@ -5,6 +5,7 @@ import { FilterCheckbox } from './';
 import { FilterCheckboxProps } from './filter-checkbox';
 import { Input } from '../ui/input';
 import { Skeleton } from '../ui';
+import { useDictionary } from '@/shared/components/shared/i18n/dictionary-provider';
 
 type Item = FilterCheckboxProps;
 
@@ -27,13 +28,15 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
     items,
     defaultItems,
     limit = 5,
-    searchInputPlaceholder = 'Cerca...',
+    searchInputPlaceholder,
     className,
     loading,
     onClickCheckbox,
     selected,
     name,
 }) => {
+    const dict = useDictionary();
+    const placeholder = searchInputPlaceholder ?? dict.filters.searchPlaceholder;
     const [showAll, setShowAll] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState('');
 
@@ -74,7 +77,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
                 <div className='mb-5'>
                     <Input
                         onChange={onChangeSearchInput}
-                        placeholder={searchInputPlaceholder}
+                        placeholder={placeholder}
                         className='border-none bg-muted'
                     />
                 </div>
@@ -104,7 +107,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
                         onClick={() => setShowAll(!showAll)}
                         className='text-primary mt-3'
                     >
-                        {showAll ? 'Nascondi' : '+ Mostra tutti'}
+                        {showAll ? dict.filters.hide : dict.filters.showAll}
                     </button>
                 </div>
             )}

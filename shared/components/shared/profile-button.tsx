@@ -3,6 +3,10 @@ import React from 'react';
 import { Button } from '../ui/button';
 import { CircleUser, User } from 'lucide-react';
 import Link from 'next/link';
+import {
+    useDictionary,
+    useLocalizeHref,
+} from './i18n/dictionary-provider';
 
 interface Props {
     onClickSignIn?: () => void;
@@ -14,6 +18,8 @@ export const ProfileButton: React.FC<Props> = ({
     onClickSignIn,
 }) => {
     const { data: session } = useSession();
+    const dict = useDictionary();
+    const localize = useLocalizeHref();
 
     // The session is only resolved on the client, so render the signed-out
     // button until mounted — this keeps the server HTML and the first client
@@ -35,16 +41,16 @@ export const ProfileButton: React.FC<Props> = ({
                     className='flex items-center gap-1'
                 >
                     <User size={16} />
-                    Accedi
+                    {dict.auth.signIn}
                 </Button>
             ) : (
-                <Link href='/profile'>
+                <Link href={localize('/profile')}>
                     <Button
                         variant='secondary'
                         className='flex items-center gap-2'
                     >
                         <CircleUser size={18} />
-                        Profilo
+                        {dict.auth.profile}
                     </Button>
                 </Link>
             )}

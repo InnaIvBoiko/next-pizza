@@ -9,8 +9,11 @@ import Image from 'next/image';
 import { Api } from '@/shared/services/api-client';
 import { Product } from '@/generated/prisma/client';
 import { logger } from '@/shared/lib/logger.client';
+import { useDictionary, useLocalizeHref } from './i18n/dictionary-provider';
 
 export const SearchInput = () => {
+    const dict = useDictionary();
+    const localize = useLocalizeHref();
     const [searchQuery, setSearchQuery] = React.useState('');
     const [focused, setFocused] = React.useState(false);
     const [products, setProducts] = React.useState<Product[]>([]);
@@ -50,7 +53,7 @@ export const SearchInput = () => {
                 <input
                     className='w-full rounded-2xl bg-muted pl-11 outline-none'
                     type='text'
-                    placeholder='Cerca la tua pizza...'
+                    placeholder={dict.search.placeholder}
                     onFocus={() => setFocused(true)}
                     // onBlur={() => setFocused(false)}
                     value={searchQuery}
@@ -69,7 +72,7 @@ export const SearchInput = () => {
                                 onClick={onClickItem}
                                 key={product.id}
                                 className='hover:bg-primary/10 flex w-full items-center gap-3 px-3 py-2'
-                                href={`/product/${product.id}`}
+                                href={localize(`/product/${product.id}`)}
                             >
                                 <div className='relative h-8 w-8 shrink-0'>
                                     <Image

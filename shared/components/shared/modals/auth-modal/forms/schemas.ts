@@ -1,57 +1,59 @@
 import { z } from 'zod';
+import type { Dictionary } from '@/shared/lib/i18n/types';
 
-export const passwordSchema = z
-    .string()
-    .min(4, { message: 'Password non valida' });
+type V = Dictionary['validation'];
 
-export const formLoginSchema = z.object({
-    email: z.string().email({ message: 'Invalid email' }),
-    password: passwordSchema,
-});
-
-export const formRegisterSchema = formLoginSchema
-    .merge(
-        z.object({
-            fullName: z.string().min(2, { message: 'Nome completo non valido' }),
-            confirmPassword: passwordSchema,
-        })
-    )
-    .refine(data => data.password === data.confirmPassword, {
-        message: 'Le password non coincidono',
-        path: ['confirmPassword'],
+export const makeLoginSchema = (v: V) =>
+    z.object({
+        email: z.string().email({ message: v.email }),
+        password: z.string().min(4, { message: v.password }),
     });
+
+export const makeRegisterSchema = (v: V) =>
+    makeLoginSchema(v)
+        .merge(
+            z.object({
+                fullName: z.string().min(2, { message: v.fullName }),
+                confirmPassword: z.string().min(4, { message: v.password }),
+            })
+        )
+        .refine(data => data.password === data.confirmPassword, {
+            message: v.passwordMismatch,
+            path: ['confirmPassword'],
+        });
 
 // Profile update: name/email are required, but the password is optional —
 // an empty password field means "keep the current password".
-export const formProfileSchema = z
-    .object({
-        email: z.string().email({ message: 'Email non valida' }),
-        fullName: z.string().min(2, { message: 'Invalid full name' }),
-        password: z.string().optional(),
-        confirmPassword: z.string().optional(),
-    })
-    .superRefine((data, ctx) => {
-        if (!data.password) {
-            return;
-        }
+export const makeProfileSchema = (v: V) =>
+    z
+        .object({
+            email: z.string().email({ message: v.email }),
+            fullName: z.string().min(2, { message: v.fullName }),
+            password: z.string().optional(),
+            confirmPassword: z.string().optional(),
+        })
+        .superRefine((data, ctx) => {
+            if (!data.password) {
+                return;
+            }
 
-        if (data.password.length < 4) {
-            ctx.addIssue({
-                code: 'custom',
-                message: 'Invalid password',
-                path: ['password'],
-            });
-        }
+            if (data.password.length < 4) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: v.password,
+                    path: ['password'],
+                });
+            }
 
-        if (data.password !== data.confirmPassword) {
-            ctx.addIssue({
-                code: 'custom',
-                message: 'Le password non coincidono',
-                path: ['confirmPassword'],
-            });
-        }
-    });
+            if (data.password !== data.confirmPassword) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: v.passwordMismatch,
+                    path: ['confirmPassword'],
+                });
+            }
+        });
 
-export type TFormLoginValues = z.infer<typeof formLoginSchema>;
-export type TFormRegisterValues = z.infer<typeof formRegisterSchema>;
-export type TFormProfileValues = z.infer<typeof formProfileSchema>;
+export type TFormLoginValues = z.infer<ReturnType<typeof makeLoginSchema>>;
+export type TFormRegisterValues = z.infer<ReturnType<typeof makeRegisterSchema>>;
+export type TFormProfileValues = z.infer<ReturnType<typeof makeProfileSchema>>;

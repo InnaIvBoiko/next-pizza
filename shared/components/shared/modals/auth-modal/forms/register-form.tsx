@@ -9,16 +9,23 @@ import { logger } from '@/shared/lib/logger.client';
 import { Title } from '../../../title';
 import { FormInput } from '../../../form';
 import { Button } from '../../../../ui';
+import { useDictionary } from '../../../i18n/dictionary-provider';
 import { registerUser } from '@/app/actions';
-import { formRegisterSchema, TFormRegisterValues } from './schemas';
+import { makeRegisterSchema, TFormRegisterValues } from './schemas';
 
 interface Props {
     onClose?: () => void;
 }
 
 export const RegisterForm: React.FC<Props> = ({ onClose }) => {
+    const dict = useDictionary();
+    const schema = React.useMemo(
+        () => makeRegisterSchema(dict.validation),
+        [dict]
+    );
+
     const form = useForm<TFormRegisterValues>({
-        resolver: zodResolver(formRegisterSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             email: '',
             fullName: '',
@@ -35,14 +42,14 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
                 password: data.password,
             });
 
-            toast.success('Registrazione completata 📝 Conferma la tua email.', {
+            toast.success(dict.auth.register.successToast, {
                 icon: '✅',
             });
 
             onClose?.();
         } catch (error) {
             logger.error({ err: error }, 'Error [REGISTER]');
-            toast.error('Impossibile registrarsi. L\'email potrebbe essere già in uso.', {
+            toast.error(dict.auth.register.errorToast, {
                 icon: '❌',
             });
         }
@@ -55,24 +62,32 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
                 onSubmit={form.handleSubmit(onSubmit)}
             >
                 <div className='mb-2'>
-                    <Title text='Crea un account' size='md' />
+                    <Title text={dict.auth.register.title} size='md' />
                     <p className='text-muted-foreground'>
-                        Inserisci i tuoi dati per creare un account
+                        {dict.auth.register.description}
                     </p>
                 </div>
 
-                <FormInput name='email' label='E-mail' required />
-                <FormInput name='fullName' label='Nome completo' required />
+                <FormInput
+                    name='email'
+                    label={dict.auth.register.email}
+                    required
+                />
+                <FormInput
+                    name='fullName'
+                    label={dict.auth.register.fullName}
+                    required
+                />
                 <FormInput
                     type='password'
                     name='password'
-                    label='Password'
+                    label={dict.auth.register.password}
                     required
                 />
                 <FormInput
                     type='password'
                     name='confirmPassword'
-                    label='Conferma password'
+                    label={dict.auth.register.confirmPassword}
                     required
                 />
 
@@ -81,7 +96,7 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
                     className='h-12 text-base'
                     type='submit'
                 >
-                    Registrati
+                    {dict.auth.register.submit}
                 </Button>
             </form>
         </FormProvider>

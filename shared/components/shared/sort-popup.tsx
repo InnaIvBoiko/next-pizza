@@ -1,12 +1,17 @@
+'use client';
+
 import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { ArrowUpDown } from 'lucide-react';
+import { useDictionary } from '@/shared/components/shared/i18n/dictionary-provider';
 
 export interface SortPopupProps {
     className?: string;
 }
 
 export const SortPopup = ({ className }: SortPopupProps) => {
+    const dict = useDictionary();
+
     return (
         <div
             className={cn(
@@ -15,8 +20,8 @@ export const SortPopup = ({ className }: SortPopupProps) => {
             )}
         >
             <ArrowUpDown size={16} />
-            <b>Ordina:</b>
-            <b className='text-primary'>popolari</b>
+            <b>{dict.sort.label}</b>
+            <b className='text-primary'>{dict.sort.popular}</b>
         </div>
     );
 };

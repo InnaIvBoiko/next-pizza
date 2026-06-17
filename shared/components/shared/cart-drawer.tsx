@@ -17,12 +17,16 @@ import { Button } from '../ui';
 import { ArrowLeft, ArrowRight, PackageOpen } from 'lucide-react';
 import { CartDrawerItem } from './cart-drawer-item';
 import { getCartItemDetails, formatPrice } from '@/shared/lib';
+import { format } from '@/shared/lib/i18n/format';
 import { PizzaSize, PizzaType } from '@/shared/constants/pizza';
 import { Title } from './title';
 import { cn } from '@/shared/lib/utils';
 import { useCart } from '@/shared/hooks';
+import { useDictionary, useLocalizeHref } from './i18n/dictionary-provider';
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const dict = useDictionary();
+    const localize = useLocalizeHref();
     const { totalAmount, updateItemQuantity, items, removeCartItem } =
         useCart();
     const [redirecting, setRedirecting] = React.useState(false);
@@ -41,7 +45,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
 
             <SheetContent className='flex flex-col justify-between bg-background px-6 pb-0'>
                 <SheetDescription className='sr-only'>
-                    Gli articoli selezionati e il totale dell&apos;ordine
+                    {dict.cart.srDescription}
                 </SheetDescription>
 
                 <div
@@ -53,14 +57,18 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                     {totalAmount > 0 ? (
                         <SheetHeader>
                             <SheetTitle>
-                                Nel carrello{' '}
+                                {dict.cart.title}{' '}
                                 <span className='font-bold'>
-                                    {items.length} articoli
+                                    {format(dict.cart.itemsCount, {
+                                        count: items.length,
+                                    })}
                                 </span>
                             </SheetTitle>
                         </SheetHeader>
                     ) : (
-                        <SheetTitle className='sr-only'>Carrello</SheetTitle>
+                        <SheetTitle className='sr-only'>
+                            {dict.cart.srTitle}
+                        </SheetTitle>
                     )}
 
                     {!totalAmount && (
@@ -72,11 +80,11 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                             />
                             <Title
                                 size='sm'
-                                text='Il tuo carrello è vuoto'
+                                text={dict.cart.emptyTitle}
                                 className='my-2 text-center font-bold'
                             />
                             <p className='mb-5 text-center text-muted-foreground'>
-                                Aggiungi qualcosa al carrello
+                                {dict.cart.emptyText}
                             </p>
 
                             <SheetClose asChild>
@@ -85,7 +93,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                     size='lg'
                                 >
                                     <ArrowLeft className='mr-2 w-5' />
-                                    Torna indietro
+                                    {dict.common.back}
                                 </Button>
                             </SheetClose>
                         </div>
@@ -100,6 +108,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                             id={item.id}
                                             imageUrl={item.imageUrl}
                                             details={getCartItemDetails(
+                                                dict,
                                                 item.ingredients,
                                                 item.pizzaType as PizzaType,
                                                 item.pizzaSize as PizzaSize
@@ -127,7 +136,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                 <div className='w-full'>
                                     <div className='mb-4 flex'>
                                         <span className='flex flex-1 text-lg text-muted-foreground'>
-                                            Totale
+                                            {dict.cart.total}
                                             <div className='relative -top-1 mx-2 flex-1 border-b border-dashed border-b-border' />
                                         </span>
 
@@ -136,7 +145,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                         </span>
                                     </div>
 
-                                    <Link href='/checkout'>
+                                    <Link href={localize('/checkout')}>
                                         <Button
                                             onClick={() => setRedirecting(true)}
                                             disabled={redirecting}
@@ -145,8 +154,8 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                             className='h-12 w-full text-base'
                                         >
                                             {redirecting
-                                                ? 'Caricamento...'
-                                                : 'Vai al pagamento'}
+                                                ? dict.common.loading
+                                                : dict.cart.checkout}
                                             <ArrowRight className='ml-2 w-5' />
                                         </Button>
                                     </Link>

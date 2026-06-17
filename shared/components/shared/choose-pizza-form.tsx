@@ -7,11 +7,14 @@ import { PizzaImage } from './pizza-image';
 import { Title } from './title';
 import { Button } from '../ui';
 import { GroupVariants } from './group-variants';
-import { PizzaSize, PizzaType, pizzaTypes } from '@/shared/constants/pizza';
+import { PizzaSize, PizzaType } from '@/shared/constants/pizza';
 import { IngredientItem } from './ingredient-item';
 import { cn } from '@/shared/lib/utils';
 import { getPizzaDetails, formatPrice } from '@/shared/lib';
+import { buildPizzaTypeVariants } from '@/shared/lib/pizza-labels';
+import { format } from '@/shared/lib/i18n/format';
 import { usePizzaOptions } from '@/shared/hooks';
+import { useDictionary } from './i18n/dictionary-provider';
 
 interface Props {
     imageUrl: string;
@@ -35,6 +38,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
     onSubmit,
     className,
 }) => {
+    const dict = useDictionary();
     const {
         size,
         type,
@@ -51,7 +55,8 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         size,
         items,
         ingredients,
-        selectedIngredients
+        selectedIngredients,
+        dict
     );
 
     const handleClickAdd = () => {
@@ -77,7 +82,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
                     />
 
                     <GroupVariants
-                        items={pizzaTypes}
+                        items={buildPizzaTypeVariants(dict)}
                         value={String(type)}
                         onClick={value => setType(Number(value) as PizzaType)}
                     />
@@ -104,8 +109,10 @@ export const ChoosePizzaForm: React.FC<Props> = ({
                     disabled={loading}
                 >
                     {loading
-                        ? 'Aggiungo...'
-                        : `Aggiungi al carrello · ${formatPrice(totalPrice)}`}
+                        ? dict.product.adding
+                        : format(dict.product.addToCart, {
+                              price: formatPrice(totalPrice),
+                          })}
                 </Button>
             </div>
         </div>

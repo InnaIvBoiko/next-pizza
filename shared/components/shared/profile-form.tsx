@@ -5,7 +5,7 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
     TFormProfileValues,
-    formProfileSchema,
+    makeProfileSchema,
 } from './modals/auth-modal/forms/schemas';
 import { User } from '@/generated/prisma/client';
 import { toast } from 'sonner';
@@ -14,6 +14,7 @@ import { signOut } from 'next-auth/react';
 import { FormInput } from './form';
 import { Button } from '../ui';
 import { DeleteAccountModal } from './modals';
+import { useDictionary } from './i18n/dictionary-provider';
 import { updateUserInfo } from '@/app/actions';
 
 interface Props {
@@ -22,9 +23,14 @@ interface Props {
 
 export const ProfileForm: React.FC<Props> = ({ data }) => {
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const dict = useDictionary();
+    const schema = React.useMemo(
+        () => makeProfileSchema(dict.validation),
+        [dict]
+    );
 
     const form = useForm({
-        resolver: zodResolver(formProfileSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             fullName: data.fullName,
             email: data.email,
@@ -41,12 +47,12 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                 password: data.password,
             });
 
-            toast.success('Profilo aggiornato con successo 📝', {
+            toast.success(dict.profile.updateSuccess, {
                 icon: '✅',
             });
         } catch (error) {
             logger.error({ err: error }, '[ProfileForm] Update failed');
-            return toast.error('Errore durante l\'aggiornamento del profilo', {
+            return toast.error(dict.profile.updateError, {
                 icon: '❌',
             });
         }
@@ -65,18 +71,26 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                     className='flex w-full flex-col gap-5'
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
-                    <FormInput name='email' label='E-mail' required />
-                    <FormInput name='fullName' label='Nome completo' required />
+                    <FormInput
+                        name='email'
+                        label={dict.profile.email}
+                        required
+                    />
+                    <FormInput
+                        name='fullName'
+                        label={dict.profile.fullName}
+                        required
+                    />
 
                     <FormInput
                         type='password'
                         name='password'
-                        label='Nuova password (lascia vuoto per non cambiarla)'
+                        label={dict.profile.newPassword}
                     />
                     <FormInput
                         type='password'
                         name='confirmPassword'
-                        label='Conferma password'
+                        label={dict.profile.confirmPassword}
                     />
 
                     <Button
@@ -84,7 +98,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                         className='mt-10 text-base'
                         type='submit'
                     >
-                        Salva
+                        {dict.profile.save}
                     </Button>
 
                     <Button
@@ -94,7 +108,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                         className='text-base'
                         type='button'
                     >
-                        Esci
+                        {dict.profile.signOut}
                     </Button>
 
                     <Button
@@ -104,7 +118,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
                         className='text-base'
                         type='button'
                     >
-                        Elimina account
+                        {dict.profile.deleteAccount}
                     </Button>
                 </form>
             </FormProvider>

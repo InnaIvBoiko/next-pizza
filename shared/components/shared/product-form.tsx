@@ -6,8 +6,10 @@ import { useShallow } from 'zustand/react/shallow';
 import React from 'react';
 import { toast } from 'sonner';
 import { logger } from '@/shared/lib/logger.client';
+import { format } from '@/shared/lib/i18n/format';
 import { ChoosePizzaForm } from './choose-pizza-form';
 import { ChooseProductForm } from './choose-product-form';
+import { useDictionary } from './i18n/dictionary-provider';
 
 interface Props {
     product: ProductWithRelations;
@@ -18,6 +20,7 @@ export const ProductForm: React.FC<Props> = ({
     product,
     onSubmit: _onSubmit,
 }) => {
+    const dict = useDictionary();
     const [addCartItem, loading] = useCartStore(
         useShallow(state => [state.addCartItem, state.loading] as const)
     );
@@ -34,11 +37,13 @@ export const ProductForm: React.FC<Props> = ({
                 ingredients,
             });
 
-            toast.success(product.name + ' aggiunto al carrello');
+            toast.success(
+                format(dict.product.addedToCart, { name: product.name })
+            );
 
             _onSubmit?.();
         } catch (err) {
-            toast.error('Impossibile aggiungere al carrello');
+            toast.error(dict.product.addError);
             logger.error({ err }, '[ProductForm] Add to cart failed');
         }
     };

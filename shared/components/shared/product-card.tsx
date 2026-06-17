@@ -1,9 +1,11 @@
-import React from 'react';
+'use client';
+
 import { cn } from '@/shared/lib/utils';
 import { formatPrice } from '@/shared/lib';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Plus } from 'lucide-react';
+import { useDictionary, useLocalizeHref } from './i18n/dictionary-provider';
 
 export interface ProductCardProps {
     id: number;
@@ -24,9 +26,12 @@ export const ProductCard = ({
     priority = false,
     className,
 }: ProductCardProps) => {
+    const dict = useDictionary();
+    const localize = useLocalizeHref();
+
     return (
         <Link
-            href={`/product/${id}`}
+            href={localize(`/product/${id}`)}
             className={cn(
                 'group flex flex-col rounded-3xl border border-border bg-card p-3 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-foreground/5',
                 className
@@ -56,7 +61,7 @@ export const ProductCard = ({
 
                 <div className='mt-4 flex items-center justify-between gap-2'>
                     <span className='text-sm text-muted-foreground'>
-                        da{' '}
+                        {dict.product.from}{' '}
                         <b className='text-xl text-foreground'>
                             {formatPrice(price)}
                         </b>
