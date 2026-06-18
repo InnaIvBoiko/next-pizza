@@ -3,6 +3,7 @@ import { ProductsGroupList } from '@/shared/components/shared/products-group-lis
 import { prisma } from '@/prisma/prisma-client';
 import { getDictionary } from '../../dictionaries';
 import type { Locale } from '@/shared/constants/i18n';
+import { parseSort } from '@/shared/constants/sort';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -21,8 +22,13 @@ interface MenuProps {
         pizzaTypes?: string;
         priceFrom?: string;
         priceTo?: string;
+        sort?: string;
     }>;
 }
+
+// A product's price is the cheapest of its variants; used for price sorting.
+const minItemPrice = (items: { price: number }[]) =>
+    items.length ? Math.min(...items.map(item => item.price)) : Infinity;
 
 // "2,8,6" -> [2, 8, 6] (drops anything non-numeric)
 const toNumberList = (value?: string) =>
@@ -41,6 +47,14 @@ export default async function Menu({ params, searchParams }: MenuProps) {
     const pizzaTypes = toNumberList(filters.pizzaTypes);
     const priceFrom = Number(filters.priceFrom) || undefined;
     const priceTo = Number(filters.priceTo) || undefined;
+    const sort = parseSort(filters.sort);
+
+    // Sort by a real column where possible; price needs the variants, so it's
+    // sorted in JS after fetching. `popular` is the natural menu order (id asc).
+    const productsOrderBy =
+        sort === 'newest'
+            ? { createdAt: 'desc' as const }
+            : { id: 'asc' as const };
 
     // Constraints on a product's variants (ProductItem): size, dough type, price.
     const itemsWhere = {
@@ -70,6 +84,7 @@ export default async function Menu({ params, searchParams }: MenuProps) {
                     ingredients: true,
                     items: true,
                 },
+                orderBy: productsOrderBy,
             },
         },
         orderBy: { id: 'asc' },
@@ -81,6 +96,18 @@ export default async function Menu({ params, searchParams }: MenuProps) {
     const visibleCategories = categories.filter(
         category => category.products.length > 0
     );
+
+    // Price sort can't be expressed as a Prisma orderBy (price lives on the
+    // variants), so order each category's products by their cheapest variant.
+    if (sort === 'priceAsc' || sort === 'priceDesc') {
+        const direction = sort === 'priceAsc' ? 1 : -1;
+        for (const category of visibleCategories) {
+            category.products.sort(
+                (a, b) =>
+                    (minItemPrice(a.items) - minItemPrice(b.items)) * direction
+            );
+        }
+    }
 
     return (
         <>

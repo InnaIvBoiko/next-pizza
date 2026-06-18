@@ -64,12 +64,16 @@
     },
     "sort": {
         "label": "Sort:",
-        "popular": "popular"
+        "options": {
+            "popular": "Popular",
+            "priceAsc": "Price: low to high",
+            "priceDesc": "Price: high to low",
+            "newest": "Newest"
+        }
     },
     "auth": {
         "signIn": "Sign in",
         "signOut": "Sign out",
-        "register": "Sign up",
         "profile": "Profile",
         "continueWithGoogle": "Continue with Google",
         "modalDescription": "Sign in to your Next Pizza account",

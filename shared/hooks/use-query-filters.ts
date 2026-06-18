@@ -1,9 +1,18 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Filters } from './use-filters';
 
 export const useQueryFilters = (filters: Filters) => {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    // Read the latest sort selection inside the effect without making
+    // searchParams a dependency — it changes on every navigation (including
+    // the sort updates written by SortPopup), which would re-fire this effect.
+    // Synced in its own effect so we never touch the ref during render.
+    const searchParamsRef = React.useRef(searchParams);
+    React.useEffect(() => {
+        searchParamsRef.current = searchParams;
+    });
     const isMounted = React.useRef(false);
 
     React.useEffect(() => {
@@ -31,6 +40,11 @@ export const useQueryFilters = (filters: Filters) => {
         if (filters.prices.priceTo) {
             params.set('priceTo', String(filters.prices.priceTo));
         }
+
+        // Carry over the sort selection, which SortPopup writes to the same
+        // URL independently, so toggling a filter doesn't reset it.
+        const sort = searchParamsRef.current.get('sort');
+        if (sort) params.set('sort', sort);
 
         const query = params.toString();
 

@@ -64,12 +64,16 @@
     },
     "sort": {
         "label": "Ordina:",
-        "popular": "popolari"
+        "options": {
+            "popular": "Popolari",
+            "priceAsc": "Prezzo crescente",
+            "priceDesc": "Prezzo decrescente",
+            "newest": "Novità"
+        }
     },
     "auth": {
         "signIn": "Accedi",
         "signOut": "Esci",
-        "register": "Registrati",
         "profile": "Profilo",
         "continueWithGoogle": "Continua con Google",
         "modalDescription": "Accedi al tuo account Next Pizza",
