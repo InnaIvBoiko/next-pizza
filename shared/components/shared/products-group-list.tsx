@@ -6,6 +6,7 @@ import { cn } from '@/shared/lib/utils';
 import { ProductCard } from './product-card';
 import { Title } from './title';
 import { useCategoryStore } from '@/shared/store/category';
+import { isProductAvailable } from '@/shared/lib';
 
 export interface ProductsGroupListProps {
     title: string;
@@ -15,7 +16,8 @@ export interface ProductsGroupListProps {
         id: number;
         name: string;
         imageUrl: string;
-        description?: string;
+        description?: string | null;
+        ingredients: Array<{ available: boolean }>;
         items: Array<{
             price: number;
         }>;
@@ -85,6 +87,7 @@ export const ProductsGroupList = ({
                         imageUrl={product.imageUrl}
                         price={product.items[0].price}
                         description={product.description}
+                        available={isProductAvailable(product.ingredients)}
                         priority={priority && index === 0}
                     />
                 ))}

@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Title } from './title';
 import { Input, RangeSlider } from '../ui';
 // import { FilterCheckbox } from './filter-checkbox';
@@ -37,6 +38,22 @@ export const Filters = ({ className }: FiltersProps) => {
         prices,
         setPrices,
     } = filters;
+
+    // Once the available ingredients have loaded, drop any selected id that's
+    // no longer offered (e.g. just marked out-of-stock in the dashboard). The
+    // checkbox already vanishes from the list, but the id would otherwise
+    // linger in the URL until the user resets the filters. Removing it from
+    // the set makes useQueryFilters rewrite a clean URL. Runs once per load.
+    const prunedRef = React.useRef(false);
+    React.useEffect(() => {
+        if (loading || prunedRef.current) return;
+        prunedRef.current = true;
+
+        const availableIds = new Set(ingredients.map(i => String(i.id)));
+        selectedIngredients.forEach(id => {
+            if (!availableIds.has(id)) setSelectedIngredients(id);
+        });
+    }, [loading, ingredients, selectedIngredients, setSelectedIngredients]);
 
     // Mirror the whole selection into the URL (ingredients, sizes,
     // pizzaTypes, priceFrom, priceTo).

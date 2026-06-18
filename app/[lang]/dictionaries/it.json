@@ -38,7 +38,8 @@
         "included": "Incluso",
         "includedTitle": "Ingredienti inclusi",
         "extraTitle": "Aggiungi extra",
-        "without": "senza"
+        "without": "senza",
+        "unavailable": "Non disponibile"
     },
     "cart": {
         "itemDetailsTemplate": "{type} {size} cm",
@@ -281,6 +282,15 @@
         "filterAll": "Tutti",
         "empty": "Nessun ordine.",
         "updateError": "Impossibile aggiornare lo stato",
+        "edit": "Modifica",
+        "save": "Salva",
+        "cancel": "Annulla",
+        "productName": "Nome",
+        "productDescription": "Descrizione (opzionale)",
+        "productImage": "URL immagine",
+        "includedLabel": "Inclusi",
+        "extraLabel": "Extra",
+        "saveError": "Salvataggio non riuscito",
         "searchPlaceholder": "Cerca per nome, cognome o n° ordine",
         "sortLabel": "Ordina",
         "periodLabel": "Periodo",

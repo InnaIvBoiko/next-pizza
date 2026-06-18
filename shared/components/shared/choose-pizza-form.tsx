@@ -21,12 +21,15 @@ import { localizeName } from '@/shared/lib/i18n/localize-name';
 interface Props {
     imageUrl: string;
     name: string;
+    description?: string | null;
     /** Included ingredients (in the base price, pre-selected, removable for free). */
     ingredients: Ingredient[];
     /** Paid add-ons offered for this product. */
     extraIngredients: Ingredient[];
     items: ProductItem[];
     loading?: boolean;
+    /** False when an included ingredient is out of stock — can't be ordered. */
+    available?: boolean;
     onSubmit: (
         itemId: number,
         ingredients: number[],
@@ -41,11 +44,13 @@ interface Props {
  */
 export const ChoosePizzaForm: React.FC<Props> = ({
     name,
+    description,
     items,
     imageUrl,
     ingredients,
     extraIngredients,
     loading,
+    available = true,
     onSubmit,
     className,
 }) => {
@@ -88,6 +93,12 @@ export const ChoosePizzaForm: React.FC<Props> = ({
                 <Title text={name} size='md' className='mb-1 font-extrabold' />
 
                 <p className='text-muted-foreground'>{textDetaills}</p>
+
+                {description && (
+                    <p className='mt-2 text-sm text-muted-foreground'>
+                        {description}
+                    </p>
+                )}
 
                 <div className='mt-5 flex flex-col gap-4'>
                     <GroupVariants
@@ -159,13 +170,15 @@ export const ChoosePizzaForm: React.FC<Props> = ({
                 <Button
                     onClick={handleClickAdd}
                     className='mt-10 h-13.75 w-full rounded-[18px] px-10 text-base'
-                    disabled={loading}
+                    disabled={loading || !available}
                 >
-                    {loading
-                        ? dict.product.adding
-                        : format(dict.product.addToCart, {
-                              price: formatPrice(totalPrice),
-                          })}
+                    {!available
+                        ? dict.product.unavailable
+                        : loading
+                          ? dict.product.adding
+                          : format(dict.product.addToCart, {
+                                price: formatPrice(totalPrice),
+                            })}
                 </Button>
             </div>
         </div>

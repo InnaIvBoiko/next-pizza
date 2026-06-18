@@ -312,6 +312,40 @@ export async function updateOrderStatus(orderId: number, status: OrderStatus) {
 }
 
 /**
+ * Admin-only: edit a product's catalog data — name, optional description, image,
+ * and which ingredients are included (base price) vs offered as paid extras.
+ */
+export async function updateProduct(input: {
+    id: number;
+    name: string;
+    description: string;
+    imageUrl: string;
+    includedIds: number[];
+    extraIds: number[];
+}) {
+    try {
+        const session = await getUserSession();
+        if (!session || session.role !== 'ADMIN') {
+            throw new Error('Forbidden');
+        }
+
+        await prisma.product.update({
+            where: { id: input.id },
+            data: {
+                name: input.name.trim(),
+                description: input.description.trim() || null,
+                imageUrl: input.imageUrl.trim(),
+                ingredients: { set: input.includedIds.map(id => ({ id })) },
+                extraIngredients: { set: input.extraIds.map(id => ({ id })) },
+            },
+        });
+    } catch (err) {
+        logger.error({ err }, '[UpdateProduct] Server error');
+        throw err;
+    }
+}
+
+/**
  * Staff (admin/kitchen): toggle an ingredient's availability. Going out of stock
  * auto-adds it to the shopping list; restocking removes it from the list.
  */

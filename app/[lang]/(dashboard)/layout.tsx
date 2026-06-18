@@ -8,6 +8,7 @@ import { Container } from '@/shared/components/shared/container';
 import { Button } from '@/shared/components/ui';
 import { ThemeToggle } from '@/shared/components/shared/theme-toggle';
 import { DashboardNav } from '@/shared/components/shared/dashboard-nav';
+import { SignOutButton } from '@/shared/components/shared/sign-out-button';
 import { localizeHref } from '@/shared/lib/i18n/localize-href';
 import type { Locale } from '@/shared/constants/i18n';
 import { getDictionary } from '../dictionaries';
@@ -42,7 +43,17 @@ export default async function DashboardLayout({ children, params }: Props) {
                         kitchenLabel={dict.kitchen.title}
                         inventoryLabel={dict.inventory.title}
                     />
-                    <div className='flex items-center gap-3'>
+                    <div className='flex items-center gap-2 sm:gap-3'>
+                        <Button
+                            asChild
+                            variant='ghost'
+                            size='sm'
+                            className='rounded-full'
+                        >
+                            <Link href={localizeHref(lang as Locale, '/menu')}>
+                                {dict.nav.menu}
+                            </Link>
+                        </Button>
                         <Button
                             asChild
                             variant='ghost'
@@ -54,6 +65,7 @@ export default async function DashboardLayout({ children, params }: Props) {
                                 {dict.admin.backToSite}
                             </Link>
                         </Button>
+                        <SignOutButton label={dict.auth.signOut} />
                         <ThemeToggle />
                     </div>
                 </Container>

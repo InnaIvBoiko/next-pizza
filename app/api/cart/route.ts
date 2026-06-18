@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma-client';
 import { findOrCreateCart } from '@/shared/lib/find-or-create-cart';
 import { updateCartTotalAmount } from '@/shared/lib/update-cart-total-amount';
 import { CreateCartItemValues } from '@/shared/services/dto/cart.dto';
+import { isProductAvailable } from '@/shared/lib/is-product-available';
 import { logger } from '@/shared/lib/logger.server';
 
 const CART_TOKEN = 'cartToken';
@@ -54,6 +55,31 @@ export async function POST(req: NextRequest) {
 
         const userCart = await findOrCreateCart(token);
         const data = (await req.json()) as CreateCartItemValues;
+
+        // Guard: a product whose included ingredient is out of stock can't be
+        // ordered, even if a stale client bypasses the disabled button.
+        const productItem = await prisma.productItem.findUnique({
+            where: { id: data.productItemId },
+            include: {
+                product: {
+                    include: { ingredients: { select: { available: true } } },
+                },
+            },
+        });
+
+        if (!productItem) {
+            return NextResponse.json(
+                { error: 'Product not found' },
+                { status: 404 }
+            );
+        }
+
+        if (!isProductAvailable(productItem.product.ingredients)) {
+            return NextResponse.json(
+                { error: 'Product is not available' },
+                { status: 409 }
+            );
+        }
 
         const ingredientIds = (data.ingredients ?? [])
             .slice()

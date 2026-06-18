@@ -3,7 +3,12 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
     try {
-        const ingredients = await prisma.ingredient.findMany();
+        // Only in-stock ingredients are offered as menu filters (out-of-stock
+        // ones are managed in the dashboard "Scorte" page).
+        const ingredients = await prisma.ingredient.findMany({
+            where: { available: true },
+            orderBy: { id: 'asc' },
+        });
 
         return NextResponse.json(ingredients);
     } catch (error: unknown) {

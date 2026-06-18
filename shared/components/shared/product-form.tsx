@@ -6,6 +6,7 @@ import { useShallow } from 'zustand/react/shallow';
 import React from 'react';
 import { toast } from 'sonner';
 import { logger } from '@/shared/lib/logger.client';
+import { isProductAvailable } from '@/shared/lib';
 import { format } from '@/shared/lib/i18n/format';
 import { ChoosePizzaForm } from './choose-pizza-form';
 import { ChooseProductForm } from './choose-product-form';
@@ -27,6 +28,9 @@ export const ProductForm: React.FC<Props> = ({
 
     const firstItem = product.items[0];
     const isPizzaForm = Boolean(firstItem.pizzaType);
+
+    // An included ingredient is out of stock → the product can't be made.
+    const available = isProductAvailable(product.ingredients);
 
     const onSubmit = async (
         productItemId?: number,
@@ -58,11 +62,13 @@ export const ProductForm: React.FC<Props> = ({
             <ChoosePizzaForm
                 imageUrl={product.imageUrl}
                 name={product.name}
+                description={product.description}
                 ingredients={product.ingredients}
                 extraIngredients={product.extraIngredients}
                 items={product.items}
                 onSubmit={onSubmit}
                 loading={loading}
+                available={available}
             />
         );
     }
@@ -71,9 +77,11 @@ export const ProductForm: React.FC<Props> = ({
         <ChooseProductForm
             imageUrl={product.imageUrl}
             name={product.name}
+            description={product.description}
             onSubmit={onSubmit}
             price={firstItem.price}
             loading={loading}
+            available={available}
         />
     );
 };

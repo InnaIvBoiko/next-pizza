@@ -41,8 +41,9 @@ model Category {
 model Product {
     id Int @id @default(autoincrement())
 
-    name     String
-    imageUrl String
+    name        String
+    description String?
+    imageUrl    String
 
     // Included ingredients: in the base price, pre-selected, removable for free.
     // These also drive the ingredient filters.

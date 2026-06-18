@@ -38,7 +38,8 @@
         "included": "Included",
         "includedTitle": "Included ingredients",
         "extraTitle": "Add extras",
-        "without": "without"
+        "without": "without",
+        "unavailable": "Unavailable"
     },
     "cart": {
         "itemDetailsTemplate": "{type} {size} cm",
@@ -281,6 +282,15 @@
         "filterAll": "All",
         "empty": "No orders.",
         "updateError": "Could not update the status",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "productName": "Name",
+        "productDescription": "Description (optional)",
+        "productImage": "Image URL",
+        "includedLabel": "Included",
+        "extraLabel": "Extra",
+        "saveError": "Could not save",
         "searchPlaceholder": "Search by name, surname or order #",
         "sortLabel": "Sort",
         "periodLabel": "Period",
