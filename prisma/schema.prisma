@@ -174,8 +174,12 @@ model StoryItem {
 }
 
 enum OrderStatus {
-    PENDING
-    SUCCEEDED
+    PENDING // created, awaiting payment
+    SUCCEEDED // paid / confirmed
+    PREPARING // kitchen started
+    READY // ready for delivery
+    OUT_FOR_DELIVERY // courier en route
+    DELIVERED // completed
     CANCELLED
 }
 

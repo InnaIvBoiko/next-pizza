@@ -50,7 +50,9 @@ export const ProfileButton: React.FC<Props> = ({
                         className='flex items-center gap-2'
                     >
                         <CircleUser size={18} />
-                        {dict.auth.profile}
+                        {/* Show the user's first name; fall back to the
+                            generic label when the name is unavailable. */}
+                        {session.user?.name?.split(' ')[0] || dict.auth.profile}
                     </Button>
                 </Link>
             )}

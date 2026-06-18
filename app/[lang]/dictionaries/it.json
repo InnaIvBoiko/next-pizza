@@ -106,6 +106,9 @@
     "profile": {
         "pageTitle": "Il mio profilo",
         "pageDescription": "Gestisci i tuoi dati e l'account.",
+        "tab": "Dati",
+        "edit": "Modifica",
+        "cancel": "Annulla",
         "email": "E-mail",
         "fullName": "Nome completo",
         "newPassword": "Nuova password (lascia vuoto per non cambiarla)",
@@ -237,5 +240,23 @@
         "email": "Inserisci un indirizzo email valido",
         "phone": "Inserisci un numero di telefono valido",
         "address": "Inserisci un indirizzo valido"
+    },
+    "orders": {
+        "title": "I miei ordini",
+        "empty": "Non hai ancora effettuato ordini.",
+        "orderNumber": "Ordine #{id}",
+        "items": "Articoli",
+        "total": "Totale",
+        "tab": "Ordini",
+        "activeTitle": "Ordine in corso",
+        "status": {
+            "PENDING": "In attesa di pagamento",
+            "SUCCEEDED": "Confermato",
+            "PREPARING": "In preparazione",
+            "READY": "Pronto per la consegna",
+            "OUT_FOR_DELIVERY": "In consegna",
+            "DELIVERED": "Consegnato",
+            "CANCELLED": "Annullato"
+        }
     }
 }

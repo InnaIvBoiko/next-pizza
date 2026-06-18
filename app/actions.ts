@@ -54,10 +54,15 @@ export async function createOrder(data: CheckoutFormValues) {
             throw new Error('Cart is empty');
         }
 
+        /* Link the order to the signed-in user (if any) so it shows up in their
+           order history. Guest checkouts stay unlinked. */
+        const session = await getUserSession();
+
         /* Creating an order */
         const order = await prisma.order.create({
             data: {
                 token: cartToken,
+                userId: session ? Number(session.id) : undefined,
                 fullName: data.firstName + ' ' + data.lastName,
                 email: data.email,
                 phone: data.phone,

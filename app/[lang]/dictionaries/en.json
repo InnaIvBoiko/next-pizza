@@ -106,6 +106,9 @@
     "profile": {
         "pageTitle": "My profile",
         "pageDescription": "Manage your details and account.",
+        "tab": "Details",
+        "edit": "Edit",
+        "cancel": "Cancel",
         "email": "E-mail",
         "fullName": "Full name",
         "newPassword": "New password (leave blank to keep it)",
@@ -237,5 +240,23 @@
         "email": "Please enter a valid email address",
         "phone": "Please enter a valid phone number",
         "address": "Please enter a valid address"
+    },
+    "orders": {
+        "title": "My orders",
+        "empty": "You haven't placed any orders yet.",
+        "orderNumber": "Order #{id}",
+        "items": "Items",
+        "total": "Total",
+        "tab": "Orders",
+        "activeTitle": "Current order",
+        "status": {
+            "PENDING": "Awaiting payment",
+            "SUCCEEDED": "Confirmed",
+            "PREPARING": "Preparing",
+            "READY": "Ready for delivery",
+            "OUT_FOR_DELIVERY": "Out for delivery",
+            "DELIVERED": "Delivered",
+            "CANCELLED": "Cancelled"
+        }
     }
 }
