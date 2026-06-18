@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useSet } from 'react-use';
 import { Ingredient, ProductItem } from '@/generated/prisma/client';
 
 import { PizzaImage } from './pizza-image';
@@ -20,50 +21,62 @@ import { localizeName } from '@/shared/lib/i18n/localize-name';
 interface Props {
     imageUrl: string;
     name: string;
+    /** Included ingredients (in the base price, pre-selected, removable for free). */
     ingredients: Ingredient[];
+    /** Paid add-ons offered for this product. */
+    extraIngredients: Ingredient[];
     items: ProductItem[];
     loading?: boolean;
-    onSubmit: (itemId: number, ingredients: number[]) => void;
+    onSubmit: (
+        itemId: number,
+        ingredients: number[],
+        removedIngredients: number[]
+    ) => void;
     className?: string;
 }
 
 /**
- * Form for choosing pizza options
+ * Form for choosing pizza options: size/dough, the included ingredients (which
+ * can be removed for free) and the paid extras.
  */
 export const ChoosePizzaForm: React.FC<Props> = ({
     name,
     items,
     imageUrl,
     ingredients,
+    extraIngredients,
     loading,
     onSubmit,
     className,
 }) => {
     const dict = useDictionary();
     const locale = useLocale();
-    const {
-        size,
-        type,
-        selectedIngredients,
-        availableSizes,
-        currentItemId,
-        setSize,
-        setType,
-        addIngredient,
-    } = usePizzaOptions(items);
+    const { size, type, availableSizes, currentItemId, setSize, setType } =
+        usePizzaOptions(items);
 
+    // Included ingredients the user removed (free) and extras they added (paid).
+    const [removedIncluded, { toggle: toggleIncluded }] = useSet(
+        new Set<number>()
+    );
+    const [selectedExtras, { toggle: toggleExtra }] = useSet(new Set<number>());
+
+    // Price = base (size/dough) + selected extras; the included don't affect it.
     const { totalPrice, textDetaills } = getPizzaDetails(
         type,
         size,
         items,
-        ingredients,
-        selectedIngredients,
+        extraIngredients,
+        selectedExtras,
         dict
     );
 
     const handleClickAdd = () => {
         if (currentItemId) {
-            onSubmit(currentItemId, Array.from(selectedIngredients));
+            onSubmit(
+                currentItemId,
+                Array.from(selectedExtras),
+                Array.from(removedIncluded)
+            );
         }
     };
 
@@ -90,21 +103,57 @@ export const ChoosePizzaForm: React.FC<Props> = ({
                     />
                 </div>
 
-                <div className='scrollbar mt-5 h-64 overflow-auto rounded-md bg-muted p-4 sm:p-5 lg:h-105'>
-                    <div className='grid grid-cols-3 gap-3'>
-                        {ingredients.map(ingredient => (
-                            <IngredientItem
-                                key={ingredient.id}
-                                name={localizeName(ingredient, locale)}
-                                price={ingredient.price}
-                                imageUrl={ingredient.imageUrl}
-                                onClick={() => addIngredient(ingredient.id)}
-                                active={selectedIngredients.has(ingredient.id)}
-                                disabled={!ingredient.available}
-                                unavailableLabel={dict.inventory.unavailable}
-                            />
-                        ))}
-                    </div>
+                <div className='scrollbar mt-5 h-64 space-y-5 overflow-auto rounded-md bg-muted p-4 sm:p-5 lg:h-105'>
+                    {ingredients.length > 0 && (
+                        <div>
+                            <p className='mb-2 text-sm font-bold'>
+                                {dict.product.includedTitle}
+                            </p>
+                            <div className='grid grid-cols-3 gap-3'>
+                                {ingredients.map(ingredient => (
+                                    <IngredientItem
+                                        key={ingredient.id}
+                                        name={localizeName(ingredient, locale)}
+                                        price={ingredient.price}
+                                        imageUrl={ingredient.imageUrl}
+                                        priceLabel={dict.product.included}
+                                        active={
+                                            !removedIncluded.has(ingredient.id)
+                                        }
+                                        onClick={() =>
+                                            toggleIncluded(ingredient.id)
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {extraIngredients.length > 0 && (
+                        <div>
+                            <p className='mb-2 text-sm font-bold'>
+                                {dict.product.extraTitle}
+                            </p>
+                            <div className='grid grid-cols-3 gap-3'>
+                                {extraIngredients.map(ingredient => (
+                                    <IngredientItem
+                                        key={ingredient.id}
+                                        name={localizeName(ingredient, locale)}
+                                        price={ingredient.price}
+                                        imageUrl={ingredient.imageUrl}
+                                        active={selectedExtras.has(ingredient.id)}
+                                        onClick={() =>
+                                            toggleExtra(ingredient.id)
+                                        }
+                                        disabled={!ingredient.available}
+                                        unavailableLabel={
+                                            dict.inventory.unavailable
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <Button

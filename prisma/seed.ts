@@ -74,6 +74,9 @@ async function up() {
 
     // Pizzas need ingredient relations, so they are created one by one and
     // their generated ids are captured for the size/dough ProductItems.
+    // `ingredients` are the included ones (in the base price); every other
+    // ingredient is offered as a paid extra by default (admins refine later).
+    const allIngredientIds = _ingredients.map(ingredient => ingredient.id);
     const createdPizzas = await Promise.all(
         pizzas.map(pizza =>
             prisma.product.create({
@@ -83,6 +86,11 @@ async function up() {
                     categoryId: 1,
                     ingredients: {
                         connect: pizza.ingredients.map(id => ({ id })),
+                    },
+                    extraIngredients: {
+                        connect: allIngredientIds
+                            .filter(id => !pizza.ingredients.includes(id))
+                            .map(id => ({ id })),
                     },
                 },
             })

@@ -8,6 +8,7 @@ const cartInclude = {
         include: {
             productItem: { include: { product: true } },
             ingredients: true,
+            removedIngredients: true,
         },
     },
 };

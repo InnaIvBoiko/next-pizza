@@ -43,6 +43,7 @@ export const CheckoutCart: React.FC<Props> = ({
                               details={getCartItemDetails(
                                   dict,
                                   item.ingredients,
+                                  item.removedIngredients,
                                   item.pizzaType as PizzaType,
                                   item.pizzaSize as PizzaSize
                               )}

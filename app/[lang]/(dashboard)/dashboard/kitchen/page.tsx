@@ -48,6 +48,7 @@ type RawItem = {
         pizzaType?: number | null;
     };
     ingredients?: { name?: string }[];
+    removedIngredients?: { name?: string }[];
 };
 
 const parseItems = (raw: unknown): RawItem[] => {
@@ -96,6 +97,9 @@ export default async function KitchenPage({ params }: Props) {
                     variant,
                     quantity: item.quantity ?? 1,
                     extras: (item.ingredients ?? [])
+                        .map(i => i.name)
+                        .filter(Boolean) as string[],
+                    removed: (item.removedIngredients ?? [])
                         .map(i => i.name)
                         .filter(Boolean) as string[],
                 };
@@ -175,6 +179,19 @@ export default async function KitchenPage({ params }: Props) {
                                                                     {item.extras.join(
                                                                         ', '
                                                                     )}
+                                                                </span>
+                                                            )}
+                                                            {item.removed.length >
+                                                                0 && (
+                                                                <span className='block text-xs font-medium text-destructive'>
+                                                                    {item.removed
+                                                                        .map(
+                                                                            r =>
+                                                                                `${dict.product.without} ${r}`
+                                                                        )
+                                                                        .join(
+                                                                            ', '
+                                                                        )}
                                                                 </span>
                                                             )}
                                                         </li>

@@ -110,6 +110,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                                             details={getCartItemDetails(
                                                 dict,
                                                 item.ingredients,
+                                                item.removedIngredients,
                                                 item.pizzaType as PizzaType,
                                                 item.pizzaSize as PizzaSize
                                             )}

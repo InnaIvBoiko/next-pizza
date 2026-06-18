@@ -12,6 +12,8 @@ interface Props {
     disabled?: boolean;
     /** Shown in place of the price when the ingredient is out of stock. */
     unavailableLabel?: string;
+    /** Shown in place of the price (e.g. "Included" for base ingredients). */
+    priceLabel?: string;
     onClick?: () => void;
     className?: string;
 }
@@ -21,6 +23,7 @@ export const IngredientItem: React.FC<Props> = ({
     active,
     disabled,
     unavailableLabel,
+    priceLabel,
     price,
     name,
     imageUrl,
@@ -44,6 +47,10 @@ export const IngredientItem: React.FC<Props> = ({
             {disabled && unavailableLabel ? (
                 <span className='text-xs font-semibold text-destructive'>
                     {unavailableLabel}
+                </span>
+            ) : priceLabel ? (
+                <span className='text-xs font-semibold text-muted-foreground'>
+                    {priceLabel}
                 </span>
             ) : (
                 <span className='font-bold'>{formatPrice(price)}</span>

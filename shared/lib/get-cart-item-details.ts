@@ -7,6 +7,7 @@ import type { Dictionary } from './i18n/types';
 export const getCartItemDetails = (
     dict: Dictionary,
     ingredients: CartStateItem['ingredients'],
+    removedIngredients: CartStateItem['removedIngredients'],
     pizzaType?: PizzaType,
     pizzaSize?: PizzaSize
 ): string => {
@@ -18,6 +19,14 @@ export const getCartItemDetails = (
                 type: pizzaTypeName(dict, pizzaType),
                 size: pizzaSize,
             })
+        );
+    }
+
+    if (removedIngredients?.length) {
+        details.push(
+            ...removedIngredients.map(
+                ingredient => `${dict.product.without} ${ingredient.name}`
+            )
         );
     }
 

@@ -34,7 +34,11 @@
         "addToCart": "Add to cart · {price}",
         "addedToCart": "{name} added to cart",
         "addError": "Could not add to cart",
-        "detailsTemplate": "{size} cm, {type} pizza"
+        "detailsTemplate": "{size} cm, {type} pizza",
+        "included": "Included",
+        "includedTitle": "Included ingredients",
+        "extraTitle": "Add extras",
+        "without": "without"
     },
     "cart": {
         "itemDetailsTemplate": "{type} {size} cm",

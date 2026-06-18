@@ -23,11 +23,17 @@ export interface CartItemDTO {
         price: number;
         imageUrl: string;
     }>;
+    // Included ingredients the customer removed (free; for display/kitchen).
+    removedIngredients: Array<{
+        id: number;
+        name: string;
+    }>;
 }
 
 export interface CreateCartItemValues {
     productItemId: number;
     ingredients?: number[];
+    removedIngredients?: number[];
 }
 
 export interface CartDTO {

@@ -44,8 +44,12 @@ model Product {
     name     String
     imageUrl String
 
-    ingredients Ingredient[]
-    items       ProductItem[]
+    // Included ingredients: in the base price, pre-selected, removable for free.
+    // These also drive the ingredient filters.
+    ingredients      Ingredient[] @relation("ProductIncluded")
+    // Paid add-ons the admin offers for this product.
+    extraIngredients Ingredient[] @relation("ProductExtra")
+    items            ProductItem[]
 
     category   Category @relation(fields: [categoryId], references: [id])
     categoryId Int
@@ -78,9 +82,11 @@ model Ingredient {
     // Out-of-stock ingredients can't be added as extras.
     available Boolean @default(true)
 
-    products     Product[]
-    cartItems    CartItem[]
-    shoppingItem ShoppingItem?
+    includedInProducts Product[]  @relation("ProductIncluded")
+    extraInProducts    Product[]  @relation("ProductExtra")
+    cartItems          CartItem[] @relation("CartItemExtra")
+    removedInCartItems CartItem[] @relation("CartItemRemoved")
+    shoppingItem       ShoppingItem?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -125,7 +131,10 @@ model CartItem {
 
     quantity Int @default(1)
 
-    ingredients Ingredient[]
+    // Paid extras the customer added.
+    ingredients        Ingredient[] @relation("CartItemExtra")
+    // Included ingredients the customer removed (no price change; for the kitchen).
+    removedIngredients Ingredient[] @relation("CartItemRemoved")
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

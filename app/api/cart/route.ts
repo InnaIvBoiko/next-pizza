@@ -28,6 +28,7 @@ export async function GET(req: NextRequest) {
                     include: {
                         productItem: { include: { product: true } },
                         ingredients: true,
+                        removedIngredients: true,
                     },
                 },
             },
@@ -57,19 +58,30 @@ export async function POST(req: NextRequest) {
         const ingredientIds = (data.ingredients ?? [])
             .slice()
             .sort((a, b) => a - b);
+        const removedIngredientIds = (data.removedIngredients ?? [])
+            .slice()
+            .sort((a, b) => a - b);
 
-        // Re-adding the exact same line (same product item AND same ingredient
-        // set) bumps the quantity instead of creating a duplicate row.
+        const sameIds = (a: number[], b: number[]) =>
+            a.length === b.length && a.every((id, i) => id === b[i]);
+
+        // Re-adding the exact same line (same product item, same extras AND same
+        // removed ingredients) bumps the quantity instead of duplicating a row.
         const candidates = await prisma.cartItem.findMany({
             where: { cartId: userCart.id, productItemId: data.productItemId },
-            include: { ingredients: true },
+            include: { ingredients: true, removedIngredients: true },
         });
 
         const existingItem = candidates.find(item => {
-            const ids = item.ingredients.map(i => i.id).sort((a, b) => a - b);
+            const extras = item.ingredients
+                .map(i => i.id)
+                .sort((a, b) => a - b);
+            const removed = item.removedIngredients
+                .map(i => i.id)
+                .sort((a, b) => a - b);
             return (
-                ids.length === ingredientIds.length &&
-                ids.every((id, i) => id === ingredientIds[i])
+                sameIds(extras, ingredientIds) &&
+                sameIds(removed, removedIngredientIds)
             );
         });
 
@@ -86,6 +98,9 @@ export async function POST(req: NextRequest) {
                     quantity: 1,
                     ingredients: {
                         connect: ingredientIds.map(id => ({ id })),
+                    },
+                    removedIngredients: {
+                        connect: removedIngredientIds.map(id => ({ id })),
                     },
                 },
             });
