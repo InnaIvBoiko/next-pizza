@@ -293,5 +293,17 @@
             "month": "Ultimo mese",
             "all": "Tutto"
         }
+    },
+    "kitchen": {
+        "title": "Cucina",
+        "toPrepare": "Da preparare",
+        "preparing": "In preparazione",
+        "ready": "Pronti",
+        "start": "Inizia",
+        "markReady": "Pronto",
+        "handOff": "In consegna",
+        "extras": "Aggiunte",
+        "empty": "Nessun ordine.",
+        "updateError": "Impossibile aggiornare l'ordine"
     }
 }

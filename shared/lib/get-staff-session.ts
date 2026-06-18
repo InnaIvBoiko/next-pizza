@@ -4,11 +4,11 @@ import { UserRole } from '@/generated/prisma/enums';
 import { getUserSession } from './get-user-session';
 
 /**
- * Server-side guard for the kitchen view. Allows kitchen staff and admins;
- * redirects everyone else to the home page. Secure check next to the data
- * (Proxy does the optimistic cookie-only pre-check).
+ * Server-side guard for the dashboard area. Allows admins and kitchen staff;
+ * redirects everyone else home. Individual pages still narrow access further
+ * (admin-only pages use `getAdminSession`).
  */
-export const getKitchenSession = async () => {
+export const getStaffSession = async () => {
     const user = await getUserSession();
 
     if (

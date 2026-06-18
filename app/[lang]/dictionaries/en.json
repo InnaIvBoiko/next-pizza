@@ -293,5 +293,17 @@
             "month": "Last month",
             "all": "All"
         }
+    },
+    "kitchen": {
+        "title": "Kitchen",
+        "toPrepare": "To prepare",
+        "preparing": "Preparing",
+        "ready": "Ready",
+        "start": "Start",
+        "markReady": "Ready",
+        "handOff": "Out for delivery",
+        "extras": "Extras",
+        "empty": "No orders.",
+        "updateError": "Could not update the order"
     }
 }

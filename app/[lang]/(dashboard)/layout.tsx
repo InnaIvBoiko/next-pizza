@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ArrowLeft } from 'lucide-react';
 
-import { getAdminSession } from '@/shared/lib/get-admin-session';
+import { getStaffSession } from '@/shared/lib/get-staff-session';
 import { Container } from '@/shared/components/shared/container';
 import { Button } from '@/shared/components/ui';
 import { ThemeToggle } from '@/shared/components/shared/theme-toggle';
@@ -22,9 +22,10 @@ interface Props {
 }
 
 export default async function DashboardLayout({ children, params }: Props) {
-    // Defence in depth: every dashboard page also guards, but block the whole
-    // section here too.
-    await getAdminSession();
+    // Defence in depth: the section is for staff (admins + kitchen); each page
+    // narrows access further (admin-only pages use getAdminSession).
+    const user = await getStaffSession();
+    const isAdmin = user.role === 'ADMIN';
 
     const { lang } = await params;
     const dict = await getDictionary(lang as Locale);
@@ -35,8 +36,10 @@ export default async function DashboardLayout({ children, params }: Props) {
                 <Container className='flex items-center justify-between gap-4 px-4 py-3'>
                     <DashboardNav
                         lang={lang as Locale}
+                        isAdmin={isAdmin}
                         ordersLabel={dict.admin.ordersNav}
                         productsLabel={dict.admin.productsNav}
+                        kitchenLabel={dict.kitchen.title}
                     />
                     <div className='flex items-center gap-3'>
                         <Button

@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib/utils';
 import React from 'react';
 import { Container } from './container';
 import Link from 'next/link';
-import { ArrowRight, LayoutDashboard, Pizza } from 'lucide-react';
+import { ArrowRight, ChefHat, LayoutDashboard, Pizza } from 'lucide-react';
 import { Button } from '../ui';
 import { Logo } from './logo';
 import { BurgerMenu } from './burger-menu';
@@ -90,7 +90,7 @@ export const Header: React.FC<Props> = ({
                             <span className='text-lg font-black sm:text-xl'>
                                 Next Pizza
                             </span>
-                            <p className='hidden text-xs text-muted-foreground sm:block'>
+                            <p className='text-muted-foreground hidden text-xs sm:block'>
                                 {dict.header.tagline}
                             </p>
                         </div>
@@ -148,6 +148,19 @@ export const Header: React.FC<Props> = ({
                                 <Link href={localize('/dashboard')}>
                                     <LayoutDashboard className='mr-1.5 size-4' />
                                     {dict.admin.title}
+                                </Link>
+                            </Button>
+                        )}
+                        {session?.user?.role === 'KITCHEN' && (
+                            <Button
+                                asChild
+                                variant='outline'
+                                size='sm'
+                                className='hidden rounded-full md:inline-flex'
+                            >
+                                <Link href={localize('/dashboard/kitchen')}>
+                                    <ChefHat className='mr-1.5 size-4' />
+                                    {dict.kitchen.title}
                                 </Link>
                             </Button>
                         )}

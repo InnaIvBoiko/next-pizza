@@ -55,9 +55,7 @@ export async function proxy(request: NextRequest) {
     // Path relative to the locale, e.g. `/it/dashboard/x` -> `/dashboard/x`.
     const rest = pathname.slice(`/${pathLocale}`.length) || '/';
     const isProtected =
-        rest.startsWith('/dashboard') ||
-        rest.startsWith('/profile') ||
-        rest.startsWith('/kitchen');
+        rest.startsWith('/dashboard') || rest.startsWith('/profile');
 
     if (!isProtected) {
         return NextResponse.next();
@@ -76,14 +74,10 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(url);
     }
 
-    // The dashboard is admin-only (RBAC).
-    if (rest.startsWith('/dashboard') && token.role !== UserRole.ADMIN) {
-        return NextResponse.redirect(new URL(`/${pathLocale}`, request.url));
-    }
-
-    // The kitchen is for kitchen staff and admins.
+    // The dashboard is for staff: admins and kitchen. The admin-only pages
+    // (orders/products) are enforced server-side next to the data.
     if (
-        rest.startsWith('/kitchen') &&
+        rest.startsWith('/dashboard') &&
         token.role !== UserRole.ADMIN &&
         token.role !== UserRole.KITCHEN
     ) {

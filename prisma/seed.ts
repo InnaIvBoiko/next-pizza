@@ -49,6 +49,13 @@ async function up() {
                 verified: new Date(),
                 role: 'ADMIN',
             },
+            {
+                fullName: 'Kitchen Staff',
+                email: 'kitchen@test.it',
+                password: hashSync('111111', 10),
+                verified: new Date(),
+                role: 'KITCHEN',
+            },
         ],
     });
 

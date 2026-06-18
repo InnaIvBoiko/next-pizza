@@ -9,27 +9,41 @@ import type { Locale } from '@/shared/constants/i18n';
 
 interface Props {
     lang: Locale;
+    /** Admins manage orders/products; kitchen staff only see the kitchen tab. */
+    isAdmin: boolean;
     ordersLabel: string;
     productsLabel: string;
+    kitchenLabel: string;
 }
 
 export const DashboardNav: React.FC<Props> = ({
     lang,
+    isAdmin,
     ordersLabel,
     productsLabel,
+    kitchenLabel,
 }) => {
     const pathname = usePathname();
 
     const items = [
+        ...(isAdmin
+            ? [
+                  {
+                      href: localizeHref(lang, '/dashboard/orders'),
+                      label: ordersLabel,
+                      match: '/dashboard/orders',
+                  },
+                  {
+                      href: localizeHref(lang, '/dashboard/products'),
+                      label: productsLabel,
+                      match: '/dashboard/products',
+                  },
+              ]
+            : []),
         {
-            href: localizeHref(lang, '/dashboard/orders'),
-            label: ordersLabel,
-            match: '/dashboard/orders',
-        },
-        {
-            href: localizeHref(lang, '/dashboard/products'),
-            label: productsLabel,
-            match: '/dashboard/products',
+            href: localizeHref(lang, '/dashboard/kitchen'),
+            label: kitchenLabel,
+            match: '/dashboard/kitchen',
         },
     ];
 

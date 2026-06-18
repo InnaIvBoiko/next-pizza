@@ -41,6 +41,14 @@ export const BurgerMenu: React.FC<Props> = ({ onClickSignIn, className }) => {
         ...(session?.user?.role === 'ADMIN'
             ? [{ href: localize('/dashboard'), label: dict.admin.title }]
             : []),
+        ...(session?.user?.role === 'KITCHEN'
+            ? [
+                  {
+                      href: localize('/dashboard/kitchen'),
+                      label: dict.kitchen.title,
+                  },
+              ]
+            : []),
     ];
 
     return (

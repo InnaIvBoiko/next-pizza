@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { getAdminSession } from '@/shared/lib/get-admin-session';
+import { getStaffSession } from '@/shared/lib/get-staff-session';
 import { localizeHref } from '@/shared/lib/i18n/localize-href';
 import type { Locale } from '@/shared/constants/i18n';
 
@@ -9,7 +9,11 @@ interface Props {
 }
 
 export default async function Dashboard({ params }: Props) {
-    await getAdminSession();
+    const user = await getStaffSession();
     const { lang } = await params;
-    redirect(localizeHref(lang as Locale, '/dashboard/orders'));
+
+    // Kitchen staff land on the kitchen board; admins on the orders list.
+    const target =
+        user.role === 'KITCHEN' ? '/dashboard/kitchen' : '/dashboard/orders';
+    redirect(localizeHref(lang as Locale, target));
 }
