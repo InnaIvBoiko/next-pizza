@@ -305,5 +305,18 @@
         "extras": "Extras",
         "empty": "No orders.",
         "updateError": "Could not update the order"
+    },
+    "inventory": {
+        "title": "Stock",
+        "ingredients": "Ingredients",
+        "available": "Available",
+        "unavailable": "Out of stock",
+        "shoppingList": "Shopping list",
+        "shoppingEmpty": "Nothing to buy.",
+        "addPlaceholder": "Add something to buy",
+        "add": "Add",
+        "auto": "Out of stock",
+        "remove": "Bought",
+        "updateError": "Action failed"
     }
 }

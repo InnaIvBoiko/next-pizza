@@ -310,6 +310,85 @@ export async function updateOrderStatus(orderId: number, status: OrderStatus) {
     }
 }
 
+/**
+ * Staff (admin/kitchen): toggle an ingredient's availability. Going out of stock
+ * auto-adds it to the shopping list; restocking removes it from the list.
+ */
+export async function setIngredientAvailability(
+    ingredientId: number,
+    available: boolean
+) {
+    try {
+        const session = await getUserSession();
+        if (
+            !session ||
+            (session.role !== 'ADMIN' && session.role !== 'KITCHEN')
+        ) {
+            throw new Error('Forbidden');
+        }
+
+        const ingredient = await prisma.ingredient.update({
+            where: { id: ingredientId },
+            data: { available },
+        });
+
+        if (available) {
+            await prisma.shoppingItem.deleteMany({ where: { ingredientId } });
+        } else {
+            await prisma.shoppingItem.upsert({
+                where: { ingredientId },
+                update: {},
+                create: {
+                    ingredientId,
+                    label: ingredient.nameIt ?? ingredient.name,
+                },
+            });
+        }
+    } catch (err) {
+        logger.error({ err }, '[SetIngredientAvailability] Server error');
+        throw err;
+    }
+}
+
+/** Staff: add a free-text item to the shopping list. */
+export async function addShoppingItem(label: string) {
+    try {
+        const session = await getUserSession();
+        if (
+            !session ||
+            (session.role !== 'ADMIN' && session.role !== 'KITCHEN')
+        ) {
+            throw new Error('Forbidden');
+        }
+
+        const trimmed = label.trim();
+        if (!trimmed) return;
+
+        await prisma.shoppingItem.create({ data: { label: trimmed } });
+    } catch (err) {
+        logger.error({ err }, '[AddShoppingItem] Server error');
+        throw err;
+    }
+}
+
+/** Staff: remove (mark bought) a shopping list item. */
+export async function removeShoppingItem(id: number) {
+    try {
+        const session = await getUserSession();
+        if (
+            !session ||
+            (session.role !== 'ADMIN' && session.role !== 'KITCHEN')
+        ) {
+            throw new Error('Forbidden');
+        }
+
+        await prisma.shoppingItem.delete({ where: { id } });
+    } catch (err) {
+        logger.error({ err }, '[RemoveShoppingItem] Server error');
+        throw err;
+    }
+}
+
 export async function deleteUser() {
     try {
         const currentUser = await getUserSession();

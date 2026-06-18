@@ -9,11 +9,12 @@ import type { Locale } from '@/shared/constants/i18n';
 
 interface Props {
     lang: Locale;
-    /** Admins manage orders/products; kitchen staff only see the kitchen tab. */
+    /** Admins manage orders/products; kitchen staff only see kitchen + stock. */
     isAdmin: boolean;
     ordersLabel: string;
     productsLabel: string;
     kitchenLabel: string;
+    inventoryLabel: string;
 }
 
 export const DashboardNav: React.FC<Props> = ({
@@ -22,6 +23,7 @@ export const DashboardNav: React.FC<Props> = ({
     ordersLabel,
     productsLabel,
     kitchenLabel,
+    inventoryLabel,
 }) => {
     const pathname = usePathname();
 
@@ -44,6 +46,11 @@ export const DashboardNav: React.FC<Props> = ({
             href: localizeHref(lang, '/dashboard/kitchen'),
             label: kitchenLabel,
             match: '/dashboard/kitchen',
+        },
+        {
+            href: localizeHref(lang, '/dashboard/inventory'),
+            label: inventoryLabel,
+            match: '/dashboard/inventory',
         },
     ];
 

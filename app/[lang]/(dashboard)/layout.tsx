@@ -40,6 +40,7 @@ export default async function DashboardLayout({ children, params }: Props) {
                         ordersLabel={dict.admin.ordersNav}
                         productsLabel={dict.admin.productsNav}
                         kitchenLabel={dict.kitchen.title}
+                        inventoryLabel={dict.inventory.title}
                     />
                     <div className='flex items-center gap-3'>
                         <Button

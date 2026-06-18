@@ -305,5 +305,18 @@
         "extras": "Aggiunte",
         "empty": "Nessun ordine.",
         "updateError": "Impossibile aggiornare l'ordine"
+    },
+    "inventory": {
+        "title": "Scorte",
+        "ingredients": "Ingredienti",
+        "available": "Disponibile",
+        "unavailable": "Non disponibile",
+        "shoppingList": "Lista della spesa",
+        "shoppingEmpty": "Niente da comprare.",
+        "addPlaceholder": "Aggiungi qualcosa da comprare",
+        "add": "Aggiungi",
+        "auto": "Esaurito",
+        "remove": "Comprato",
+        "updateError": "Operazione non riuscita"
     }
 }

@@ -75,12 +75,27 @@ model Ingredient {
     nameIt   String?
     price    Float
     imageUrl String
+    // Out-of-stock ingredients can't be added as extras.
+    available Boolean @default(true)
 
-    products  Product[]
-    cartItems CartItem[]
+    products     Product[]
+    cartItems    CartItem[]
+    shoppingItem ShoppingItem?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+// Shared shopping list for staff. Auto-filled when an ingredient goes
+// out-of-stock (ingredientId set), plus free-text items added by hand.
+model ShoppingItem {
+    id    Int    @id @default(autoincrement())
+    label String
+
+    ingredient   Ingredient? @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+    ingredientId Int?        @unique
+
+    createdAt DateTime @default(now())
 }
 
 model Cart {
