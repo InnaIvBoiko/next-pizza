@@ -4,7 +4,12 @@ import type { OrderStatus } from '@/generated/prisma/client';
 import type { Dictionary } from '@/shared/lib/i18n/types';
 import type { Locale } from '@/shared/constants/i18n';
 import { format } from '@/shared/lib/i18n/format';
+import { formatPrice } from '@/shared/lib';
+import { orderItemsSummary } from '@/shared/lib/order-items';
+import { RESTAURANT_TIME_ZONE } from '@/shared/constants/restaurant';
 import { OrderStatusBadge } from './order-status-badge';
+import { PayOrderButton } from './pay-order-button';
+import { CancelOrderButton } from './cancel-order-button';
 
 // Post-payment lifecycle shown in the stepper. PENDING (awaiting payment) sits
 // before the first step, so the whole track stays dim until the order is paid.
@@ -19,6 +24,8 @@ const STEPS: OrderStatus[] = [
 interface OrderLike {
     id: number;
     status: OrderStatus;
+    totalAmount: number;
+    items: unknown;
     createdAt: Date | string;
 }
 
@@ -30,12 +37,14 @@ interface Props {
 
 export const ActiveOrderCard: React.FC<Props> = ({ order, lang, dict }) => {
     const currentIndex = STEPS.indexOf(order.status);
+    const summary = orderItemsSummary(order.items);
 
     const dateStr = new Intl.DateTimeFormat(lang, {
         day: 'numeric',
         month: 'long',
         hour: '2-digit',
         minute: '2-digit',
+        timeZone: RESTAURANT_TIME_ZONE,
     }).format(new Date(order.createdAt));
 
     return (
@@ -56,6 +65,15 @@ export const ActiveOrderCard: React.FC<Props> = ({ order, lang, dict }) => {
                     status={order.status}
                     label={dict.status[order.status]}
                 />
+            </div>
+
+            {summary && (
+                <p className='mt-3 line-clamp-2 text-sm text-muted-foreground'>
+                    {summary}
+                </p>
+            )}
+            <div className='mt-2 text-sm font-semibold'>
+                {dict.total}: {formatPrice(order.totalAmount)}
             </div>
 
             <ol className='mt-5 flex items-center'>
@@ -85,6 +103,13 @@ export const ActiveOrderCard: React.FC<Props> = ({ order, lang, dict }) => {
                     </li>
                 ))}
             </ol>
+
+            {order.status === 'PENDING' && (
+                <div className='mt-4 flex gap-2'>
+                    <PayOrderButton orderId={order.id} className='flex-1' />
+                    <CancelOrderButton orderId={order.id} />
+                </div>
+            )}
         </div>
     );
 };

@@ -4,7 +4,11 @@ import type { Dictionary } from '@/shared/lib/i18n/types';
 import type { Locale } from '@/shared/constants/i18n';
 import { format } from '@/shared/lib/i18n/format';
 import { formatPrice } from '@/shared/lib';
+import { orderItemsSummary } from '@/shared/lib/order-items';
+import { RESTAURANT_TIME_ZONE } from '@/shared/constants/restaurant';
 import { OrderStatusBadge } from './order-status-badge';
+import { PayOrderButton } from './pay-order-button';
+import { CancelOrderButton } from './cancel-order-button';
 
 interface OrderLike {
     id: number;
@@ -18,26 +22,20 @@ interface Props {
     orders: OrderLike[];
     lang: Locale;
     dict: Dictionary['orders'];
+    /** Override the empty message (e.g. "no past orders" when one is active). */
+    emptyLabel?: string;
 }
 
-// Orders store the cart snapshot as a JSON string; parse it defensively.
-type ParsedItem = {
-    quantity: number;
-    productItem?: { product?: { name?: string } };
-};
-
-const parseItems = (raw: unknown): ParsedItem[] => {
-    try {
-        const value = typeof raw === 'string' ? JSON.parse(raw) : raw;
-        return Array.isArray(value) ? (value as ParsedItem[]) : [];
-    } catch {
-        return [];
-    }
-};
-
-export const OrderHistory: React.FC<Props> = ({ orders, lang, dict }) => {
+export const OrderHistory: React.FC<Props> = ({
+    orders,
+    lang,
+    dict,
+    emptyLabel,
+}) => {
     if (orders.length === 0) {
-        return <p className='text-muted-foreground'>{dict.empty}</p>;
+        return (
+            <p className='text-muted-foreground'>{emptyLabel ?? dict.empty}</p>
+        );
     }
 
     const dateFormatter = new Intl.DateTimeFormat(lang, {
@@ -46,19 +44,13 @@ export const OrderHistory: React.FC<Props> = ({ orders, lang, dict }) => {
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
+        timeZone: RESTAURANT_TIME_ZONE,
     });
 
     return (
         <ul className='space-y-4'>
             {orders.map(order => {
-                const items = parseItems(order.items);
-                const summary = items
-                    .map(
-                        item =>
-                            `${item.productItem?.product?.name ?? ''} × ${item.quantity}`
-                    )
-                    .filter(Boolean)
-                    .join(' · ');
+                const summary = orderItemsSummary(order.items);
 
                 return (
                     <li key={order.id} className='glass rounded-2xl p-4 sm:p-5'>
@@ -85,8 +77,16 @@ export const OrderHistory: React.FC<Props> = ({ orders, lang, dict }) => {
                             </p>
                         )}
 
-                        <div className='mt-3 text-sm font-semibold'>
-                            {dict.total}: {formatPrice(order.totalAmount)}
+                        <div className='mt-3 flex items-center justify-between gap-3'>
+                            <span className='text-sm font-semibold'>
+                                {dict.total}: {formatPrice(order.totalAmount)}
+                            </span>
+                            {order.status === 'PENDING' && (
+                                <div className='flex gap-2'>
+                                    <PayOrderButton orderId={order.id} />
+                                    <CancelOrderButton orderId={order.id} />
+                                </div>
+                            )}
                         </div>
                     </li>
                 );

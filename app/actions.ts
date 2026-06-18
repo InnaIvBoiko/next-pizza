@@ -168,6 +168,89 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
     }
 }
 
+/**
+ * Resume payment for an order that was created but never paid (status PENDING).
+ * Stripe Checkout URLs expire, so a fresh session is created each time. Returns
+ * the hosted payment URL for the client to redirect to.
+ */
+export async function payOrder(orderId: number) {
+    try {
+        const session = await getUserSession();
+
+        if (!session) {
+            throw new Error('Not authenticated');
+        }
+
+        const order = await prisma.order.findFirst({
+            where: { id: orderId, userId: Number(session.id) },
+        });
+
+        if (!order) {
+            throw new Error('Order not found');
+        }
+
+        if (order.status !== OrderStatus.PENDING) {
+            throw new Error('Order is not awaiting payment');
+        }
+
+        // The stored totalAmount already includes delivery; charge it as a
+        // single line on the resumed session.
+        const payment = await createPayment({
+            orderId: order.id,
+            cartAmount: order.totalAmount,
+            deliveryPrice: 0,
+        });
+
+        if (!payment?.url) {
+            throw new Error('Payment data not found');
+        }
+
+        await prisma.order.update({
+            where: { id: order.id },
+            data: { paymentId: payment.id },
+        });
+
+        return payment.url;
+    } catch (err) {
+        logger.error({ err }, '[PayOrder] Server error');
+        throw err;
+    }
+}
+
+/**
+ * Cancel an unpaid order (status PENDING). Paid orders can't be self-cancelled
+ * here (that would need a refund flow). After this the order moves to history.
+ */
+export async function cancelOrder(orderId: number) {
+    try {
+        const session = await getUserSession();
+
+        if (!session) {
+            throw new Error('Not authenticated');
+        }
+
+        const order = await prisma.order.findFirst({
+            where: { id: orderId, userId: Number(session.id) },
+        });
+
+        if (!order) {
+            throw new Error('Order not found');
+        }
+
+        if (order.status !== OrderStatus.PENDING) {
+            throw new Error('Only unpaid orders can be cancelled');
+        }
+
+        await prisma.order.update({
+            where: { id: order.id },
+            data: { status: OrderStatus.CANCELLED },
+        });
+    } catch (err) {
+        logger.error({ err }, '[CancelOrder] Server error');
+        throw err;
+    }
+}
+
 export async function deleteUser() {
     try {
         const currentUser = await getUserSession();

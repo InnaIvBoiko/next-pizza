@@ -58,6 +58,9 @@ export default async function ProfileModalPage({ params }: Props) {
                     orders={pastOrders}
                     lang={lang as Locale}
                     dict={dict.orders}
+                    emptyLabel={
+                        activeOrder ? dict.orders.emptyPast : dict.orders.empty
+                    }
                 />
             }
         />

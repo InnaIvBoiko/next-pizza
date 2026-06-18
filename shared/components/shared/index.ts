@@ -34,6 +34,8 @@ export { OrderHistory } from './order-history';
 export { OrderStatusBadge } from './order-status-badge';
 export { ActiveOrderCard } from './active-order-card';
 export { ProfilePanel } from './profile-panel';
+export { PayOrderButton } from './pay-order-button';
+export { CancelOrderButton } from './cancel-order-button';
 export { Stories } from './stories';
 export { ThemeToggle } from './theme-toggle';
 export { LanguageSelect } from './language-select';
