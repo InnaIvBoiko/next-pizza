@@ -34,14 +34,20 @@ export async function createPayment({
                 },
                 quantity: 1,
             },
-            {
-                price_data: {
-                    currency: 'eur',
-                    product_data: { name: 'Delivery' },
-                    unit_amount: Math.round(deliveryPrice * 100),
-                },
-                quantity: 1,
-            },
+            // Delivery is free above the threshold — omit the line item entirely
+            // since Stripe rejects a €0 line item.
+            ...(deliveryPrice > 0
+                ? [
+                      {
+                          price_data: {
+                              currency: 'eur',
+                              product_data: { name: 'Delivery' },
+                              unit_amount: Math.round(deliveryPrice * 100),
+                          },
+                          quantity: 1,
+                      },
+                  ]
+                : []),
         ],
         metadata: { orderId: String(orderId) },
         success_url: `${baseUrl}/checkout/success?orderId=${orderId}`,

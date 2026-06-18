@@ -6,7 +6,7 @@ import { Button, Skeleton } from '../ui';
 import { cn } from '@/shared/lib/utils';
 import { formatPrice } from '@/shared/lib';
 import { format } from '@/shared/lib/i18n/format';
-import { DELIVERY_PRICE, VAT } from '@/shared/constants';
+import { getDeliveryPrice, VAT } from '@/shared/constants';
 import { useDictionary } from './i18n/dictionary-provider';
 
 interface Props {
@@ -21,7 +21,8 @@ export const CheckoutSidebar: React.FC<Props> = ({
     className,
 }) => {
     const dict = useDictionary();
-    const totalPrice = totalAmount + DELIVERY_PRICE;
+    const deliveryPrice = getDeliveryPrice(totalAmount);
+    const totalPrice = totalAmount + deliveryPrice;
     // VAT extracted (scorporata) from the VAT-inclusive total, shown for info only.
     const vatPrice = (totalPrice * VAT) / (100 + VAT);
 
@@ -63,8 +64,12 @@ export const CheckoutSidebar: React.FC<Props> = ({
                 value={
                     loading ? (
                         <Skeleton className='h-6 w-16 rounded-[6px]' />
+                    ) : deliveryPrice === 0 ? (
+                        <span className='font-semibold text-success'>
+                            {dict.checkout.deliveryFree}
+                        </span>
                     ) : (
-                        formatPrice(DELIVERY_PRICE)
+                        formatPrice(deliveryPrice)
                     )
                 }
             />

@@ -5,7 +5,7 @@ import {
     PayOrderTemplate,
     VerificationUserTemplate,
 } from '@/shared/components/shared/email-temapltes';
-import { CheckoutFormValues, DELIVERY_PRICE } from '@/shared/constants';
+import { CheckoutFormValues, getDeliveryPrice } from '@/shared/constants';
 import { createPayment } from '@/shared/lib/create-payment';
 import { sendEmail } from '@/shared/lib/send-email';
 import { getUserSession } from '@/shared/lib/get-user-session';
@@ -64,7 +64,7 @@ export async function createOrder(data: CheckoutFormValues) {
                 address: data.address,
                 comment: data.comment,
                 // Charged total = cart + delivery (matches the checkout sidebar).
-                totalAmount: userCart.totalAmount + DELIVERY_PRICE,
+                totalAmount: userCart.totalAmount + getDeliveryPrice(userCart.totalAmount),
                 status: OrderStatus.PENDING,
                 items: JSON.stringify(userCart.items),
             },
@@ -89,7 +89,7 @@ export async function createOrder(data: CheckoutFormValues) {
         const paymentData = await createPayment({
             orderId: order.id,
             cartAmount: userCart.totalAmount,
-            deliveryPrice: DELIVERY_PRICE,
+            deliveryPrice: getDeliveryPrice(userCart.totalAmount),
         });
 
         if (!paymentData || !paymentData.url) {

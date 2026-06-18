@@ -138,6 +138,7 @@
         "total": "Totale:",
         "productsTotal": "Totale prodotti:",
         "delivery": "Consegna:",
+        "deliveryFree": "Gratuita",
         "vat": "di cui IVA ({vat}%):",
         "submit": "Vai al pagamento",
         "orderSuccess": "Ordine creato con successo! 📝 Reindirizzamento al pagamento... ",
