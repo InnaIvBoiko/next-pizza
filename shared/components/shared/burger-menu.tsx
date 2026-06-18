@@ -12,6 +12,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '../ui/sheet';
+import { useSession } from 'next-auth/react';
 import { ThemeToggle } from './theme-toggle';
 import { LanguageSelect } from './language-select';
 import { ProfileButton } from './profile-button';
@@ -30,12 +31,16 @@ interface Props {
 export const BurgerMenu: React.FC<Props> = ({ onClickSignIn, className }) => {
     const dict = useDictionary();
     const localize = useLocalizeHref();
+    const { data: session } = useSession();
 
     const links = [
         { href: localize('/'), label: dict.nav.home },
         { href: localize('/menu'), label: dict.nav.menu },
         { href: localize('/#chi-siamo'), label: dict.nav.aboutUs },
         { href: localize('/#come-funziona'), label: dict.nav.howItWorks },
+        ...(session?.user?.role === 'ADMIN'
+            ? [{ href: localize('/dashboard'), label: dict.admin.title }]
+            : []),
     ];
 
     return (

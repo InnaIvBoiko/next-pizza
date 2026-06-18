@@ -251,6 +251,65 @@ export async function cancelOrder(orderId: number) {
     }
 }
 
+/**
+ * Kitchen/admin: advance an order through the preparation pipeline. Restricted
+ * to the kitchen-relevant transitions so staff can't set arbitrary statuses.
+ */
+export async function advanceKitchenOrder(
+    orderId: number,
+    status: OrderStatus
+) {
+    try {
+        const session = await getUserSession();
+
+        if (
+            !session ||
+            (session.role !== 'ADMIN' && session.role !== 'KITCHEN')
+        ) {
+            throw new Error('Forbidden');
+        }
+
+        const allowed: OrderStatus[] = ['PREPARING', 'READY', 'OUT_FOR_DELIVERY'];
+        if (!allowed.includes(status)) {
+            throw new Error('Invalid kitchen transition');
+        }
+
+        await prisma.order.update({
+            where: { id: orderId },
+            data: { status },
+        });
+    } catch (err) {
+        logger.error({ err }, '[AdvanceKitchenOrder] Server error');
+        throw err;
+    }
+}
+
+/**
+ * Admin-only: set any order to any status (advances the lifecycle from the
+ * dashboard). Guarded by the user's ADMIN role.
+ */
+export async function updateOrderStatus(orderId: number, status: OrderStatus) {
+    try {
+        const session = await getUserSession();
+
+        if (!session || session.role !== 'ADMIN') {
+            throw new Error('Forbidden');
+        }
+
+        if (!Object.values(OrderStatus).includes(status)) {
+            throw new Error('Invalid status');
+        }
+
+        await prisma.order.update({
+            where: { id: orderId },
+            data: { status },
+        });
+    } catch (err) {
+        logger.error({ err }, '[UpdateOrderStatus] Server error');
+        throw err;
+    }
+}
+
 export async function deleteUser() {
     try {
         const currentUser = await getUserSession();

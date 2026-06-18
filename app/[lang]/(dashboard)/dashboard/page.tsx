@@ -1,7 +1,15 @@
+import { redirect } from 'next/navigation';
+
 import { getAdminSession } from '@/shared/lib/get-admin-session';
+import { localizeHref } from '@/shared/lib/i18n/localize-href';
+import type { Locale } from '@/shared/constants/i18n';
 
-export default async function Dashboard() {
+interface Props {
+    params: Promise<{ lang: string }>;
+}
+
+export default async function Dashboard({ params }: Props) {
     await getAdminSession();
-
-    return <div>Dashboard</div>;
+    const { lang } = await params;
+    redirect(localizeHref(lang as Locale, '/dashboard/orders'));
 }

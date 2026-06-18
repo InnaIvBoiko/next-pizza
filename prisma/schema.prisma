@@ -186,4 +186,5 @@ enum OrderStatus {
 enum UserRole {
     USER
     ADMIN
+    KITCHEN
 }

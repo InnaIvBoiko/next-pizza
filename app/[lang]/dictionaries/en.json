@@ -267,5 +267,31 @@
             "DELIVERED": "Delivered",
             "CANCELLED": "Cancelled"
         }
+    },
+    "admin": {
+        "title": "Dashboard",
+        "ordersNav": "Orders",
+        "productsNav": "Products",
+        "backToSite": "Back to site",
+        "ordersTitle": "Orders",
+        "filterAll": "All",
+        "empty": "No orders.",
+        "updateError": "Could not update the status",
+        "searchPlaceholder": "Search by name, surname or order #",
+        "sortLabel": "Sort",
+        "periodLabel": "Period",
+        "statusLabel": "Status",
+        "sort": {
+            "newest": "Newest",
+            "priceAsc": "Price: low to high",
+            "priceDesc": "Price: high to low"
+        },
+        "period": {
+            "today": "Today",
+            "3d": "Last 3 days",
+            "week": "Last week",
+            "month": "Last month",
+            "all": "All"
+        }
     }
 }

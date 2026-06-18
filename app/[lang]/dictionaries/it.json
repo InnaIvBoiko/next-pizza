@@ -267,5 +267,31 @@
             "DELIVERED": "Consegnato",
             "CANCELLED": "Annullato"
         }
+    },
+    "admin": {
+        "title": "Dashboard",
+        "ordersNav": "Ordini",
+        "productsNav": "Prodotti",
+        "backToSite": "Torna al sito",
+        "ordersTitle": "Ordini",
+        "filterAll": "Tutti",
+        "empty": "Nessun ordine.",
+        "updateError": "Impossibile aggiornare lo stato",
+        "searchPlaceholder": "Cerca per nome, cognome o n° ordine",
+        "sortLabel": "Ordina",
+        "periodLabel": "Periodo",
+        "statusLabel": "Stato",
+        "sort": {
+            "newest": "Più recenti",
+            "priceAsc": "Prezzo crescente",
+            "priceDesc": "Prezzo decrescente"
+        },
+        "period": {
+            "today": "Oggi",
+            "3d": "Ultimi 3 giorni",
+            "week": "Ultima settimana",
+            "month": "Ultimo mese",
+            "all": "Tutto"
+        }
     }
 }

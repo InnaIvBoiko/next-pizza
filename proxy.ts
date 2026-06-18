@@ -55,7 +55,9 @@ export async function proxy(request: NextRequest) {
     // Path relative to the locale, e.g. `/it/dashboard/x` -> `/dashboard/x`.
     const rest = pathname.slice(`/${pathLocale}`.length) || '/';
     const isProtected =
-        rest.startsWith('/dashboard') || rest.startsWith('/profile');
+        rest.startsWith('/dashboard') ||
+        rest.startsWith('/profile') ||
+        rest.startsWith('/kitchen');
 
     if (!isProtected) {
         return NextResponse.next();
@@ -76,6 +78,15 @@ export async function proxy(request: NextRequest) {
 
     // The dashboard is admin-only (RBAC).
     if (rest.startsWith('/dashboard') && token.role !== UserRole.ADMIN) {
+        return NextResponse.redirect(new URL(`/${pathLocale}`, request.url));
+    }
+
+    // The kitchen is for kitchen staff and admins.
+    if (
+        rest.startsWith('/kitchen') &&
+        token.role !== UserRole.ADMIN &&
+        token.role !== UserRole.KITCHEN
+    ) {
         return NextResponse.redirect(new URL(`/${pathLocale}`, request.url));
     }
 

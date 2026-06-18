@@ -36,6 +36,7 @@ export { ActiveOrderCard } from './active-order-card';
 export { ProfilePanel } from './profile-panel';
 export { PayOrderButton } from './pay-order-button';
 export { CancelOrderButton } from './cancel-order-button';
+export { AdminOrderStatusSelect } from './admin-order-status-select';
 export { Stories } from './stories';
 export { ThemeToggle } from './theme-toggle';
 export { LanguageSelect } from './language-select';

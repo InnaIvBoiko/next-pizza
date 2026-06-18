@@ -16,7 +16,15 @@ export const Providers: React.FC<React.PropsWithChildren> = ({ children }) => {
         >
             <SessionProvider>{children}</SessionProvider>
             <Toaster richColors position='top-center' />
-            <NextTopLoader color='var(--primary)' showSpinner={false} />
+            {/* Global navigation feedback: a prominent top bar + corner spinner
+                on every route change / router.push (links, filters, etc.). */}
+            <NextTopLoader
+                color='var(--primary)'
+                height={4}
+                showSpinner
+                shadow='0 0 10px var(--primary), 0 0 5px var(--primary)'
+                zIndex={9999}
+            />
         </ThemeProvider>
     );
 };

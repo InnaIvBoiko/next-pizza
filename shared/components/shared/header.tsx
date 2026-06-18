@@ -4,13 +4,14 @@ import { cn } from '@/shared/lib/utils';
 import React from 'react';
 import { Container } from './container';
 import Link from 'next/link';
-import { ArrowRight, Pizza } from 'lucide-react';
+import { ArrowRight, LayoutDashboard, Pizza } from 'lucide-react';
 import { Button } from '../ui';
 import { Logo } from './logo';
 import { BurgerMenu } from './burger-menu';
 import { SearchInput } from './search-input';
 import { CartButton } from './cart-button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { ProfileButton } from './profile-button';
 import { ThemeToggle } from './theme-toggle';
@@ -35,6 +36,7 @@ export const Header: React.FC<Props> = ({
 }) => {
     const router = useRouter();
     const pathname = usePathname();
+    const { data: session } = useSession();
     const lang = useLocale();
     const dict = useDictionary();
     const localize = useLocalizeHref();
@@ -136,6 +138,19 @@ export const Header: React.FC<Props> = ({
                         />
 
                         {/* Desktop actions */}
+                        {session?.user?.role === 'ADMIN' && (
+                            <Button
+                                asChild
+                                variant='outline'
+                                size='sm'
+                                className='hidden rounded-full md:inline-flex'
+                            >
+                                <Link href={localize('/dashboard')}>
+                                    <LayoutDashboard className='mr-1.5 size-4' />
+                                    {dict.admin.title}
+                                </Link>
+                            </Button>
+                        )}
                         <LanguageSelect className='hidden md:inline-flex' />
                         <ThemeToggle className='hidden md:inline-flex' />
                         <ProfileButton
