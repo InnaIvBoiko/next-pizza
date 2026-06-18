@@ -14,7 +14,8 @@ import { getPizzaDetails, formatPrice } from '@/shared/lib';
 import { buildPizzaTypeVariants } from '@/shared/lib/pizza-labels';
 import { format } from '@/shared/lib/i18n/format';
 import { usePizzaOptions } from '@/shared/hooks';
-import { useDictionary } from './i18n/dictionary-provider';
+import { useDictionary, useLocale } from './i18n/dictionary-provider';
+import { localizeName } from '@/shared/lib/i18n/localize-name';
 
 interface Props {
     imageUrl: string;
@@ -39,6 +40,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
     className,
 }) => {
     const dict = useDictionary();
+    const locale = useLocale();
     const {
         size,
         type,
@@ -93,7 +95,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
                         {ingredients.map(ingredient => (
                             <IngredientItem
                                 key={ingredient.id}
-                                name={ingredient.name}
+                                name={localizeName(ingredient, locale)}
                                 price={ingredient.price}
                                 imageUrl={ingredient.imageUrl}
                                 onClick={() => addIngredient(ingredient.id)}

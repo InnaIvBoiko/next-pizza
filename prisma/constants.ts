@@ -1,11 +1,33 @@
 export const categories = [
-    { name: 'Pizzas' },
-    { name: 'Combos' },
-    { name: 'Appetizers' },
-    { name: 'Cocktails' },
-    { name: 'Coffee' },
-    { name: 'Beverages' },
+    { name: 'Pizzas', nameIt: 'Pizze' },
+    { name: 'Combos', nameIt: 'Combo' },
+    { name: 'Appetizers', nameIt: 'Antipasti' },
+    { name: 'Cocktails', nameIt: 'Cocktail' },
+    { name: 'Coffee', nameIt: 'Caffè' },
+    { name: 'Beverages', nameIt: 'Bevande' },
 ];
+
+// Italian translations keyed by the English source name; merged into each
+// ingredient below so a fresh seed is bilingual too.
+const _ingredientNamesIt: Record<string, string> = {
+    'Cheese crust': 'Bordo al formaggio',
+    'Creamy mozzarella': 'Mozzarella cremosa',
+    'Cheddar and parmesan cheeses': 'Cheddar e parmigiano',
+    'Spicy jalapeño peppers': 'Jalapeño piccanti',
+    'Tender chicken': 'Pollo tenero',
+    Mushrooms: 'Funghi',
+    Ham: 'Prosciutto cotto',
+    'Spicy pepperoni': 'Salamino piccante',
+    'Spicy chorizo': 'Chorizo piccante',
+    'Pickled cucumbers': 'Cetriolini',
+    'Fresh tomatoes': 'Pomodori freschi',
+    'Red onion': 'Cipolla rossa',
+    'Juicy pineapples': 'Ananas succoso',
+    'Italian herbs': 'Erbe italiane',
+    'Sweet pepper': 'Peperone dolce',
+    'Feta cheese cubes': 'Cubetti di feta',
+    Meatballs: 'Polpette',
+};
 
 export const _ingredients = [
     {
@@ -110,7 +132,11 @@ export const _ingredients = [
         imageUrl:
             'https://cdn.dodostatic.net/static/Img/Ingredients/b2f3a5d5afe44516a93cfc0d2ee60088.png',
     },
-].map((obj, index) => ({ id: index + 1, ...obj }));
+].map((obj, index) => ({
+    id: index + 1,
+    ...obj,
+    nameIt: _ingredientNamesIt[obj.name],
+}));
 
 // Real product photos from Wikimedia Commons (allowed in next.config).
 const W = 'https://upload.wikimedia.org/wikipedia/commons';

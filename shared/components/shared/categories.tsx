@@ -7,7 +7,10 @@ import { useCategoryStore } from '@/shared/store/category';
 
 interface Category {
     id: number;
+    /** Locale-independent anchor key (matches the section id). */
     name: string;
+    /** Localized label shown to the user. */
+    label: string;
 }
 
 export interface CategoriesProps {
@@ -39,7 +42,7 @@ export const Categories = ({ items, className }: CategoriesProps) => {
                             'bg-background text-primary shadow-sm'
                     )}
                 >
-                    {cat.name}
+                    {cat.label}
                 </Link>
             ))}
         </div>

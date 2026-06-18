@@ -5,7 +5,11 @@ import { Input, RangeSlider } from '../ui';
 // import { FilterCheckbox } from './filter-checkbox';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
 import { useFilters, useIngredients, useQueryFilters } from '@/shared/hooks';
-import { useDictionary } from '@/shared/components/shared/i18n/dictionary-provider';
+import {
+    useDictionary,
+    useLocale,
+} from '@/shared/components/shared/i18n/dictionary-provider';
+import { localizeName } from '@/shared/lib/i18n/localize-name';
 
 export interface FiltersProps {
     className?: string;
@@ -20,6 +24,7 @@ const noSpinner =
 
 export const Filters = ({ className }: FiltersProps) => {
     const dict = useDictionary();
+    const locale = useLocale();
     const { ingredients, loading } = useIngredients();
     const filters = useFilters();
     const {
@@ -38,7 +43,7 @@ export const Filters = ({ className }: FiltersProps) => {
     useQueryFilters(filters);
 
     const items = ingredients.map(ingredient => ({
-        text: ingredient.name,
+        text: localizeName(ingredient, locale),
         value: String(ingredient.id),
     }));
 

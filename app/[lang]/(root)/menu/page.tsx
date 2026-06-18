@@ -3,6 +3,7 @@ import { ProductsGroupList } from '@/shared/components/shared/products-group-lis
 import { prisma } from '@/prisma/prisma-client';
 import { getDictionary } from '../../dictionaries';
 import type { Locale } from '@/shared/constants/i18n';
+import { localizeName } from '@/shared/lib/i18n/localize-name';
 import { parseSort } from '@/shared/constants/sort';
 import type { Metadata } from 'next';
 
@@ -126,9 +127,10 @@ export default async function Menu({ params, searchParams }: MenuProps) {
             </section>
 
             <TopBar
-                categories={visibleCategories.map(({ id, name }) => ({
-                    id,
-                    name,
+                categories={visibleCategories.map(category => ({
+                    id: category.id,
+                    name: category.name,
+                    label: localizeName(category, lang as Locale),
                 }))}
             />
 
@@ -149,7 +151,8 @@ export default async function Menu({ params, searchParams }: MenuProps) {
                             {visibleCategories.map(category => (
                                 <ProductsGroupList
                                     key={category.id}
-                                    title={category.name}
+                                    title={localizeName(category, lang as Locale)}
+                                    anchorId={category.name}
                                     categoryId={category.id}
                                     items={category.products}
                                     priority={category.id === 1}

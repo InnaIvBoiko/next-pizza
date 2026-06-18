@@ -1,4 +1,3 @@
-import { _ingredients } from '@/prisma/constants';
 import { CartDTO } from '../services/dto/cart.dto';
 import { calcCartItemTotalPrice } from './calc-cart-item-total-price';
 
@@ -30,7 +29,7 @@ export const getCartDetails = (data: CartDTO): ReturnProps => {
         pizzaType: item.productItem.pizzaType,
         disabled: false,
         ingredients: item.ingredients.map(
-            (ingredient: (typeof _ingredients)[number]) => ({
+            (ingredient: { name: string; price: number }) => ({
                 name: ingredient.name,
                 price: ingredient.price,
             })

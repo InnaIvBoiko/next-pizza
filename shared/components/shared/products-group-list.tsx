@@ -9,6 +9,8 @@ import { useCategoryStore } from '@/shared/store/category';
 
 export interface ProductsGroupListProps {
     title: string;
+    /** Locale-independent anchor id for the section (matches the TopBar tab). */
+    anchorId: string;
     items: Array<{
         id: number;
         name: string;
@@ -26,6 +28,7 @@ export interface ProductsGroupListProps {
 
 export const ProductsGroupList = ({
     title,
+    anchorId,
     items,
     className,
     listClassName,
@@ -58,7 +61,7 @@ export const ProductsGroupList = ({
                 'scroll-mt-[calc(var(--header-height)+5rem)]',
                 className
             )}
-            id={title}
+            id={anchorId}
             ref={intersectionRef}
         >
             <div className='mb-6 flex items-center gap-3'>

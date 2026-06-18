@@ -6,7 +6,10 @@ import { Container } from './container';
 
 interface Category {
     id: number;
+    /** Locale-independent anchor key (matches the section id). */
     name: string;
+    /** Localized label shown to the user. */
+    label: string;
 }
 
 export interface TopBarProps {
