@@ -21,10 +21,37 @@ model User {
 
     cart             Cart?
     orders           Order[]
+    addresses        Address[]
     verificationCode VerificationCode?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+// A saved delivery address. The structured parts (street/houseNumber/city/
+// postalCode) are entered separately in the UI; `formatted` is the single-line
+// composition used to prefill checkout and stored on Order.address.
+model Address {
+    id Int @id @default(autoincrement())
+
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId Int
+
+    street      String // via
+    houseNumber String // civico
+    city        String // città
+    postalCode  String // CAP
+
+    formatted String
+
+    // Exactly one address per user should be the default; the actions keep this
+    // invariant (setting one default unsets the others).
+    isDefault Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([userId])
 }
 
 model Category {

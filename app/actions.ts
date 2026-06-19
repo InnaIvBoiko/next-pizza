@@ -5,7 +5,11 @@ import {
     PayOrderTemplate,
     VerificationUserTemplate,
 } from '@/shared/components/shared/email-temapltes';
-import { CheckoutFormValues, getDeliveryPrice } from '@/shared/constants';
+import {
+    CheckoutFormValues,
+    getDeliveryPrice,
+    formatAddress,
+} from '@/shared/constants';
 import { createPayment } from '@/shared/lib/create-payment';
 import { sendEmail } from '@/shared/lib/send-email';
 import { getUserSession } from '@/shared/lib/get-user-session';
@@ -784,6 +788,182 @@ export async function deleteUser() {
         });
     } catch (err) {
         logger.error({ err }, 'Error [DELETE_USER]');
+        throw err;
+    }
+}
+
+/* ----------------------------- Delivery addresses ----------------------------- */
+
+/** Throws unless a user is signed in; returns their numeric id. */
+async function requireUserId() {
+    const session = await getUserSession();
+    if (!session) {
+        throw new Error('Not authenticated');
+    }
+    return Number(session.id);
+}
+
+interface AddressInput {
+    street: string;
+    houseNumber: string;
+    city: string;
+    postalCode: string;
+    isDefault?: boolean;
+}
+
+/** The current user's saved addresses, default first then newest. */
+export async function getMyAddresses() {
+    try {
+        const userId = await requireUserId();
+        return await prisma.address.findMany({
+            where: { userId },
+            orderBy: [{ isDefault: 'desc' }, { createdAt: 'desc' }],
+        });
+    } catch (err) {
+        logger.error({ err }, '[GetMyAddresses] Server error');
+        throw err;
+    }
+}
+
+/**
+ * Create a saved address for the current user. The first address (or one the
+ * user marks default) becomes the default, unsetting any previous default.
+ */
+export async function createAddress(input: AddressInput) {
+    try {
+        const userId = await requireUserId();
+        const formatted = formatAddress(input);
+
+        const count = await prisma.address.count({ where: { userId } });
+        const makeDefault = Boolean(input.isDefault) || count === 0;
+
+        await prisma.$transaction(async tx => {
+            if (makeDefault) {
+                await tx.address.updateMany({
+                    where: { userId },
+                    data: { isDefault: false },
+                });
+            }
+            await tx.address.create({
+                data: {
+                    userId,
+                    street: input.street.trim(),
+                    houseNumber: input.houseNumber.trim(),
+                    city: input.city.trim(),
+                    postalCode: input.postalCode.trim(),
+                    formatted,
+                    isDefault: makeDefault,
+                },
+            });
+        });
+    } catch (err) {
+        logger.error({ err }, '[CreateAddress] Server error');
+        throw err;
+    }
+}
+
+/** Edit one of the current user's addresses (ownership enforced). */
+export async function updateAddress(input: AddressInput & { id: number }) {
+    try {
+        const userId = await requireUserId();
+        const formatted = formatAddress(input);
+
+        const existing = await prisma.address.findFirst({
+            where: { id: input.id, userId },
+        });
+        if (!existing) {
+            throw new Error('Address not found');
+        }
+
+        const makeDefault = Boolean(input.isDefault);
+
+        await prisma.$transaction(async tx => {
+            if (makeDefault) {
+                await tx.address.updateMany({
+                    where: { userId },
+                    data: { isDefault: false },
+                });
+            }
+            await tx.address.update({
+                where: { id: input.id },
+                data: {
+                    street: input.street.trim(),
+                    houseNumber: input.houseNumber.trim(),
+                    city: input.city.trim(),
+                    postalCode: input.postalCode.trim(),
+                    formatted,
+                    // Never clear the default flag on an address that is already
+                    // the default — there must always be one if any exist.
+                    isDefault: makeDefault || existing.isDefault,
+                },
+            });
+        });
+    } catch (err) {
+        logger.error({ err }, '[UpdateAddress] Server error');
+        throw err;
+    }
+}
+
+/** Make one of the current user's addresses the default, unsetting the others. */
+export async function setDefaultAddress(id: number) {
+    try {
+        const userId = await requireUserId();
+
+        const existing = await prisma.address.findFirst({
+            where: { id, userId },
+        });
+        if (!existing) {
+            throw new Error('Address not found');
+        }
+
+        await prisma.$transaction([
+            prisma.address.updateMany({
+                where: { userId },
+                data: { isDefault: false },
+            }),
+            prisma.address.update({
+                where: { id },
+                data: { isDefault: true },
+            }),
+        ]);
+    } catch (err) {
+        logger.error({ err }, '[SetDefaultAddress] Server error');
+        throw err;
+    }
+}
+
+/**
+ * Delete one of the current user's addresses (ownership enforced). If the
+ * deleted address was the default, promote the newest remaining one so the
+ * user always has a default to fall back on.
+ */
+export async function deleteAddress(id: number) {
+    try {
+        const userId = await requireUserId();
+
+        const existing = await prisma.address.findFirst({
+            where: { id, userId },
+        });
+        if (!existing) {
+            throw new Error('Address not found');
+        }
+
+        await prisma.address.delete({ where: { id } });
+
+        if (existing.isDefault) {
+            const next = await prisma.address.findFirst({
+                where: { userId },
+                orderBy: { createdAt: 'desc' },
+            });
+            if (next) {
+                await prisma.address.update({
+                    where: { id: next.id },
+                    data: { isDefault: true },
+                });
+            }
+        }
+    } catch (err) {
+        logger.error({ err }, '[DeleteAddress] Server error');
         throw err;
     }
 }

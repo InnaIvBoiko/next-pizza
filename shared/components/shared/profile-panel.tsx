@@ -3,30 +3,25 @@
 import React from 'react';
 import { cn } from '@/shared/lib/utils';
 
+interface Tab {
+    key: string;
+    label: string;
+    content: React.ReactNode;
+}
+
 interface Props {
-    accountLabel: string;
-    ordersLabel: string;
-    /** Account form (server/client node). */
-    account: React.ReactNode;
-    /** Order history list. */
-    orders: React.ReactNode;
+    tabs: Tab[];
     /** Highlighted active-order card, shown above the tabs when present. */
     activeOrder?: React.ReactNode;
 }
 
 /**
- * Splits the profile into two tabs (details / orders) so the panel stays light
- * instead of one long scroll. An active order, when present, is surfaced above
- * the tabs so its status is always visible.
+ * Splits the profile into tabs (details / addresses / orders) so the panel
+ * stays light instead of one long scroll. An active order, when present, is
+ * surfaced above the tabs so its status is always visible.
  */
-export const ProfilePanel: React.FC<Props> = ({
-    accountLabel,
-    ordersLabel,
-    account,
-    orders,
-    activeOrder,
-}) => {
-    const [tab, setTab] = React.useState<'account' | 'orders'>('account');
+export const ProfilePanel: React.FC<Props> = ({ tabs, activeOrder }) => {
+    const [activeKey, setActiveKey] = React.useState(tabs[0]?.key);
 
     const tabClass = (active: boolean) =>
         cn(
@@ -36,28 +31,26 @@ export const ProfilePanel: React.FC<Props> = ({
                 : 'text-muted-foreground hover:text-foreground'
         );
 
+    const active = tabs.find(tab => tab.key === activeKey) ?? tabs[0];
+
     return (
         <div>
             {activeOrder && <div className='mb-6'>{activeOrder}</div>}
 
             <div className='inline-flex w-full gap-1 rounded-full bg-muted p-1'>
-                <button
-                    type='button'
-                    className={tabClass(tab === 'account')}
-                    onClick={() => setTab('account')}
-                >
-                    {accountLabel}
-                </button>
-                <button
-                    type='button'
-                    className={tabClass(tab === 'orders')}
-                    onClick={() => setTab('orders')}
-                >
-                    {ordersLabel}
-                </button>
+                {tabs.map(tab => (
+                    <button
+                        key={tab.key}
+                        type='button'
+                        className={tabClass(tab.key === active?.key)}
+                        onClick={() => setActiveKey(tab.key)}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
             </div>
 
-            <div className='mt-6'>{tab === 'account' ? account : orders}</div>
+            <div className='mt-6'>{active?.content}</div>
         </div>
     );
 };

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/prisma/prisma-client';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { ProfileModal } from '@/shared/components/shared/modals';
+import { AddressList } from '@/shared/components/shared/addresses';
 import { OrderHistory } from '@/shared/components/shared/order-history';
 import { ActiveOrderCard } from '@/shared/components/shared/active-order-card';
 import { splitActiveOrder } from '@/shared/lib/order-status';
@@ -24,11 +25,15 @@ export default async function ProfileModalPage({ params }: Props) {
 
     const userId = Number(session.id);
 
-    const [user, orders] = await Promise.all([
+    const [user, orders, addresses] = await Promise.all([
         prisma.user.findFirst({ where: { id: userId } }),
         prisma.order.findMany({
             where: { userId },
             orderBy: { createdAt: 'desc' },
+        }),
+        prisma.address.findMany({
+            where: { userId },
+            orderBy: [{ isDefault: 'desc' }, { createdAt: 'desc' }],
         }),
     ]);
 
@@ -43,7 +48,9 @@ export default async function ProfileModalPage({ params }: Props) {
             user={user}
             title={dict.profile.pageTitle}
             accountLabel={dict.profile.tab}
+            addressesLabel={dict.addresses.tab}
             ordersLabel={dict.orders.tab}
+            addresses={<AddressList addresses={addresses} />}
             activeOrder={
                 activeOrder ? (
                     <ActiveOrderCard

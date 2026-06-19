@@ -48,6 +48,7 @@ export {
 } from './i18n/dictionary-provider';
 export * from './home';
 export * from './email-temapltes';
+export * from './addresses';
 export * from './checkout';
 export * from './form';
 export * from './modals';

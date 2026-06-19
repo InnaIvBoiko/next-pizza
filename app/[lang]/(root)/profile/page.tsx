@@ -5,6 +5,7 @@ import { prisma } from '@/prisma/prisma-client';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { ProfileForm } from '@/shared/components/shared/profile-form';
 import { ProfilePanel } from '@/shared/components/shared/profile-panel';
+import { AddressList } from '@/shared/components/shared/addresses';
 import { OrderHistory } from '@/shared/components/shared/order-history';
 import { ActiveOrderCard } from '@/shared/components/shared/active-order-card';
 import { splitActiveOrder } from '@/shared/lib/order-status';
@@ -32,11 +33,15 @@ export default async function ProfilePage({ params }: Props) {
 
     const userId = Number(session.id);
 
-    const [user, orders] = await Promise.all([
+    const [user, orders, addresses] = await Promise.all([
         prisma.user.findFirst({ where: { id: userId } }),
         prisma.order.findMany({
             where: { userId },
             orderBy: { createdAt: 'desc' },
+        }),
+        prisma.address.findMany({
+            where: { userId },
+            orderBy: [{ isDefault: 'desc' }, { createdAt: 'desc' }],
         }),
     ]);
 
@@ -61,25 +66,44 @@ export default async function ProfilePage({ params }: Props) {
 
                     <div className='mt-6'>
                         <ProfilePanel
-                            accountLabel={dict.profile.tab}
-                            ordersLabel={dict.orders.tab}
-                            account={
-                                <div className='glass rounded-3xl p-6 sm:p-8'>
-                                    <ProfileForm data={user} />
-                                </div>
-                            }
-                            orders={
-                                <OrderHistory
-                                    orders={pastOrders}
-                                    lang={lang as Locale}
-                                    dict={dict.orders}
-                                    emptyLabel={
-                                        activeOrder
-                                            ? dict.orders.emptyPast
-                                            : dict.orders.empty
-                                    }
-                                />
-                            }
+                            tabs={[
+                                {
+                                    key: 'account',
+                                    label: dict.profile.tab,
+                                    content: (
+                                        <div className='glass rounded-3xl p-6 sm:p-8'>
+                                            <ProfileForm data={user} />
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    key: 'addresses',
+                                    label: dict.addresses.tab,
+                                    content: (
+                                        <div className='glass rounded-3xl p-6 sm:p-8'>
+                                            <AddressList
+                                                addresses={addresses}
+                                            />
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    key: 'orders',
+                                    label: dict.orders.tab,
+                                    content: (
+                                        <OrderHistory
+                                            orders={pastOrders}
+                                            lang={lang as Locale}
+                                            dict={dict.orders}
+                                            emptyLabel={
+                                                activeOrder
+                                                    ? dict.orders.emptyPast
+                                                    : dict.orders.empty
+                                            }
+                                        />
+                                    ),
+                                },
+                            ]}
                             activeOrder={
                                 activeOrder ? (
                                     <ActiveOrderCard

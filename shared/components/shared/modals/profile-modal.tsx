@@ -18,9 +18,12 @@ interface Props {
     user: User;
     title: string;
     accountLabel: string;
+    addressesLabel: string;
     ordersLabel: string;
     /** Highlighted active-order card (server node), if any. */
     activeOrder?: React.ReactNode;
+    /** Saved-addresses list (client node). */
+    addresses: React.ReactNode;
     /** Order history list (server node). */
     orders: React.ReactNode;
 }
@@ -29,8 +32,10 @@ export const ProfileModal: React.FC<Props> = ({
     user,
     title,
     accountLabel,
+    addressesLabel,
     ordersLabel,
     activeOrder,
+    addresses,
     orders,
 }) => {
     const router = useRouter();
@@ -43,10 +48,23 @@ export const ProfileModal: React.FC<Props> = ({
                 <Title text={title} size='md' className='font-bold' />
                 <div className='mt-6'>
                     <ProfilePanel
-                        accountLabel={accountLabel}
-                        ordersLabel={ordersLabel}
-                        account={<ProfileForm data={user} />}
-                        orders={orders}
+                        tabs={[
+                            {
+                                key: 'account',
+                                label: accountLabel,
+                                content: <ProfileForm data={user} />,
+                            },
+                            {
+                                key: 'addresses',
+                                label: addressesLabel,
+                                content: addresses,
+                            },
+                            {
+                                key: 'orders',
+                                label: ordersLabel,
+                                content: orders,
+                            },
+                        ]}
                         activeOrder={activeOrder}
                     />
                 </div>
