@@ -15,7 +15,7 @@ export const Providers: React.FC<React.PropsWithChildren> = ({ children }) => {
             disableTransitionOnChange
         >
             <SessionProvider>{children}</SessionProvider>
-            <Toaster richColors position='top-center' />
+            <Toaster position='top-center' />
             {/* Global navigation feedback: a prominent top bar + corner spinner
                 on every route change / router.push (links, filters, etc.). */}
             <NextTopLoader
