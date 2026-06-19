@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        if (!isProductAvailable(productItem.product.ingredients)) {
+        if (!isProductAvailable(productItem.product)) {
             return NextResponse.json(
                 { error: 'Product is not available' },
                 { status: 409 }

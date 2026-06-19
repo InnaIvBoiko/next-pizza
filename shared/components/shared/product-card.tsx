@@ -2,6 +2,7 @@
 
 import { cn } from '@/shared/lib/utils';
 import { formatPrice } from '@/shared/lib';
+import { PRODUCT_IMAGE_PLACEHOLDER } from '@/shared/constants/images';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Plus } from 'lucide-react';
@@ -45,7 +46,7 @@ export const ProductCard = ({
                             ? 'group-hover:scale-105'
                             : 'opacity-60 grayscale'
                     )}
-                    src={imageUrl}
+                    src={imageUrl || PRODUCT_IMAGE_PLACEHOLDER}
                     alt={name}
                     fill
                     sizes='(max-width: 640px) 90vw, (max-width: 1280px) 45vw, 300px'
@@ -61,10 +62,10 @@ export const ProductCard = ({
                     </p>
                 )}
 
-                <div className='mt-4 flex items-center justify-between gap-2'>
+                <div className='mt-auto flex items-center justify-between gap-2 pt-4'>
                     {available ? (
                         <>
-                            <span className='text-sm text-muted-foreground'>
+                            <span className='whitespace-nowrap text-sm text-muted-foreground'>
                                 {dict.product.from}{' '}
                                 <b className='text-xl text-foreground'>
                                     {formatPrice(price)}

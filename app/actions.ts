@@ -311,36 +311,296 @@ export async function updateOrderStatus(orderId: number, status: OrderStatus) {
     }
 }
 
-/**
- * Admin-only: edit a product's catalog data — name, optional description, image,
- * and which ingredients are included (base price) vs offered as paid extras.
- */
-export async function updateProduct(input: {
-    id: number;
+/** Throws unless the caller is an authenticated admin. */
+async function requireAdmin() {
+    const session = await getUserSession();
+    if (!session || session.role !== 'ADMIN') {
+        throw new Error('Forbidden');
+    }
+}
+
+// A price variant. Plain products have one (size/pizzaType null); pizzas have
+// several, one per size × dough combination. `id` is set for existing rows.
+interface ProductVariantInput {
+    id?: number;
+    price: number;
+    size: number | null;
+    pizzaType: number | null;
+}
+
+interface ProductInput {
     name: string;
+    nameIt: string;
     description: string;
+    descriptionIt: string;
     imageUrl: string;
+    categoryId: number;
     includedIds: number[];
     extraIds: number[];
-}) {
-    try {
-        const session = await getUserSession();
-        if (!session || session.role !== 'ADMIN') {
-            throw new Error('Forbidden');
-        }
+    items: ProductVariantInput[];
+}
 
-        await prisma.product.update({
-            where: { id: input.id },
+const cleanVariants = (items: ProductVariantInput[]) =>
+    items
+        .filter(item => item.price > 0)
+        .map(item => ({
+            id: item.id,
+            price: item.price,
+            size: item.size,
+            pizzaType: item.pizzaType,
+        }));
+
+/**
+ * Admin-only: edit a product's catalog data — names (EN/IT), optional
+ * descriptions (EN/IT), image, category, included/extra ingredients, and its
+ * price variants (size/dough/price). Removed variants and their cart references
+ * are cleared so foreign keys don't block.
+ */
+export async function updateProduct(input: ProductInput & { id: number }) {
+    try {
+        await requireAdmin();
+
+        const variants = cleanVariants(input.items);
+        if (variants.length === 0) throw new Error('At least one variant');
+
+        const existing = await prisma.productItem.findMany({
+            where: { productId: input.id },
+            select: { id: true },
+        });
+        const keptIds = variants
+            .map(v => v.id)
+            .filter((id): id is number => typeof id === 'number');
+        const removedIds = existing
+            .map(e => e.id)
+            .filter(id => !keptIds.includes(id));
+
+        await prisma.$transaction([
+            prisma.product.update({
+                where: { id: input.id },
+                data: {
+                    name: input.name.trim(),
+                    nameIt: input.nameIt.trim() || null,
+                    description: input.description.trim() || null,
+                    descriptionIt: input.descriptionIt.trim() || null,
+                    imageUrl: input.imageUrl.trim(),
+                    categoryId: input.categoryId,
+                    ingredients: { set: input.includedIds.map(id => ({ id })) },
+                    extraIngredients: {
+                        set: input.extraIds.map(id => ({ id })),
+                    },
+                },
+            }),
+            // Drop variants the admin removed (and any carts referencing them).
+            prisma.cartItem.deleteMany({
+                where: { productItemId: { in: removedIds } },
+            }),
+            prisma.productItem.deleteMany({
+                where: { id: { in: removedIds } },
+            }),
+            // Update kept variants in place.
+            ...variants
+                .filter(v => typeof v.id === 'number')
+                .map(v =>
+                    prisma.productItem.update({
+                        where: { id: v.id },
+                        data: {
+                            price: v.price,
+                            size: v.size,
+                            pizzaType: v.pizzaType,
+                        },
+                    })
+                ),
+            // Create newly added variants.
+            ...variants
+                .filter(v => typeof v.id !== 'number')
+                .map(v =>
+                    prisma.productItem.create({
+                        data: {
+                            productId: input.id,
+                            price: v.price,
+                            size: v.size,
+                            pizzaType: v.pizzaType,
+                        },
+                    })
+                ),
+        ]);
+    } catch (err) {
+        logger.error({ err }, '[UpdateProduct] Server error');
+        throw err;
+    }
+}
+
+/** Admin-only: create a product with one or more price variants. */
+export async function createProduct(input: ProductInput) {
+    try {
+        await requireAdmin();
+
+        const variants = cleanVariants(input.items);
+        if (variants.length === 0) throw new Error('At least one variant');
+
+        await prisma.product.create({
             data: {
                 name: input.name.trim(),
+                nameIt: input.nameIt.trim() || null,
                 description: input.description.trim() || null,
+                descriptionIt: input.descriptionIt.trim() || null,
                 imageUrl: input.imageUrl.trim(),
-                ingredients: { set: input.includedIds.map(id => ({ id })) },
-                extraIngredients: { set: input.extraIds.map(id => ({ id })) },
+                categoryId: input.categoryId,
+                ingredients: { connect: input.includedIds.map(id => ({ id })) },
+                extraIngredients: {
+                    connect: input.extraIds.map(id => ({ id })),
+                },
+                items: {
+                    create: variants.map(v => ({
+                        price: v.price,
+                        size: v.size,
+                        pizzaType: v.pizzaType,
+                    })),
+                },
             },
         });
     } catch (err) {
-        logger.error({ err }, '[UpdateProduct] Server error');
+        logger.error({ err }, '[CreateProduct] Server error');
+        throw err;
+    }
+}
+
+/**
+ * Admin-only: delete a product. Clears its cart-item references and price
+ * variants first so foreign keys don't block; the shopping-list link cascades.
+ */
+export async function deleteProduct(id: number) {
+    try {
+        await requireAdmin();
+
+        await prisma.$transaction([
+            prisma.cartItem.deleteMany({
+                where: { productItem: { productId: id } },
+            }),
+            prisma.productItem.deleteMany({ where: { productId: id } }),
+            prisma.product.delete({ where: { id } }),
+        ]);
+    } catch (err) {
+        logger.error({ err }, '[DeleteProduct] Server error');
+        throw err;
+    }
+}
+
+/** Admin-only: create a category (name EN required, nameIt optional). */
+export async function createCategory(name: string, nameIt: string) {
+    try {
+        await requireAdmin();
+
+        const trimmed = name.trim();
+        if (!trimmed) throw new Error('Name required');
+
+        await prisma.category.create({
+            data: { name: trimmed, nameIt: nameIt.trim() || null },
+        });
+    } catch (err) {
+        logger.error({ err }, '[CreateCategory] Server error');
+        throw err;
+    }
+}
+
+/** Admin-only: rename a category (EN/IT). */
+export async function updateCategory(id: number, name: string, nameIt: string) {
+    try {
+        await requireAdmin();
+
+        const trimmed = name.trim();
+        if (!trimmed) throw new Error('Name required');
+
+        await prisma.category.update({
+            where: { id },
+            data: { name: trimmed, nameIt: nameIt.trim() || null },
+        });
+    } catch (err) {
+        logger.error({ err }, '[UpdateCategory] Server error');
+        throw err;
+    }
+}
+
+/** Admin-only: delete a category. Fails if it still has products. */
+export async function deleteCategory(id: number) {
+    try {
+        await requireAdmin();
+
+        const count = await prisma.product.count({
+            where: { categoryId: id },
+        });
+        if (count > 0) throw new Error('Category not empty');
+
+        await prisma.category.delete({ where: { id } });
+    } catch (err) {
+        logger.error({ err }, '[DeleteCategory] Server error');
+        throw err;
+    }
+}
+
+interface IngredientInput {
+    name: string;
+    nameIt: string;
+    price: number;
+    imageUrl: string;
+}
+
+/** Admin-only: create an ingredient (available by default). */
+export async function createIngredient(input: IngredientInput) {
+    try {
+        await requireAdmin();
+
+        const name = input.name.trim();
+        if (!name) throw new Error('Name required');
+
+        await prisma.ingredient.create({
+            data: {
+                name,
+                nameIt: input.nameIt.trim() || null,
+                price: input.price,
+                imageUrl: input.imageUrl.trim(),
+            },
+        });
+    } catch (err) {
+        logger.error({ err }, '[CreateIngredient] Server error');
+        throw err;
+    }
+}
+
+/** Admin-only: edit an ingredient's catalog data (name EN/IT, price, image). */
+export async function updateIngredient(input: IngredientInput & { id: number }) {
+    try {
+        await requireAdmin();
+
+        const name = input.name.trim();
+        if (!name) throw new Error('Name required');
+
+        await prisma.ingredient.update({
+            where: { id: input.id },
+            data: {
+                name,
+                nameIt: input.nameIt.trim() || null,
+                price: input.price,
+                imageUrl: input.imageUrl.trim(),
+            },
+        });
+    } catch (err) {
+        logger.error({ err }, '[UpdateIngredient] Server error');
+        throw err;
+    }
+}
+
+/**
+ * Admin-only: delete an ingredient. Its links to products/carts (implicit
+ * many-to-many) and its shopping-list entry cascade away automatically.
+ */
+export async function deleteIngredient(id: number) {
+    try {
+        await requireAdmin();
+
+        await prisma.ingredient.delete({ where: { id } });
+    } catch (err) {
+        logger.error({ err }, '[DeleteIngredient] Server error');
         throw err;
     }
 }
@@ -385,6 +645,47 @@ export async function setIngredientAvailability(
     }
 }
 
+/**
+ * Staff (admin/kitchen): toggle a product's manual out-of-stock override. Going
+ * out of stock hides it from the menu and adds an "Ingredienti per …" line to
+ * the shopping list; restocking removes that line.
+ */
+export async function setProductAvailability(
+    productId: number,
+    available: boolean
+) {
+    try {
+        const session = await getUserSession();
+        if (
+            !session ||
+            (session.role !== 'ADMIN' && session.role !== 'KITCHEN')
+        ) {
+            throw new Error('Forbidden');
+        }
+
+        const product = await prisma.product.update({
+            where: { id: productId },
+            data: { available },
+        });
+
+        if (available) {
+            await prisma.shoppingItem.deleteMany({ where: { productId } });
+        } else {
+            await prisma.shoppingItem.upsert({
+                where: { productId },
+                update: {},
+                create: {
+                    productId,
+                    label: `Ingredienti per ${product.name}`,
+                },
+            });
+        }
+    } catch (err) {
+        logger.error({ err }, '[SetProductAvailability] Server error');
+        throw err;
+    }
+}
+
 /** Staff: add a free-text item to the shopping list. */
 export async function addShoppingItem(label: string) {
     try {
@@ -406,7 +707,11 @@ export async function addShoppingItem(label: string) {
     }
 }
 
-/** Staff: remove (mark bought) a shopping list item. */
+/**
+ * Staff: remove (mark bought) a shopping list item. If the item is linked to an
+ * ingredient or product, restock it (set available = true) so it reappears as
+ * available.
+ */
 export async function removeShoppingItem(id: number) {
     try {
         const session = await getUserSession();
@@ -417,9 +722,47 @@ export async function removeShoppingItem(id: number) {
             throw new Error('Forbidden');
         }
 
-        await prisma.shoppingItem.delete({ where: { id } });
+        const item = await prisma.shoppingItem.delete({ where: { id } });
+
+        if (item.ingredientId) {
+            await prisma.ingredient.update({
+                where: { id: item.ingredientId },
+                data: { available: true },
+            });
+        }
+
+        if (item.productId) {
+            await prisma.product.update({
+                where: { id: item.productId },
+                data: { available: true },
+            });
+        }
     } catch (err) {
         logger.error({ err }, '[RemoveShoppingItem] Server error');
+        throw err;
+    }
+}
+
+/** Staff: edit the label of a shopping list item. */
+export async function updateShoppingItem(id: number, label: string) {
+    try {
+        const session = await getUserSession();
+        if (
+            !session ||
+            (session.role !== 'ADMIN' && session.role !== 'KITCHEN')
+        ) {
+            throw new Error('Forbidden');
+        }
+
+        const trimmed = label.trim();
+        if (!trimmed) return;
+
+        await prisma.shoppingItem.update({
+            where: { id },
+            data: { label: trimmed },
+        });
+    } catch (err) {
+        logger.error({ err }, '[UpdateShoppingItem] Server error');
         throw err;
     }
 }

@@ -4,8 +4,10 @@ import { prisma } from '@/prisma/prisma-client';
 import { getStaffSession } from '@/shared/lib/get-staff-session';
 import { Container } from '@/shared/components/shared/container';
 import { IngredientAvailabilityToggle } from '@/shared/components/shared/ingredient-availability-toggle';
+import { AdminIngredientEditor } from '@/shared/components/shared/admin-ingredient-editor';
 import { ShoppingList } from '@/shared/components/shared/shopping-list';
 import { localizeName } from '@/shared/lib/i18n/localize-name';
+import { PRODUCT_IMAGE_PLACEHOLDER } from '@/shared/constants/images';
 import { cn } from '@/shared/lib/utils';
 import type { Locale } from '@/shared/constants/i18n';
 import { getDictionary } from '../../../dictionaries';
@@ -17,7 +19,8 @@ interface Props {
 }
 
 export default async function InventoryPage({ params }: Props) {
-    await getStaffSession();
+    const session = await getStaffSession();
+    const isAdmin = session.role === 'ADMIN';
 
     const { lang } = await params;
     const dict = await getDictionary(lang as Locale);
@@ -34,9 +37,12 @@ export default async function InventoryPage({ params }: Props) {
             <div className='mt-6 grid gap-8 lg:grid-cols-2'>
                 {/* Ingredients availability */}
                 <section>
-                    <h2 className='mb-3 font-bold'>
-                        {dict.inventory.ingredients}
-                    </h2>
+                    <div className='mb-3 flex items-center justify-between gap-3'>
+                        <h2 className='font-bold'>
+                            {dict.inventory.ingredients}
+                        </h2>
+                        {isAdmin && <AdminIngredientEditor />}
+                    </div>
                     <ul className='space-y-2'>
                         {ingredients.map(ingredient => (
                             <li
@@ -46,7 +52,10 @@ export default async function InventoryPage({ params }: Props) {
                                 <div className='flex min-w-0 items-center gap-3'>
                                     <div className='relative size-9 shrink-0'>
                                         <Image
-                                            src={ingredient.imageUrl}
+                                            src={
+                                                ingredient.imageUrl ||
+                                                PRODUCT_IMAGE_PLACEHOLDER
+                                            }
                                             alt=''
                                             fill
                                             sizes='36px'
@@ -63,10 +72,23 @@ export default async function InventoryPage({ params }: Props) {
                                         {localizeName(ingredient, lang as Locale)}
                                     </span>
                                 </div>
-                                <IngredientAvailabilityToggle
-                                    ingredientId={ingredient.id}
-                                    available={ingredient.available}
-                                />
+                                <div className='flex shrink-0 items-center gap-2'>
+                                    <IngredientAvailabilityToggle
+                                        ingredientId={ingredient.id}
+                                        available={ingredient.available}
+                                    />
+                                    {isAdmin && (
+                                        <AdminIngredientEditor
+                                            ingredient={{
+                                                id: ingredient.id,
+                                                name: ingredient.name,
+                                                nameIt: ingredient.nameIt,
+                                                price: ingredient.price,
+                                                imageUrl: ingredient.imageUrl,
+                                            }}
+                                        />
+                                    )}
+                                </div>
                             </li>
                         ))}
                     </ul>
@@ -82,6 +104,7 @@ export default async function InventoryPage({ params }: Props) {
                             id: item.id,
                             label: item.label,
                             ingredientId: item.ingredientId,
+                            productId: item.productId,
                         }))}
                     />
                 </section>

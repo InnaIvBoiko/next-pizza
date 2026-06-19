@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/shared/lib/utils';
+import { PRODUCT_IMAGE_PLACEHOLDER } from '@/shared/constants/images';
 import Image from 'next/image';
 
 interface Props {
@@ -19,7 +20,7 @@ export const PizzaImage: React.FC<Props> = ({ imageUrl, size, className }) => {
             )}
         >
             <Image
-                src={imageUrl}
+                src={imageUrl || PRODUCT_IMAGE_PLACEHOLDER}
                 alt='Logo'
                 width={sizePx[size]}
                 height={sizePx[size]}

@@ -8,9 +8,11 @@ import { toast } from 'sonner';
 import { logger } from '@/shared/lib/logger.client';
 import { isProductAvailable } from '@/shared/lib';
 import { format } from '@/shared/lib/i18n/format';
+import { localizeName } from '@/shared/lib/i18n/localize-name';
+import { localizeDescription } from '@/shared/lib/i18n/localize-description';
 import { ChoosePizzaForm } from './choose-pizza-form';
 import { ChooseProductForm } from './choose-product-form';
-import { useDictionary } from './i18n/dictionary-provider';
+import { useDictionary, useLocale } from './i18n/dictionary-provider';
 
 interface Props {
     product: ProductWithRelations;
@@ -22,15 +24,18 @@ export const ProductForm: React.FC<Props> = ({
     onSubmit: _onSubmit,
 }) => {
     const dict = useDictionary();
+    const locale = useLocale();
     const [addCartItem, loading] = useCartStore(
         useShallow(state => [state.addCartItem, state.loading] as const)
     );
 
     const firstItem = product.items[0];
     const isPizzaForm = Boolean(firstItem.pizzaType);
+    const name = localizeName(product, locale);
+    const description = localizeDescription(product, locale);
 
-    // An included ingredient is out of stock → the product can't be made.
-    const available = isProductAvailable(product.ingredients);
+    // Out of stock if marked so by staff or an included ingredient is missing.
+    const available = isProductAvailable(product);
 
     const onSubmit = async (
         productItemId?: number,
@@ -46,9 +51,7 @@ export const ProductForm: React.FC<Props> = ({
                 removedIngredients,
             });
 
-            toast.success(
-                format(dict.product.addedToCart, { name: product.name })
-            );
+            toast.success(format(dict.product.addedToCart, { name }));
 
             _onSubmit?.();
         } catch (err) {
@@ -61,8 +64,8 @@ export const ProductForm: React.FC<Props> = ({
         return (
             <ChoosePizzaForm
                 imageUrl={product.imageUrl}
-                name={product.name}
-                description={product.description}
+                name={name}
+                description={description}
                 ingredients={product.ingredients}
                 extraIngredients={product.extraIngredients}
                 items={product.items}
@@ -76,8 +79,8 @@ export const ProductForm: React.FC<Props> = ({
     return (
         <ChooseProductForm
             imageUrl={product.imageUrl}
-            name={product.name}
-            description={product.description}
+            name={name}
+            description={description}
             onSubmit={onSubmit}
             price={firstItem.price}
             loading={loading}

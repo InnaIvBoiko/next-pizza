@@ -5,6 +5,7 @@ import { getDictionary } from '../../dictionaries';
 import type { Locale } from '@/shared/constants/i18n';
 import { localizeName } from '@/shared/lib/i18n/localize-name';
 import { parseSort } from '@/shared/constants/sort';
+import { isProductAvailable } from '@/shared/lib/is-product-available';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -108,6 +109,16 @@ export default async function Menu({ params, searchParams }: MenuProps) {
                     (minItemPrice(a.items) - minItemPrice(b.items)) * direction
             );
         }
+    }
+
+    // Push unavailable products to the end of each category, regardless of the
+    // chosen sort. Array.sort is stable, so the order above is preserved within
+    // the available and unavailable groups.
+    for (const category of visibleCategories) {
+        category.products.sort(
+            (a, b) =>
+                Number(isProductAvailable(b)) - Number(isProductAvailable(a))
+        );
     }
 
     return (

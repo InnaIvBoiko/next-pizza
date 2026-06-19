@@ -288,6 +288,28 @@
         "productName": "Nome",
         "productDescription": "Descrizione (opzionale)",
         "productImage": "URL immagine",
+        "nameEn": "Nome (EN)",
+        "nameIt": "Nome (IT)",
+        "descriptionEn": "Descrizione (EN)",
+        "descriptionIt": "Descrizione (IT)",
+        "category": "Categoria",
+        "price": "Prezzo",
+        "variants": "Varianti",
+        "addVariant": "Aggiungi variante",
+        "size": "Misura",
+        "dough": "Impasto",
+        "variantInvalid": "Ogni variante deve avere un prezzo; per le pizze servono sia misura sia impasto.",
+        "create": "Crea",
+        "newProduct": "Nuovo prodotto",
+        "delete": "Elimina",
+        "deleteConfirm": "Eliminare questo prodotto?",
+        "deleteError": "Eliminazione non riuscita",
+        "manageCategories": "Categorie",
+        "addCategory": "Aggiungi categoria",
+        "deleteCategoryConfirm": "Eliminare questa categoria?",
+        "categoryNotEmpty": "Sposta o elimina prima i prodotti di questa categoria",
+        "newIngredient": "Nuovo ingrediente",
+        "deleteIngredientConfirm": "Eliminare questo ingrediente?",
         "includedLabel": "Inclusi",
         "extraLabel": "Extra",
         "saveError": "Salvataggio non riuscito",
@@ -306,6 +328,16 @@
             "week": "Ultima settimana",
             "month": "Ultimo mese",
             "all": "Tutto"
+        },
+        "products": {
+            "searchPlaceholder": "Cerca prodotto",
+            "statusLabel": "Stato",
+            "categoryLabel": "Categoria",
+            "allStatus": "Tutti",
+            "allCategories": "Tutte le categorie",
+            "available": "Disponibili",
+            "unavailable": "Esauriti",
+            "empty": "Nessun prodotto trovato."
         }
     },
     "kitchen": {
@@ -331,6 +363,9 @@
         "add": "Aggiungi",
         "auto": "Esaurito",
         "remove": "Comprato",
+        "edit": "Modifica",
+        "save": "Salva",
+        "cancel": "Annulla",
         "updateError": "Operazione non riuscita"
     }
 }

@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { cn } from '@/shared/lib/utils';
 import { formatPrice } from '@/shared/lib';
+import { PRODUCT_IMAGE_PLACEHOLDER } from '@/shared/constants/images';
 import { format } from '@/shared/lib/i18n/format';
 import { Title } from './title';
 import { Button } from '../ui';
@@ -40,7 +41,7 @@ export const ChooseProductForm: React.FC<Props> = ({
         <div className={cn(className, 'flex flex-1 flex-col lg:flex-row')}>
             <div className='relative flex flex-1 items-center justify-center py-6 lg:py-0'>
                 <Image
-                    src={imageUrl}
+                    src={imageUrl || PRODUCT_IMAGE_PLACEHOLDER}
                     alt={name}
                     width={350}
                     height={350}

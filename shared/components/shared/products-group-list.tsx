@@ -7,6 +7,9 @@ import { ProductCard } from './product-card';
 import { Title } from './title';
 import { useCategoryStore } from '@/shared/store/category';
 import { isProductAvailable } from '@/shared/lib';
+import { localizeName } from '@/shared/lib/i18n/localize-name';
+import { localizeDescription } from '@/shared/lib/i18n/localize-description';
+import { useLocale } from './i18n/dictionary-provider';
 
 export interface ProductsGroupListProps {
     title: string;
@@ -15,8 +18,11 @@ export interface ProductsGroupListProps {
     items: Array<{
         id: number;
         name: string;
+        nameIt?: string | null;
         imageUrl: string;
         description?: string | null;
+        descriptionIt?: string | null;
+        available: boolean;
         ingredients: Array<{ available: boolean }>;
         items: Array<{
             price: number;
@@ -37,6 +43,7 @@ export const ProductsGroupList = ({
     categoryId,
     priority = false,
 }: ProductsGroupListProps) => {
+    const locale = useLocale();
     const setActiveCategoryId = useCategoryStore(state => state.setActiveId);
 
     const intersectionRef = React.useRef<HTMLDivElement | null>(null);
@@ -83,11 +90,11 @@ export const ProductsGroupList = ({
                     <ProductCard
                         key={product.id}
                         id={product.id}
-                        name={product.name}
+                        name={localizeName(product, locale)}
                         imageUrl={product.imageUrl}
                         price={product.items[0].price}
-                        description={product.description}
-                        available={isProductAvailable(product.ingredients)}
+                        description={localizeDescription(product, locale)}
+                        available={isProductAvailable(product)}
                         priority={priority && index === 0}
                     />
                 ))}

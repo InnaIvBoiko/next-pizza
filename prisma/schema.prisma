@@ -42,8 +42,14 @@ model Product {
     id Int @id @default(autoincrement())
 
     name        String
-    description String?
+    // Italian translations; `name`/`description` hold the default (English) value.
+    nameIt        String?
+    description   String?
+    descriptionIt String?
     imageUrl    String
+    // Manual out-of-stock override set by staff. The product is only orderable
+    // when this is true AND all its included ingredients are available.
+    available   Boolean @default(true)
 
     // Included ingredients: in the base price, pre-selected, removable for free.
     // These also drive the ingredient filters.
@@ -51,6 +57,7 @@ model Product {
     // Paid add-ons the admin offers for this product.
     extraIngredients Ingredient[] @relation("ProductExtra")
     items            ProductItem[]
+    shoppingItem     ShoppingItem?
 
     category   Category @relation(fields: [categoryId], references: [id])
     categoryId Int
@@ -93,14 +100,17 @@ model Ingredient {
     updatedAt DateTime @updatedAt
 }
 
-// Shared shopping list for staff. Auto-filled when an ingredient goes
-// out-of-stock (ingredientId set), plus free-text items added by hand.
+// Shared shopping list for staff. Auto-filled when an ingredient or product goes
+// out-of-stock (ingredientId/productId set), plus free-text items added by hand.
 model ShoppingItem {
     id    Int    @id @default(autoincrement())
     label String
 
     ingredient   Ingredient? @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
     ingredientId Int?        @unique
+
+    product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+    productId Int?     @unique
 
     createdAt DateTime @default(now())
 }

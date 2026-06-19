@@ -3,9 +3,13 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { X } from 'lucide-react';
+import { Check, Pencil, X } from 'lucide-react';
 import { Button } from '../ui';
-import { addShoppingItem, removeShoppingItem } from '@/app/actions';
+import {
+    addShoppingItem,
+    removeShoppingItem,
+    updateShoppingItem,
+} from '@/app/actions';
 import { logger } from '@/shared/lib/logger.client';
 import { useDictionary } from './i18n/dictionary-provider';
 
@@ -13,18 +17,21 @@ interface Item {
     id: number;
     label: string;
     ingredientId: number | null;
+    productId: number | null;
 }
 
 interface Props {
     items: Item[];
 }
 
-/** Shared shopping list: add free-text items, remove (mark bought). */
+/** Shared shopping list: add free-text items, edit labels, remove (mark bought). */
 export const ShoppingList: React.FC<Props> = ({ items }) => {
     const dict = useDictionary();
     const router = useRouter();
     const [value, setValue] = React.useState('');
     const [busy, setBusy] = React.useState(false);
+    const [editingId, setEditingId] = React.useState<number | null>(null);
+    const [editValue, setEditValue] = React.useState('');
 
     const onAdd = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,6 +55,28 @@ export const ShoppingList: React.FC<Props> = ({ items }) => {
             router.refresh();
         } catch (err) {
             logger.error({ err }, '[ShoppingList] remove failed');
+            toast.error(dict.inventory.updateError);
+        }
+    };
+
+    const startEdit = (item: Item) => {
+        setEditingId(item.id);
+        setEditValue(item.label);
+    };
+
+    const cancelEdit = () => {
+        setEditingId(null);
+        setEditValue('');
+    };
+
+    const onSaveEdit = async (id: number) => {
+        if (!editValue.trim()) return;
+        try {
+            await updateShoppingItem(id, editValue);
+            cancelEdit();
+            router.refresh();
+        } catch (err) {
+            logger.error({ err }, '[ShoppingList] edit failed');
             toast.error(dict.inventory.updateError);
         }
     };
@@ -77,31 +106,84 @@ export const ShoppingList: React.FC<Props> = ({ items }) => {
                 </p>
             ) : (
                 <ul className='mt-4 space-y-2'>
-                    {items.map(item => (
-                        <li
-                            key={item.id}
-                            className='flex items-center justify-between gap-3 rounded-2xl bg-muted/60 px-4 py-2'
-                        >
-                            <span className='flex min-w-0 items-center gap-2'>
-                                <span className='truncate font-medium'>
-                                    {item.label}
-                                </span>
-                                {item.ingredientId !== null && (
-                                    <span className='rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-destructive'>
-                                        {dict.inventory.auto}
-                                    </span>
-                                )}
-                            </span>
-                            <button
-                                type='button'
-                                onClick={() => onRemove(item.id)}
-                                className='inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-foreground'
+                    {items.map(item => {
+                        const auto =
+                            item.ingredientId !== null ||
+                            item.productId !== null;
+                        const editing = editingId === item.id;
+
+                        return (
+                            <li
+                                key={item.id}
+                                className='flex items-center justify-between gap-3 rounded-2xl bg-muted/60 px-4 py-2'
                             >
-                                <X className='size-4' />
-                                {dict.inventory.remove}
-                            </button>
-                        </li>
-                    ))}
+                                {editing ? (
+                                    <form
+                                        onSubmit={e => {
+                                            e.preventDefault();
+                                            onSaveEdit(item.id);
+                                        }}
+                                        className='flex min-w-0 flex-1 items-center gap-2'
+                                    >
+                                        <input
+                                            autoFocus
+                                            value={editValue}
+                                            onChange={e =>
+                                                setEditValue(e.target.value)
+                                            }
+                                            className='min-w-0 flex-1 rounded-full bg-background px-3 py-1 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                                        />
+                                        <button
+                                            type='submit'
+                                            aria-label={dict.inventory.save}
+                                            className='inline-flex items-center text-success transition-colors hover:text-foreground'
+                                        >
+                                            <Check className='size-4' />
+                                        </button>
+                                        <button
+                                            type='button'
+                                            onClick={cancelEdit}
+                                            aria-label={dict.inventory.cancel}
+                                            className='inline-flex items-center text-muted-foreground transition-colors hover:text-foreground'
+                                        >
+                                            <X className='size-4' />
+                                        </button>
+                                    </form>
+                                ) : (
+                                    <>
+                                        <span className='flex min-w-0 items-center gap-2'>
+                                            <span className='truncate font-medium'>
+                                                {item.label}
+                                            </span>
+                                            {auto && (
+                                                <span className='rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-destructive'>
+                                                    {dict.inventory.auto}
+                                                </span>
+                                            )}
+                                        </span>
+                                        <span className='flex shrink-0 items-center gap-3'>
+                                            <button
+                                                type='button'
+                                                onClick={() => startEdit(item)}
+                                                className='inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground'
+                                            >
+                                                <Pencil className='size-4' />
+                                                {dict.inventory.edit}
+                                            </button>
+                                            <button
+                                                type='button'
+                                                onClick={() => onRemove(item.id)}
+                                                className='inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-foreground'
+                                            >
+                                                <X className='size-4' />
+                                                {dict.inventory.remove}
+                                            </button>
+                                        </span>
+                                    </>
+                                )}
+                            </li>
+                        );
+                    })}
                 </ul>
             )}
         </div>

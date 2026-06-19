@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Api } from '@/shared/services/api-client';
 import { Product } from '@/generated/prisma/client';
+import { PRODUCT_IMAGE_PLACEHOLDER } from '@/shared/constants/images';
 import { logger } from '@/shared/lib/logger.client';
 import { useDictionary, useLocalizeHref } from './i18n/dictionary-provider';
 
@@ -77,7 +78,10 @@ export const SearchInput = () => {
                                 <div className='relative h-8 w-8 shrink-0'>
                                     <Image
                                         className='rounded-sm object-cover'
-                                        src={product.imageUrl}
+                                        src={
+                                            product.imageUrl ||
+                                            PRODUCT_IMAGE_PLACEHOLDER
+                                        }
                                         alt={product.name}
                                         fill
                                         sizes='32px'

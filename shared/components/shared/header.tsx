@@ -103,9 +103,10 @@ export const Header: React.FC<Props> = ({
                         </div>
                     )}
 
-                    {/* Centered Menu button (home only) */}
+                    {/* Menu button (home only). In normal flow so justify-between
+                        keeps it clear of the right-side actions. */}
                     {isHome && (
-                        <div className='absolute inset-y-0 left-1/2 hidden -translate-x-1/2 items-center md:flex'>
+                        <div className='mx-auto hidden items-center md:flex'>
                             <Button
                                 asChild
                                 className='group relative rounded-full px-6'

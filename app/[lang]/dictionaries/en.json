@@ -288,6 +288,28 @@
         "productName": "Name",
         "productDescription": "Description (optional)",
         "productImage": "Image URL",
+        "nameEn": "Name (EN)",
+        "nameIt": "Name (IT)",
+        "descriptionEn": "Description (EN)",
+        "descriptionIt": "Description (IT)",
+        "category": "Category",
+        "price": "Price",
+        "variants": "Variants",
+        "addVariant": "Add variant",
+        "size": "Size",
+        "dough": "Dough",
+        "variantInvalid": "Each variant needs a price; pizzas need both size and dough.",
+        "create": "Create",
+        "newProduct": "New product",
+        "delete": "Delete",
+        "deleteConfirm": "Delete this product?",
+        "deleteError": "Could not delete",
+        "manageCategories": "Categories",
+        "addCategory": "Add category",
+        "deleteCategoryConfirm": "Delete this category?",
+        "categoryNotEmpty": "Move or delete this category's products first",
+        "newIngredient": "New ingredient",
+        "deleteIngredientConfirm": "Delete this ingredient?",
         "includedLabel": "Included",
         "extraLabel": "Extra",
         "saveError": "Could not save",
@@ -306,6 +328,16 @@
             "week": "Last week",
             "month": "Last month",
             "all": "All"
+        },
+        "products": {
+            "searchPlaceholder": "Search product",
+            "statusLabel": "Status",
+            "categoryLabel": "Category",
+            "allStatus": "All",
+            "allCategories": "All categories",
+            "available": "Available",
+            "unavailable": "Out of stock",
+            "empty": "No products found."
         }
     },
     "kitchen": {
@@ -331,6 +363,9 @@
         "add": "Add",
         "auto": "Out of stock",
         "remove": "Bought",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
         "updateError": "Action failed"
     }
 }
