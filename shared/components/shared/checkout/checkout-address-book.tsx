@@ -78,11 +78,11 @@ export const CheckoutAddressBook: React.FC = () => {
                             )}
                         >
                             <MapPin className='h-4 w-4 shrink-0' />
-                            <span className='break-words'>
+                            <span className='wrap-break-word'>
                                 {address.formatted}
                             </span>
                             {address.isDefault && (
-                                <span className='ml-auto shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary'>
+                                <span className='bg-primary/10 text-primary ml-auto shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold'>
                                     {dict.addresses.default}
                                 </span>
                             )}
