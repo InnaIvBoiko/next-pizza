@@ -70,12 +70,12 @@ test.describe('Add to cart flow', () => {
             await addBtn.click();
             await page.getByText(/aggiunto al carrello/i).waitFor({ timeout: 8000 });
 
-            // Go back to menu, cart button text should have changed
+            // Go back to menu — cart button must update once the cart API responds
             await page.goto('/it/menu');
             await page.waitForLoadState('domcontentloaded');
             await page.locator(PRODUCT_CARD).first().waitFor({ state: 'visible' });
-            const after = await page.getByRole('button', { name: /€/ }).first().textContent();
-            expect(after).not.toBe(before);
+            // expect().not.toHaveText polls until the text changes (handles API latency)
+            await expect(page.getByTestId('cart-button')).not.toHaveText(before ?? '', { timeout: 6000 });
         }
     });
 
