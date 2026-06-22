@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { formatPrice } from '@/shared/lib';
 import { CircleCheck } from 'lucide-react';
-import Image from 'next/image';
+import { ImageWithFallback } from './image-with-fallback';
 
 interface Props {
     imageUrl: string;
@@ -42,7 +44,7 @@ export const IngredientItem: React.FC<Props> = ({
             {active && !disabled && (
                 <CircleCheck className='text-primary absolute top-2 right-2' />
             )}
-            <Image width={110} height={110} src={imageUrl} alt={name} />
+            <ImageWithFallback width={110} height={110} src={imageUrl} alt={name} />
             <span className='mb-1 text-xs'>{name}</span>
             {disabled && unavailableLabel ? (
                 <span className='text-xs font-semibold text-destructive'>

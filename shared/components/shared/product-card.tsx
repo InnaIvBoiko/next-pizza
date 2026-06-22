@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib/utils';
 import { formatPrice } from '@/shared/lib';
 import { PRODUCT_IMAGE_PLACEHOLDER } from '@/shared/constants/images';
 import Link from 'next/link';
-import Image from 'next/image';
+import { ImageWithFallback } from './image-with-fallback';
 import { Plus } from 'lucide-react';
 import { useDictionary, useLocalizeHref } from './i18n/dictionary-provider';
 
@@ -39,7 +39,7 @@ export const ProductCard = ({
                 ratios undistorted and avoids Next's aspect-ratio warning. */}
             <div className='relative aspect-square overflow-hidden rounded-2xl bg-secondary'>
                 <div className='glow-warm absolute inset-0' />
-                <Image
+                <ImageWithFallback
                     className={cn(
                         'object-contain p-4 transition-transform duration-500',
                         available

@@ -401,5 +401,10 @@
         "save": "Salva",
         "cancel": "Annulla",
         "updateError": "Operazione non riuscita"
+    },
+    "errors": {
+        "title": "Qualcosa è andato storto",
+        "text": "Si è verificato un errore imprevisto. Puoi riprovare o tornare alla pagina principale.",
+        "retry": "Riprova"
     }
 }

@@ -401,5 +401,10 @@
         "save": "Save",
         "cancel": "Cancel",
         "updateError": "Action failed"
+    },
+    "errors": {
+        "title": "Something went wrong",
+        "text": "An unexpected error occurred. You can try again or go back to the home page.",
+        "retry": "Try again"
     }
 }
