@@ -1,4 +1,4 @@
-import { stripe } from './stripe';
+import { getStripe } from './stripe';
 
 // Origin used to build Stripe's success/cancel redirect URLs. NEXT_PUBLIC_API_URL
 // is only a path ("/api"), so we keep a dedicated base URL with a localhost fallback.
@@ -22,7 +22,7 @@ export async function createPayment({
     cartAmount,
     deliveryPrice,
 }: CreatePaymentProps) {
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
         mode: 'payment',
         line_items: [
             {
