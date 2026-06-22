@@ -1,7 +1,13 @@
+'use client';
+
 import React from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
+import Link from 'next/link';
 import { WhiteBlock } from '../white-block';
 import { FormInput } from '../form';
-import { useDictionary } from '../i18n/dictionary-provider';
+import { ErrorText } from '../error-text';
+import { Checkbox } from '@/shared/components/ui/checkbox';
+import { useDictionary, useLocalizeHref } from '../i18n/dictionary-provider';
 
 interface Props {
     className?: string;
@@ -9,6 +15,9 @@ interface Props {
 
 export const CheckoutPersonalForm: React.FC<Props> = ({ className }) => {
     const dict = useDictionary();
+    const localizeHref = useLocalizeHref();
+    const { control, formState: { errors } } = useFormContext();
+    const privacyError = errors['privacyConsent']?.message as string | undefined;
 
     return (
         <WhiteBlock title={dict.checkout.personalSection} className={className}>
@@ -33,6 +42,34 @@ export const CheckoutPersonalForm: React.FC<Props> = ({ className }) => {
                     className='text-base'
                     placeholder={dict.checkout.phone}
                 />
+            </div>
+
+            <div className='mt-5'>
+                <Controller
+                    name='privacyConsent'
+                    control={control}
+                    render={({ field }) => (
+                        <label className='flex cursor-pointer items-start gap-3'>
+                            <Checkbox
+                                id='privacy-consent'
+                                checked={field.value as boolean}
+                                onCheckedChange={field.onChange}
+                                className='mt-0.5'
+                            />
+                            <span className='text-sm text-muted-foreground'>
+                                {dict.checkout.privacyConsentLabel}
+                                <Link
+                                    href={localizeHref('/privacy')}
+                                    target='_blank'
+                                    className='text-primary underline'
+                                >
+                                    {dict.checkout.privacyConsentLinkText}
+                                </Link>
+                            </span>
+                        </label>
+                    )}
+                />
+                {privacyError && <ErrorText text={privacyError} className='mt-2' />}
             </div>
         </WhiteBlock>
     );

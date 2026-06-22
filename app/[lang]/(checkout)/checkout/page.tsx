@@ -41,6 +41,7 @@ export default function CheckoutPage() {
             phone: '',
             address: '',
             comment: '',
+            privacyConsent: false,
         },
     });
 

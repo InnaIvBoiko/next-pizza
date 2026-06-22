@@ -11,6 +11,7 @@ export const makeCheckoutFormSchema = (v: V) =>
         phone: z.string().min(10, { message: v.phone }),
         address: z.string().min(5, { message: v.address }),
         comment: z.string().optional(),
+        privacyConsent: z.boolean().refine(val => val === true, { message: v.privacyConsent }),
     });
 
 export type CheckoutFormValues = z.infer<
