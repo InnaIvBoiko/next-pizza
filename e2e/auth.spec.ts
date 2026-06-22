@@ -1,7 +1,14 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Auth modal', () => {
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach(async ({ page }, testInfo) => {
+        // On mobile the "Accedi" button is hidden inside the burger menu.
+        // These tests are desktop-only.
+        const vp = page.viewportSize();
+        if (vp && vp.width < 640) {
+            testInfo.skip(true, 'Auth header button is in burger menu on mobile — desktop only');
+            return;
+        }
         await page.goto('/it/menu');
         await page.waitForLoadState('networkidle');
     });

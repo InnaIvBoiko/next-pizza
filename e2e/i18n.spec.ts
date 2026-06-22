@@ -8,9 +8,9 @@ test.describe('i18n routing', () => {
 
     test('/it/ renders Italian hero title', async ({ page }) => {
         await page.goto('/it');
-        // dict.home.hero.title = "La vera pizza italiana, a casa tua"
+        // Use heading role to avoid matching the hidden <p class="hidden sm:block"> in the nav.
         await expect(
-            page.getByText(/La vera pizza italiana/i).first()
+            page.getByRole('heading', { name: /La vera pizza italiana/i }).first()
         ).toBeVisible();
     });
 
@@ -22,22 +22,29 @@ test.describe('i18n routing', () => {
         ).not.toBeVisible();
     });
 
-    test('language switcher trigger is present in the header', async ({ page }) => {
+    test('language switcher trigger is present in the header', async ({ page }, testInfo) => {
+        // The language select is hidden on mobile (inside burger menu).
+        const vp = page.viewportSize();
+        if (vp && vp.width < 640) {
+            testInfo.skip(true, 'Language select is in burger menu on mobile — desktop only');
+            return;
+        }
         await page.goto('/it/menu');
         await page.waitForLoadState('networkidle');
-        // LanguageSelect renders a SelectTrigger with aria-label = current locale name
         const langBtn = page.getByRole('combobox', { name: /italiano/i });
         await expect(langBtn).toBeVisible();
     });
 
-    test('switching language from IT to EN updates the URL', async ({ page }) => {
+    test('switching language from IT to EN updates the URL', async ({ page }, testInfo) => {
+        const vp = page.viewportSize();
+        if (vp && vp.width < 640) {
+            testInfo.skip(true, 'Language select is in burger menu on mobile — desktop only');
+            return;
+        }
         await page.goto('/it/menu');
         await page.waitForLoadState('networkidle');
 
-        // Open the Radix Select by clicking its trigger
         await page.getByRole('combobox', { name: /italiano/i }).click();
-
-        // Click the English option in the dropdown
         await page.getByRole('option', { name: /english/i }).click();
 
         await expect(page).toHaveURL(/\/en\/menu/);
@@ -49,7 +56,7 @@ test.describe('Locale in product URLs', () => {
         await page.goto('/it/menu');
         await page.waitForLoadState('networkidle');
 
-        const firstCard = page.locator('a:has(h3)[href*="/product/"]').first();
+        const firstCard = page.locator('[data-testid="product-card"]').first();
         await expect(firstCard).toBeVisible();
         const href = await firstCard.getAttribute('href');
 

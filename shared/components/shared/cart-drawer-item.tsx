@@ -25,6 +25,7 @@ export const CartDrawerItem: React.FC<Props> = ({
 }) => {
     return (
         <div
+            data-testid='cart-item'
             className={cn(
                 'flex gap-6 bg-card p-5',
                 {

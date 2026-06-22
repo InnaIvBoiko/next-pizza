@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const PRODUCT_CARD = 'a:has(h3)[href*="/product/"]';
+const PRODUCT_CARD = '[data-testid="product-card"]';
 
 test.describe('Cart drawer', () => {
     test.beforeEach(async ({ page }) => {
@@ -9,19 +9,19 @@ test.describe('Cart drawer', () => {
     });
 
     test('cart button is visible in the header', async ({ page }) => {
-        const cartBtn = page.getByRole('button', { name: /€/ }).first();
+        const cartBtn = page.getByTestId('cart-button');
         await expect(cartBtn).toBeVisible();
     });
 
     test('clicking cart button opens the drawer', async ({ page }) => {
-        const cartBtn = page.getByRole('button', { name: /€/ }).first();
+        const cartBtn = page.getByTestId('cart-button');
         await cartBtn.click();
 
         await expect(page.getByText('Il tuo carrello è vuoto')).toBeVisible();
     });
 
     test('empty cart shows go-back button', async ({ page }) => {
-        const cartBtn = page.getByRole('button', { name: /€/ }).first();
+        const cartBtn = page.getByTestId('cart-button');
         await cartBtn.click();
 
         await expect(
@@ -56,7 +56,7 @@ test.describe('Add to cart flow', () => {
         await page.waitForLoadState('networkidle');
 
         // Record initial count (text on cart button contains the count)
-        const cartBtn = page.getByRole('button', { name: /€/ }).first();
+        const cartBtn = page.getByTestId('cart-button');
         const before = await cartBtn.textContent();
 
         const firstCard = page.locator(PRODUCT_CARD).first();
@@ -92,12 +92,13 @@ test.describe('Add to cart flow', () => {
 
             await page.goto('/it/menu');
             await page.waitForLoadState('networkidle');
-            await page.getByRole('button', { name: /€/ }).first().click();
+            await page.getByTestId('cart-button').click();
 
             if (productName) {
-                // Scope to the sheet panel (data-state="open") to avoid hidden nav matches
-                const sheet = page.locator('[data-state="open"]');
-                await expect(sheet.getByText(productName, { exact: false }).first()).toBeVisible({ timeout: 3000 });
+                // Scope to cart items to avoid hidden nav matches
+                const cartItem = page.getByTestId('cart-item').first();
+                await expect(cartItem).toBeVisible({ timeout: 3000 });
+                await expect(cartItem.getByText(productName, { exact: false })).toBeVisible();
             }
         }
     });

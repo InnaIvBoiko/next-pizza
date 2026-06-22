@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // Product cards are the only <a> tags that contain an <h3> (product name)
-const PRODUCT_CARD = 'a:has(h3)[href*="/product/"]';
+const PRODUCT_CARD = '[data-testid="product-card"]';
 
 test.describe('Menu page', () => {
     test.beforeEach(async ({ page }) => {

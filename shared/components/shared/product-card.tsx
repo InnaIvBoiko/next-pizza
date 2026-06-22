@@ -105,6 +105,7 @@ export const ProductCard = ({
 
     return (
         <Link
+            data-testid='product-card'
             href={localize(`/product/${id}`)}
             className={cn(
                 'group flex flex-col rounded-3xl border border-border bg-card p-3 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-foreground/5',
