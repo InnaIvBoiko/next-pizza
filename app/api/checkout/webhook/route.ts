@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import React from 'react';
-import { stripe } from '@/shared/lib/stripe';
+import { getStripe } from '@/shared/lib/stripe';
 import { prisma } from '@/prisma/prisma-client';
 import { OrderStatus } from '@/generated/prisma/client';
 import { sendEmail } from '@/shared/lib/send-email';
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     // Verify the event really came from Stripe using the raw request body.
     let event: Stripe.Event;
     try {
-        event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+        event = getStripe().webhooks.constructEvent(body, signature, webhookSecret);
     } catch (err) {
         logger.error(
             { err },

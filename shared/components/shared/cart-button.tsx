@@ -27,6 +27,7 @@ export const CartButton: React.FC<Props> = ({ className, hideWhenEmpty }) => {
     return (
         <CartDrawer>
             <Button
+                data-testid='cart-button'
                 disabled={loading}
                 aria-busy={loading}
                 className={cn(
