@@ -150,7 +150,9 @@
         "vat": "di cui IVA ({vat}%):",
         "submit": "Vai al pagamento",
         "orderSuccess": "Ordine creato con successo! 📝 Reindirizzamento al pagamento... ",
-        "orderError": "Impossibile creare l'ordine"
+        "orderError": "Impossibile creare l'ordine",
+        "privacyConsentLabel": "Ho letto e accetto l'",
+        "privacyConsentLinkText": "informativa sulla privacy"
     },
     "success": {
         "title": "Grazie per il tuo ordine!",
@@ -219,7 +221,9 @@
             "hoursSection": "Orari",
             "days": "Lun–Dom",
             "hours": "11:00 – 23:00",
-            "copyright": "© {year} Next Pizza. Tutti i diritti riservati."
+            "copyright": "© {year} Next Pizza. Tutti i diritti riservati.",
+            "legalSection": "Legale",
+            "privacyLink": "Privacy & Cookie"
         }
     },
     "pizza": {
@@ -244,7 +248,8 @@
         "lastName": "Il cognome deve contenere almeno 2 caratteri",
         "email": "Inserisci un indirizzo email valido",
         "phone": "Inserisci un numero di telefono valido",
-        "address": "Inserisci un indirizzo valido"
+        "address": "Inserisci un indirizzo valido",
+        "privacyConsent": "Devi accettare l'informativa sulla privacy per procedere"
     },
     "addresses": {
         "tab": "Indirizzi",
@@ -406,5 +411,16 @@
         "title": "Qualcosa è andato storto",
         "text": "Si è verificato un errore imprevisto. Puoi riprovare o tornare alla pagina principale.",
         "retry": "Riprova"
+    },
+    "cookieBanner": {
+        "title": "Utilizziamo i cookie",
+        "description": "Usiamo cookie tecnici necessari per il funzionamento del sito (sessione, carrello). Non utilizziamo cookie di tracciamento o profilazione.",
+        "acceptAll": "Accetta",
+        "essentialOnly": "Solo necessari",
+        "learnMore": "Leggi l'informativa"
+    },
+    "privacy": {
+        "title": "Informativa sulla Privacy e Cookie Policy",
+        "backHome": "Torna alla home"
     }
 }

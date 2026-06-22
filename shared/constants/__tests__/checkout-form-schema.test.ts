@@ -8,6 +8,7 @@ const v = {
     email: 'Email non valida',
     phone: 'Telefono non valido',
     address: 'Indirizzo non valido',
+    privacyConsent: 'Devi accettare la privacy policy',
 } as Dictionary['checkoutValidation'];
 
 const schema = makeCheckoutFormSchema(v);
@@ -19,6 +20,7 @@ const valid = {
     phone: '3331234567',
     address: 'Via Roma 1, 20100 Milano',
     comment: '',
+    privacyConsent: true,
 };
 
 describe('makeCheckoutFormSchema', () => {
@@ -53,5 +55,17 @@ describe('makeCheckoutFormSchema', () => {
         const result = schema.safeParse({ ...valid, address: 'Via' });
         expect(result.success).toBe(false);
         expect(result.error?.issues[0].message).toBe(v.address);
+    });
+
+    it('rejects when privacyConsent is false', () => {
+        const result = schema.safeParse({ ...valid, privacyConsent: false });
+        expect(result.success).toBe(false);
+        expect(result.error?.issues[0].message).toBe(v.privacyConsent);
+    });
+
+    it('rejects when privacyConsent is missing', () => {
+        const { privacyConsent: _, ...noConsent } = valid;
+        const result = schema.safeParse(noConsent);
+        expect(result.success).toBe(false);
     });
 });

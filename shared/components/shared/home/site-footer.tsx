@@ -90,6 +90,20 @@ export const SiteFooter: React.FC<Props> = ({ dict, lang }) => {
                             <li>{dict.hours}</li>
                         </ul>
                     </div>
+
+                    <nav className='text-sm'>
+                        <h3 className='font-semibold'>{dict.legalSection}</h3>
+                        <ul className='mt-3 space-y-2 text-muted-foreground'>
+                            <li>
+                                <Link
+                                    href={localizeHref(lang, '/privacy')}
+                                    className='transition-colors hover:text-foreground'
+                                >
+                                    {dict.privacyLink}
+                                </Link>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
 
                 <div className='mt-10 border-t border-border pt-6 text-center text-sm text-muted-foreground'>
